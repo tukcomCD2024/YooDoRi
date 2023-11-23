@@ -7,11 +7,11 @@
 
 ## 시스템 구성도
 
-[![](../sys.png)](https://user-images.githubusercontent.com/25702499/285165960-2e3f7556-51d5-4b21-85ec-ed7942559a8e.png)
+![sys](https://github.com/tukcomCD2024/YooDoRi/assets/25702499/2e3f7556-51d5-4b21-85ec-ed7942559a8e)
 
 ## 제품 시나리오
 
-[![](../senario.png)](https://user-images.githubusercontent.com/25702499/285165971-70ecf53b-0a68-4089-b50e-86e4d9c69d52.png)
+![senario](https://github.com/tukcomCD2024/YooDoRi/assets/25702499/70ecf53b-0a68-4089-b50e-86e4d9c69d52)
 
 ## 사용 예제
 
