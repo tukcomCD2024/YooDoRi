@@ -11,7 +11,7 @@
 
 ## 제품 시나리오
 
-![](../senario.png)
+[![](../senario.png)](https://user-images.githubusercontent.com/25702499/285165971-70ecf53b-0a68-4089-b50e-86e4d9c69d52.png)
 
 ## 사용 예제
 
