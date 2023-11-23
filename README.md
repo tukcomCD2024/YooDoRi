@@ -27,11 +27,11 @@
 ## 팀원
 
 김규진(팀장) – 컴퓨터 공학과 3학년 - FrontEnd(Android), Android MVVM Architecture - kyujin0911@tukorea.ac.kr
-박승호      – 컴퓨터 공학과 3학년 - BackEnd(Flask, mySQL), 데이터 전처리            - kevin0409@tukorea.ac.kr
-이도영      – 컴퓨터 공학과 3학년 - FrontEnd(Andorid), Android Sensor Manager    - doyo0529@tukorea.ac.kr
-황순권      – 컴퓨터 공학과 3학년 - 위치 예측 알고리즘 구현, 데이터 전처리                - sk002009@tukorea.ac.kr
+<br/>박승호      – 컴퓨터 공학과 3학년 - BackEnd(Flask, mySQL), 데이터 전처리            - kevin0409@tukorea.ac.kr
+<br/>이도영      – 컴퓨터 공학과 3학년 - FrontEnd(Andorid), Android Sensor Manager    - doyo0529@tukorea.ac.kr
+<br/>황순권      – 컴퓨터 공학과 3학년 - 위치 예측 알고리즘 구현, 데이터 전처리                - sk002009@tukorea.ac.kr
 
-[https://github.com/tukcomCD2024/YooDoRi.git](https://github.com/dbader/)
+<br/>[https://github.com/tukcomCD2024/YooDoRi.git](https://github.com/dbader/)
 
 <!-- Markdown link & img dfn's -->
 [npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
