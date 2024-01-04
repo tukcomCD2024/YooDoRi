@@ -15,11 +15,11 @@
 
 ## 시스템 구성도
 
-![sys](https://github.com/tukcomCD2024/YooDoRi/assets/25702499/2e3f7556-51d5-4b21-85ec-ed7942559a8e)
+![sys](https://github.com/tukcomCD2024/YooDoRi/assets/25702499/9a188e48-5f29-4d98-bc5d-72551c424f14)
 
 ## 제품 시나리오
 
-![senario](https://github.com/tukcomCD2024/YooDoRi/assets/25702499/70ecf53b-0a68-4089-b50e-86e4d9c69d52)
+![senario](https://github.com/tukcomCD2024/YooDoRi/assets/25702499/8ab362e5-994f-4c96-a712-584f8774dd92)
 
 ## ERD
 
