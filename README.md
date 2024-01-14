@@ -1,6 +1,6 @@
 # 유도리
 
-<br/>[https://github.com/tukcomCD2024/YooDoRi.git](https://github.com/dbader/)
+- 프로젝트 관리 : <a href="https://tukorea-kevin0409.atlassian.net/jira/software/projects/YMUZ/boards/1/timeline?shared=&atlOrigin=eyJpIjoiMzI3NDU4YzE1MGJkNGE2MDgwZTgxNDFmNmU4OGI4MmMiLCJwIjoiaiJ9">Jira Software</a>
 
 ## 치매노인 위치 예측 앱 - 어디U
 
