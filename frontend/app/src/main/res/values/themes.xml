@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.WhereAreU" parent="Base.Theme.WhereAreU" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/yellow</item>
+        <item name="windowSplashScreenAnimatedIcon">@layout/activity_main</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.WhereAreU</item>
+    </style>
 </resources>

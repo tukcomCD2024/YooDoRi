@@ -20,6 +20,10 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true" >
+        </activity>
+        <activity android:name="kr.ac.tukorea.whereareu.presentation.login.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
