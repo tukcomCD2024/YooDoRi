@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.App.32sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+    </style>
+
+    <style name="TextAppearance.App.30sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">30sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+    </style>
+
+    <style name="TextAppearance.App.24sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+    </style>
+
+    <style name="TextAppearance.App.20sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+    </style>
+
+    <style name="TextAppearance.App.20sp.Bold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/suite_bold</item>
+    </style>
+
+    <style name="TextAppearance.App.18sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+    </style>
+
+    <style name="TextAppearance.App.18sp.Bold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_bold</item>
+    </style>
+
+    <style name="TextAppearance.App.18sp.SemiBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_semibold</item>
+    </style>
+
+    <style name="TextAppearance.App.18sp.Regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_regular</item>
+    </style>
+
+    <style name="TextAppearance.App.16sp.Regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_regular</item>
+    </style>
+
+    <style name="TextAppearance.App.16sp.SemiBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_semibold</item>
+    </style>
+
+    <style name="TextAppearance.App.16sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+    </style>
+
+    <style name="TextAppearance.App.16sp.Medium" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_medium</item>
+    </style>
+
+    <style name="TextAppearance.App.14sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+    </style>
+
+    <style name="TextAppearance.App.14sp.Regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/suite_regular</item>
+    </style>
+
+    <style name="TextAppearance.App.14sp.SemiBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/suite_semibold</item>
+    </style>
+</resources>
