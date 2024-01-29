@@ -64,7 +64,7 @@
             app:layout_constraintTop_toBottomOf="@id/nok_tv" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/name_textInputLayout"
+            android:id="@+id/otp_textInputLayout"
             style="@style/Widget.App.TextInputLayout.corner10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,6 +73,7 @@
             app:layout_constraintTop_toBottomOf="@id/input_name_tv">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/otp_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="인증번호"
@@ -91,6 +92,7 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/rectangle_corner_10"
             android:text="입력 완료"
+            android:onClick="@{() -> view.onClickInputDone()}"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

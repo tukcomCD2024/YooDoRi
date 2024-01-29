@@ -20,8 +20,10 @@ class LoginActivity : AppCompatActivity() {
     //LoginFragment에서 popBackStack으로 뒤로가기 방지
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (navController.previousBackStackEntry != null) {
                 navController.popBackStack()
+            Log.d("current", navController.currentBackStackEntry.toString())
+            if(navController.currentBackStackEntry == null){
+                finish()
             }
         }
     }
