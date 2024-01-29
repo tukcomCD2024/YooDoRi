@@ -8,7 +8,7 @@
             type="kr.ac.tukorea.whereareu.presentation.login.PatientIdentifyFragment"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="24dp">
@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/patient_input_name_text"
+            android:text="보호대상자의 이름을 알려주세요."
             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +76,7 @@
             app:layout_constraintTop_toBottomOf="@+id/input_name_tv">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="이름"
@@ -91,8 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:fontFamily="@font/suite_semibold"
-            android:text="@string/patient_input_phone_number_text"
+            android:text="보호대상자의 전화번호를 알려주세요."
             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,6 +108,7 @@
             app:layout_constraintTop_toBottomOf="@+id/input_phone_number_tv">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phone_number_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="전화번호"

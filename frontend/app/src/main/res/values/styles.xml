@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="TextAppearance.App.32sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">32sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
@@ -105,18 +104,15 @@
         <item name="android:padding">12dp</item>
     </style>
 
-    <style name="Widget.App.TextInputLayout.corner10" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="Widget.App.TextInputLayout.corner10" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxCornerRadiusBottomEnd">10dp</item>
         <item name="boxCornerRadiusBottomStart">10dp</item>
         <item name="boxCornerRadiusTopEnd">10dp</item>
         <item name="boxCornerRadiusTopStart">10dp</item>
         <item name="errorEnabled">true</item>
-        <item name="errorTextColor">@color/orange</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="errorIconDrawable">@null</item>
         <item name="errorTextAppearance">@style/TextAppearance.App.16sp.SemiBold</item>
-    </style>
-
-    <style name="Widget.Theme.WhereAreU.ButtonBar.Fullscreen" parent="">
-        <item name="android:background">@color/black_overlay</item>
-        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="errorTextColor">@color/orange</item>
     </style>
 </resources>

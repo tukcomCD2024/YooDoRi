@@ -20,6 +20,9 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>(R.layout.fragment_login)
     fun onClickNok(){
         findNavController().navigate(R.id.action_loginFragment_to_nokIdentityFragment)
     }
+    fun onClickPatient(){
+        findNavController().navigate(R.id.action_loginFragment_to_patientFragment)
+    }
 
 
 }
