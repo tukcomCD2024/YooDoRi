@@ -3,80 +3,116 @@
     <style name="TextAppearance.App.32sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">32sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.30sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">30sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.24sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">24sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.20sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.20sp.Bold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/suite_bold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.18sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.18sp.Bold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/suite_bold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.18sp.SemiBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/suite_semibold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.18sp.Regular" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/suite_regular</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.16sp.Regular" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/suite_regular</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.16sp.SemiBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/suite_semibold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.16sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.16sp.Medium" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/suite_medium</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.14sp.ExtraBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.14sp.Regular" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/suite_regular</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.14sp.SemiBold" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/suite_semibold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Widget.App.Button" parent="Widget.AppCompat.Button">
+        <item name="background">@drawable/rectangle_corner_10</item>
+        <item name="backgroundTint">@color/yellow</item>
+        <item name="android:textAppearance">@style/TextAppearance.App.20sp.Bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="Widget.App.TextInputLayout.corner10" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="errorEnabled">true</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="errorTextAppearance">@style/TextAppearance.App.16sp.SemiBold</item>
+        <item name="errorTextColor">@color/orange</item>
     </style>
 </resources>
