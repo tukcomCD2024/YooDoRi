@@ -1,26 +1,42 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.content.Context
+import android.util.Log
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokIdentityBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.showKeyboard
-import okhttp3.Interceptor.Companion.invoke
 
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {
+        private lateinit var viewModel: LoginViewModel
+        private val args: NokIdentityFragmentArgs by navArgs<>()
+        //private val viewModel: LoginViewModel by viewModels()
 
     override fun initObserver() {
+        viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
+        binding.viewModel = viewModel
 
+        /*with(viewModel) {
+            testError.observe(this@NokIdentityFragment) {
+                Log.d("test error", it)
+            }
+            testSuccess.observe(this@NokIdentityFragment){
+                if(it == "success"){
+                    findNavController().navigate(R.id.action_nokIdentityFragment_to_nokOtpFragment)
+                }
+            }
+        }*/
     }
 
     override fun initView() {
+        viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
         binding.view = this
         with(binding) {
             nameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT){
@@ -48,15 +64,14 @@ class NokIdentityFragment :
     }
 
     fun onClickInputDone() {
-        if(!validName()){
-            binding.nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
-        }
+        binding.nameTextInputLayout.error = if(!validName()) "최소 2자의 한글을 입력해주세요" else null
 
         if (!validPhone()){
             binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 01012345678"
             return
         }
         findNavController().navigate(R.id.action_nokIdentityFragment_to_nokOtpFragment)
+        //viewModel.sendNokIdentity()
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()

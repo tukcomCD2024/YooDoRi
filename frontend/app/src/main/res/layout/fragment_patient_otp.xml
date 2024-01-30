@@ -7,6 +7,10 @@
         <variable
             name="view"
             type="kr.ac.tukorea.whereareu.presentation.login.PatientOtpFragment" />
+
+        <variable
+            name="viewModel"
+            type="kr.ac.tukorea.whereareu.presentation.login.LoginViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,11 +73,11 @@
             app:layout_constraintTop_toBottomOf="@+id/patient_tv" />
 
         <TextView
-            android:id="@+id/display_opt_tv"
+            android:id="@+id/display_otp_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="OOOOOO"
+            android:text="000000"
             android:textSize="30sp"
             android:fontFamily="@font/jalnan2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +94,7 @@
             android:textColor="@color/gray60"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/display_opt_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/display_otp_tv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

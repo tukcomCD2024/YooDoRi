@@ -118,6 +118,7 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/rectangle_corner_10"
             android:text="@string/patient_btn_text"
+            android:onClick="@{() -> view.onClickPatient()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/patient_cardView"
             app:layout_constraintStart_toStartOf="@id/nok_cardView" />

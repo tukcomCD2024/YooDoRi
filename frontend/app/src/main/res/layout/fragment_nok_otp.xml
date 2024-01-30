@@ -6,6 +6,10 @@
         <variable
             name="view"
             type="kr.ac.tukorea.whereareu.presentation.login.NokOtpFragment" />
+
+        <variable
+            name="viewModel"
+            type="kr.ac.tukorea.whereareu.presentation.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,6 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="인증번호"
+                android:text="@{viewModel.nokOtp}"
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                 android:textColorHint="@color/gray60" />

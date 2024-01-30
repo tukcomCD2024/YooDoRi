@@ -6,6 +6,10 @@
         <variable
             name="view"
             type="kr.ac.tukorea.whereareu.presentation.login.PatientIdentifyFragment"/>
+
+        <variable
+            name="viewModel"
+            type="kr.ac.tukorea.whereareu.presentation.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="이름"
+                android:text="@{viewModel.dementiaName}"
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                 android:textColorHint="@color/gray60"
@@ -112,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="전화번호"
+                android:text="@{viewModel.dementiaPhoneNumber}"
                 android:inputType="number"
                 android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                 android:textColorHint="@color/gray60"

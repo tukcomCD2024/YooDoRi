@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
@@ -13,9 +14,18 @@ import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
 
 class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
-
+    private lateinit var viewModel: LoginViewModel
     override fun initObserver() {
+        viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
+        binding.viewModel = viewModel
 
+        viewModel.testSuccess.observe(this){
+            if(it == "success"){
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+        }
     }
 
     override fun initView() {
@@ -43,9 +53,7 @@ class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_
             return
         }
 
-        val intent = Intent(requireContext(), MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        viewModel.sendNokIdentity()
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()

@@ -1,9 +1,11 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Context
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientIdentifyBinding
@@ -15,9 +17,27 @@ import okhttp3.Interceptor.Companion.invoke
 
 class PatientIdentifyFragment :
     BaseFragment<FragmentPatientIdentifyBinding>(R.layout.fragment_patient_identify) {
-
+    private lateinit var viewModel: LoginViewModel
     override fun initObserver() {
+        viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
+        binding.viewModel = viewModel
 
+        with(viewModel) {
+            testError.observe(this@PatientIdentifyFragment) {
+                android.util.Log.d("test error", it)
+            }
+            testSuccess.observe(this@PatientIdentifyFragment){
+                if(it == "success"){
+                    findNavController().navigate(kr.ac.tukorea.whereareu.R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+                }
+            }
+            dementiaName.observe(this@PatientIdentifyFragment){
+                Log.d("dementiaName", it.toString())
+            }
+            dementiaPhoneNumber.observe(this@PatientIdentifyFragment){
+                Log.d("dementiaphone", it.toString())
+            }
+        }
     }
 
     override fun initView() {
@@ -48,16 +68,16 @@ class PatientIdentifyFragment :
     }
 
     fun onClickInputDone(){
-        if(!validName()){
-            binding.nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
-        }
+        binding.nameTextInputLayout.error = if(!validName())"최소 2자의 한글을 입력해주세요" else null
+
 
         if (!validPhone()){
             binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 01012345678"
             return
         }
 
-        findNavController().navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+        viewModel.sendDementiaIdentity(binding.nameEt.text.toString(), binding.phoneNumberEt.text.toString())
+        //findNavController().navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()
