@@ -23,6 +23,7 @@ class PatientOtpFragment: BaseFragment<FragmentPatientOtpBinding>(R.layout.fragm
     override fun initView() {
         binding.view = this
         Log.d("backstack", findNavController().currentBackStackEntry.toString())
+        Log.d("prevback", findNavController().previousBackStackEntry.toString())
     }
 
     fun onClickBackBtn(){

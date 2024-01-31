@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -26,6 +27,9 @@ object NetworkModule {
     @Singleton
     fun provideOKHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(HttpRequestInterceptor())
             .retryOnConnectionFailure(false)
             .build()

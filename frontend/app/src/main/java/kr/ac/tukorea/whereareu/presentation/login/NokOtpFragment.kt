@@ -18,15 +18,19 @@ import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorAction
 class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
     private lateinit var viewModel: LoginViewModel
     private val args: NokOtpFragmentArgs by navArgs()
+
     override fun initObserver() {
         viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
         binding.viewModel = viewModel
 
-        viewModel.testSuccess.observe(this){
+        viewModel.apiSuccess.observe(this){
             if(it == "success"){
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+            }
+            else{
+                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
             }
         }
     }
@@ -55,8 +59,7 @@ class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_
             binding.otpTextInputLayout.error = "6자리의 인증번호를 입력해주세요."
             return
         }
-        val response = viewModel.sendNokIdentity(binding.otpEt.text.toString(), args.name, args.phone)
-        response.toString()
+        viewModel.sendNokIdentity(binding.otpEt.text.toString(), args.name, args.phone)
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()

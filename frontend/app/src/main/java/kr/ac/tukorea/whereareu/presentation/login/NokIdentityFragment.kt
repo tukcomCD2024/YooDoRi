@@ -2,6 +2,7 @@ package kr.ac.tukorea.whereareu.presentation.login
 
 import android.util.Log
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
@@ -16,26 +17,14 @@ import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.showKeyboard
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {
         private lateinit var viewModel: LoginViewModel
-        //private val viewModel: LoginViewModel by viewModels()
 
     override fun initObserver() {
         viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
         binding.viewModel = viewModel
-
-        /*with(viewModel) {
-            testError.observe(this@NokIdentityFragment) {
-                Log.d("test error", it)
-            }
-            testSuccess.observe(this@NokIdentityFragment){
-                if(it == "success"){
-                    findNavController().navigate(R.id.action_nokIdentityFragment_to_nokOtpFragment)
-                }
-            }
-        }*/
     }
 
     override fun initView() {
-        viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
+        Log.d("nokbackstack", findNavController().currentBackStackEntry.toString())
         binding.view = this
         with(binding) {
             nameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT){
@@ -73,7 +62,6 @@ class NokIdentityFragment :
         val action = NokIdentityFragmentDirections.actionNokIdentityFragmentToNokOtpFragment(
             binding.nameEt.text.toString(), binding.phoneNumberEt.text.toString())
         findNavController().navigate(action)
-        //viewModel.sendNokIdentity()
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()

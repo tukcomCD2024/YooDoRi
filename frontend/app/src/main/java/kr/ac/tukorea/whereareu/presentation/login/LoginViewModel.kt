@@ -27,14 +27,12 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val repository: LoginRepositoryImpl
 ) : ViewModel() {
-    //private val _nokIdentityResult = MutableLiveData<NokIdentityResponse>()
-    //val nokIdentityResult: LiveData<NokIdentityResponse> get() = _nokIdentityResult
 
-    private val _testError = MutableLiveData<String>()
-    val testError: LiveData<String> get() = _testError
+    private val _apiError = MutableLiveData<String>()
+    val apiError: LiveData<String> get() = _apiError
 
-    private val _testSuccess = MutableLiveData<String>()
-    val testSuccess: LiveData<String> get() = _testSuccess
+    private val _apiSuccess = MutableLiveData<String>()
+    val apiSuccess: LiveData<String> get() = _apiSuccess
 
     private val _dementiaOtp = MutableLiveData<String>()
     val dementiaOtp: LiveData<String> get() = _dementiaOtp
@@ -45,8 +43,11 @@ class LoginViewModel @Inject constructor(
     private val _isConnect = MutableLiveData<Boolean>()
     val isConnect: LiveData<Boolean> get() = _isConnect
 
+    fun resetApiSuccess(reset: String){
+        _apiSuccess.value = reset
+    }
+
     fun sendNokIdentity(otp: String, name: String, phoneNumber: String) {
-        var response: NokIdentityResponse? = null
         viewModelScope.launch(Dispatchers.IO) {
             val result = handleApi({
                 repository.sendNokIdentity(
@@ -55,36 +56,34 @@ class LoginViewModel @Inject constructor(
             }, { NokIdentityResponse -> NokIdentityResponse })
             withContext(Dispatchers.Main) {
                 result.onSuccess {
-                    //_nokIdentityResult.value = it
-                    it.status
                     Log.d("NokIdentity Success", it.toString())
-                    _testSuccess.value = "success"
-                    response = it
+                    _apiSuccess.value = it.status
                 }
-                result.onFail { _testError.value = "api 연동 실패" }
-                result.onError { _testError.value = "api 연동 error: $it" }
-                result.onException { _testError.value = "api 연동 exception: $it" }
+                result.onFail { _apiError.value = "api 연동 실패" }
+                result.onError { _apiError.value = "api 연동 error: $it" }
+                result.onException { _apiError.value = "api 연동 exception: $it" }
             }
         }
     }
 
 
-    fun sendDementiaIdentity(name: String, phoneNumber: String) = viewModelScope.launch(Dispatchers.IO) {
-        val result = handleApi({
-            repository.sendDementiaIdentity(
-                DementiaIdentity(name, phoneNumber)
-            )
-        }, { DementiaIdentityResponse -> DementiaIdentityResponse })
-        withContext(Dispatchers.Main) {
-            result.onSuccess {
-                //_nokIdentityResult.value = it
-                Log.d("DementiaIdentity Success", it.toString())
-                _dementiaOtp.value = it.dementiaKey
-                _testSuccess.value = "success"
+    fun sendDementiaIdentity(name: String, phoneNumber: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = handleApi({
+                repository.sendDementiaIdentity(
+                    DementiaIdentity(name, phoneNumber)
+                )
+            }, { DementiaIdentityResponse -> DementiaIdentityResponse })
+            withContext(Dispatchers.Main) {
+                result.onSuccess {
+                    Log.d("DementiaIdentity Success", it.toString())
+                    _dementiaOtp.value = it.dementiaKey
+                    _apiSuccess.value = it.status
+                }
+                result.onFail { _apiError.value = "api 연동 실패" }
+                result.onError { _apiError.value = "api 연동 error: $it" }
+                result.onException { _apiError.value = "api 연동 exception: $it" }
             }
-            result.onFail { _testError.value = "api 연동 실패" }
-            result.onError { _testError.value = "api 연동 error: $it" }
-            result.onException { _testError.value = "api 연동 exception: $it" }
         }
     }
 }

@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientIdentifyBinding
@@ -18,36 +19,33 @@ import okhttp3.Interceptor.Companion.invoke
 class PatientIdentifyFragment :
     BaseFragment<FragmentPatientIdentifyBinding>(R.layout.fragment_patient_identify) {
     private lateinit var viewModel: LoginViewModel
+    private lateinit var navigator: NavController
     override fun initObserver() {
         viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
         binding.viewModel = viewModel
 
-        with(viewModel) {
-            testError.observe(this@PatientIdentifyFragment) {
-                android.util.Log.d("test error", it)
-            }
-            testSuccess.observe(this@PatientIdentifyFragment){
-                if(it == "success"){
-                    findNavController().navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
-                }
+        viewModel.apiSuccess.observe(this@PatientIdentifyFragment) {
+            if (it == "success") {
+                navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+                viewModel.resetApiSuccess("reset")
             }
         }
     }
 
     override fun initView() {
+        navigator = findNavController()
         binding.view = this
         with(binding) {
-            nameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT){
-                if(validName()){
+            nameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
+                if (validName()) {
                     nameTextInputLayout.error = null
                     phoneNumberEt.showKeyboard()
-                }
-                else{
+                } else {
                     nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
                 }
             }
-            phoneNumberEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT){
-                if(validPhone()){
+            phoneNumberEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
+                if (validPhone()) {
                     phoneNumberTextInputLayout.error = null
                     phoneNumberEt.hideKeyboard()
                 } else {
@@ -57,21 +55,23 @@ class PatientIdentifyFragment :
         }
     }
 
-    fun onClickBackBtn(){
-        findNavController().popBackStack()
+    fun onClickBackBtn() {
+        navigator.popBackStack()
     }
 
-    fun onClickInputDone(){
-        binding.nameTextInputLayout.error = if(!validName())"최소 2자의 한글을 입력해주세요" else null
+    fun onClickInputDone() {
+        binding.nameTextInputLayout.error = if (!validName()) "최소 2자의 한글을 입력해주세요" else null
 
 
-        if (!validPhone()){
+        if (!validPhone()) {
             binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 01012345678"
             return
         }
 
-        viewModel.sendDementiaIdentity(binding.nameEt.text.toString(), binding.phoneNumberEt.text.toString())
-        //findNavController().navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+        viewModel.sendDementiaIdentity(
+            binding.nameEt.text.toString(),
+            binding.phoneNumberEt.text.toString()
+        )
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()

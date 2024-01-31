@@ -21,8 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel: LoginViewModel
 
-    //LoginFragment에서 popBackStack으로 뒤로가기 방지
-    private val callback = object : OnBackPressedCallback(true) {
+    /*private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
                 navController.popBackStack()
             Log.d("current", navController.currentBackStackEntry.toString())
@@ -30,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
                 finish()
             }
         }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +40,6 @@ class LoginActivity : AppCompatActivity() {
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        this.onBackPressedDispatcher.addCallback(this, callback)
+        //this.onBackPressedDispatcher.addCallback(this, callback)
     }
 }
