@@ -115,4 +115,10 @@
         <item name="errorTextAppearance">@style/TextAppearance.App.16sp.SemiBold</item>
         <item name="errorTextColor">@color/orange</item>
     </style>
+
+    <style name="Widget.MyApp.BottomNavigationView.Material2" parent="Widget.MaterialComponents.BottomNavigationView"></style>
+
+    <style name="Widget.MyApp.FloatingActionButton.Material2" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:elevation">0dp</item>
+    </style>
 </resources>

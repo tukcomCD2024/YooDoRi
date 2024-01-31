@@ -16,7 +16,6 @@ import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.showKeyboard
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {
         private lateinit var viewModel: LoginViewModel
-        private val args: NokIdentityFragmentArgs by navArgs<>()
         //private val viewModel: LoginViewModel by viewModels()
 
     override fun initObserver() {
@@ -70,7 +69,10 @@ class NokIdentityFragment :
             binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 01012345678"
             return
         }
-        findNavController().navigate(R.id.action_nokIdentityFragment_to_nokOtpFragment)
+
+        val action = NokIdentityFragmentDirections.actionNokIdentityFragmentToNokOtpFragment(
+            binding.nameEt.text.toString(), binding.phoneNumberEt.text.toString())
+        findNavController().navigate(action)
         //viewModel.sendNokIdentity()
     }
 

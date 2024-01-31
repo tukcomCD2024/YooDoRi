@@ -33,18 +33,20 @@
         <action
             android:id="@+id/action_nokIdentityFragment_to_nokOtpFragment"
             app:destination="@id/nokOtpFragment" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/nokOtpFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.NokOtpFragment"
+        android:label="NokOtpFragment" >
         <argument
             android:name="name"
             app:argType="string" />
         <argument
             android:name="phone"
             app:argType="string" />
-
     </fragment>
-    <fragment
-        android:id="@+id/nokOtpFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.login.NokOtpFragment"
-        android:label="NokOtpFragment" />
 
 
 

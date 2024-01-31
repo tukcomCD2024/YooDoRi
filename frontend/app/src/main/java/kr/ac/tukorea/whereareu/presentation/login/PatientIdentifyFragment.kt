@@ -28,14 +28,8 @@ class PatientIdentifyFragment :
             }
             testSuccess.observe(this@PatientIdentifyFragment){
                 if(it == "success"){
-                    findNavController().navigate(kr.ac.tukorea.whereareu.R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+                    findNavController().navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
                 }
-            }
-            dementiaName.observe(this@PatientIdentifyFragment){
-                Log.d("dementiaName", it.toString())
-            }
-            dementiaPhoneNumber.observe(this@PatientIdentifyFragment){
-                Log.d("dementiaphone", it.toString())
             }
         }
     }

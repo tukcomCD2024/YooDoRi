@@ -1,5 +1,6 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
+import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,7 @@ class PatientOtpFragment: BaseFragment<FragmentPatientOtpBinding>(R.layout.fragm
 
     override fun initView() {
         binding.view = this
+        Log.d("backstack", findNavController().currentBackStackEntry.toString())
     }
 
     fun onClickBackBtn(){

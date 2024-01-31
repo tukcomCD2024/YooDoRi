@@ -15,6 +15,7 @@ import kr.ac.tukorea.whereareu.data.model.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.data.model.NokIdentity
 import kr.ac.tukorea.whereareu.data.model.NokIdentityResponse
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
+import kr.ac.tukorea.whereareu.util.NetworkResult
 import kr.ac.tukorea.whereareu.util.handleApi
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onException
@@ -35,41 +36,38 @@ class LoginViewModel @Inject constructor(
     private val _testSuccess = MutableLiveData<String>()
     val testSuccess: LiveData<String> get() = _testSuccess
 
-    private val _dementiaName = MutableLiveData<String>()
-    val dementiaName: LiveData<String> get() = _dementiaName
-
-    private val _dementiaPhoneNumber = MutableLiveData<String>()
-    val dementiaPhoneNumber: LiveData<String> get() = _dementiaPhoneNumber
-
     private val _dementiaOtp = MutableLiveData<String>()
     val dementiaOtp: LiveData<String> get() = _dementiaOtp
-
-    private val _nokName = MutableLiveData<String>()
-    val nokName: LiveData<String> get() = _nokName
-
-    private val _nokPhoneNumber = MutableLiveData<String>()
-    val nokPhoneNumber: LiveData<String> get() = _nokPhoneNumber
 
     private val _nokOtp = MutableLiveData<String>()
     val nokOtp: LiveData<String> get() = _nokOtp
 
-    fun sendNokIdentity() = viewModelScope.launch(Dispatchers.IO) {
-        val result = handleApi({
-            repository.sendNokIdentity(
-                NokIdentity(_nokOtp.value!!, _nokName.value!!, _nokPhoneNumber.value!!)
-            )
-        }, { NokIdentityResponse -> NokIdentityResponse })
-        withContext(Dispatchers.Main) {
-            result.onSuccess {
-                //_nokIdentityResult.value = it
-                Log.d("NokIdentity Success", it.toString())
-                _testSuccess.value = "success"
+    private val _isConnect = MutableLiveData<Boolean>()
+    val isConnect: LiveData<Boolean> get() = _isConnect
+
+    fun sendNokIdentity(otp: String, name: String, phoneNumber: String) {
+        var response: NokIdentityResponse? = null
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = handleApi({
+                repository.sendNokIdentity(
+                    NokIdentity(otp, name, phoneNumber)
+                )
+            }, { NokIdentityResponse -> NokIdentityResponse })
+            withContext(Dispatchers.Main) {
+                result.onSuccess {
+                    //_nokIdentityResult.value = it
+                    it.status
+                    Log.d("NokIdentity Success", it.toString())
+                    _testSuccess.value = "success"
+                    response = it
+                }
+                result.onFail { _testError.value = "api 연동 실패" }
+                result.onError { _testError.value = "api 연동 error: $it" }
+                result.onException { _testError.value = "api 연동 exception: $it" }
             }
-            result.onFail { _testError.value = "api 연동 실패" }
-            result.onError { _testError.value = "api 연동 error: $it" }
-            result.onException { _testError.value = "api 연동 exception: $it" }
         }
     }
+
 
     fun sendDementiaIdentity(name: String, phoneNumber: String) = viewModelScope.launch(Dispatchers.IO) {
         val result = handleApi({

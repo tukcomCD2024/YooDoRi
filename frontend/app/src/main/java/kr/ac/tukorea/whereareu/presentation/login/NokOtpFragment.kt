@@ -1,11 +1,13 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Intent
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
 import kr.ac.tukorea.whereareu.presentation.MainActivity
@@ -15,6 +17,7 @@ import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorAction
 
 class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
     private lateinit var viewModel: LoginViewModel
+    private val args: NokOtpFragmentArgs by navArgs()
     override fun initObserver() {
         viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
         binding.viewModel = viewModel
@@ -52,8 +55,8 @@ class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_
             binding.otpTextInputLayout.error = "6자리의 인증번호를 입력해주세요."
             return
         }
-
-        viewModel.sendNokIdentity()
+        val response = viewModel.sendNokIdentity(binding.otpEt.text.toString(), args.name, args.phone)
+        response.toString()
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
