@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.MainActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainer"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_graph" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_corner_15_strok_1_bottom_nav"
+        style="@style/Widget.MyApp.BottomNavigationView.Material2"
+        android:backgroundTint="@color/white"
+        android:padding="8dp"
+        app:itemIconSize="32dp"
+        app:itemIconTint="@drawable/bottom_color_selector"
+        app:itemRippleColor="@null"
+        app:itemPaddingTop="0dp"
+        app:itemPaddingBottom="5dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:itemTextColor="@drawable/bottom_color_selector"
+        app:itemTextAppearanceActive="@style/TextAppearance.App.14sp.SemiBold"
+        app:itemTextAppearanceInactive="@style/TextAppearance.App.14sp.SemiBold"
+        app:menu="@menu/main_menu" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
