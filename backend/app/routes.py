@@ -6,6 +6,7 @@ from sqlalchemy import text
 # 블루프린트 생성
 nok_info_routes = Blueprint('nok_info_routes', __name__)
 dementia_info_routes = Blueprint('dementia_info_routes', __name__)
+is_connected_routes = Blueprint('is_connected_routes', __name__)
 location_info_routes = Blueprint('location_info_routes', __name__)
 send_location_info_routes = Blueprint('send_live_location_info_routes', __name__)
 user_login_routes = Blueprint('user_login_routes', __name__)
@@ -17,9 +18,11 @@ def receive_nok_info():
         nok_data = request.json
         _keyfromdementia = nok_data.get('keyfromdementia')
         rng = RandomNumberGenerator()
+        print(_keyfromdementia)
 
         # 인증번호 중복 여부 확인
         existing_dementia = dementia_info.query.filter_by(dementia_key=_keyfromdementia).first()
+        print(existing_dementia)
         if existing_dementia:
             # 이미 등록된 인증번호에 해당하는 환자 정보가 있을 경우, 해당 환자의 key 값을 가져옴
             for _ in range(10):
@@ -63,6 +66,24 @@ def receive_dementia_info():
         db.session.commit()
         
         response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'dementia_key': _dementia_key}
+        return jsonify(response_data)
+    
+    except Exception as e:
+        response_data = {'status': 'error', 'message': str(e)}
+        return jsonify(response_data), 500
+
+@is_connected_routes.route('/is-connected', methods=['POST'])
+def is_connected():
+    try:
+        connection_request = request.json
+        _dementia_key = connection_request.get('dementia_key')
+
+        existing_dementia = nok_info.query.filter_by(dementia_info_key=_dementia_key).first()
+        if existing_dementia:
+            response_data = {'status': 'success', 'message': 'Connected successfully'}
+        else:
+            response_data = {'status': 'error', 'message': 'Connection failed'}
+
         return jsonify(response_data)
     
     except Exception as e:
