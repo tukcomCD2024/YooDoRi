@@ -8,21 +8,17 @@ import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-        lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            binding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
-            val navController = navHostFragment.navController
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        val navController = navHostFragment.navController
 
-            binding.bottomNav.setupWithNavController(navController)
-        }
-
-        fun goNews() {
-            binding.bottomNav.selectedItemId = R.id.homeFragment
-        }
+        binding.bottomNav.setupWithNavController(navController)
+    }
 }

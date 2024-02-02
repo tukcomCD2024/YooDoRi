@@ -26,13 +26,18 @@
         style="@style/Widget.MyApp.BottomNavigationView.Material2"
         android:backgroundTint="@color/white"
         android:padding="8dp"
-        app:itemIconSize="24dp"
+        app:itemIconSize="32dp"
         app:itemIconTint="@drawable/bottom_color_selector"
         app:itemRippleColor="@null"
-        app:labelVisibilityMode="unlabeled"
+        app:itemPaddingTop="0dp"
+        app:itemPaddingBottom="5dp"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:itemTextColor="@drawable/bottom_color_selector"
+        app:itemTextAppearanceActive="@style/TextAppearance.App.14sp.SemiBold"
+        app:itemTextAppearanceInactive="@style/TextAppearance.App.14sp.SemiBold"
         app:menu="@menu/main_menu" />
 
 

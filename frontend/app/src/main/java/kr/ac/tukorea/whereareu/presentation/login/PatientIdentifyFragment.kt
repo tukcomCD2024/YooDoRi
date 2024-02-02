@@ -1,11 +1,14 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -25,12 +28,12 @@ class PatientIdentifyFragment :
     override fun initObserver() {
         binding.viewModel = viewModel
 
-        viewModel.apiSuccess.observe(this@PatientIdentifyFragment) {
+        /*viewModel.apiSuccess.observe(this@PatientIdentifyFragment) {
             if (it == "success") {
                 navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
                 viewModel.resetApiSuccess("reset")
             }
-        }
+        }*/
     }
 
     override fun initView() {
@@ -70,10 +73,19 @@ class PatientIdentifyFragment :
             return
         }
 
-        viewModel.sendDementiaIdentity(
+        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+        spf.edit {
+            putString("name", binding.nameEt.text.toString())
+            putString("phone", binding.phoneNumberEt.text.toString())
+            putBoolean("isDementia", true)
+            apply()
+        }
+
+        /*viewModel.sendDementiaIdentity(
             binding.nameEt.text.toString(),
             binding.phoneNumberEt.text.toString()
-        )
+        )*/
+        navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()

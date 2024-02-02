@@ -1,10 +1,12 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,7 +25,7 @@ class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_
     override fun initObserver() {
         binding.viewModel = viewModel
 
-        viewModel.apiSuccess.observe(this){
+        /*viewModel.apiSuccess.observe(this){
             if(it == "success"){
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -32,7 +34,7 @@ class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_
             else{
                 binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
             }
-        }
+        }*/
     }
 
     override fun initView() {
@@ -59,7 +61,18 @@ class NokOtpFragment: BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_
             binding.otpTextInputLayout.error = "6자리의 인증번호를 입력해주세요."
             return
         }
-        viewModel.sendNokIdentity(binding.otpEt.text.toString(), args.name, args.phone)
+        val spf = requireActivity().getSharedPreferences("User", Context.MODE_PRIVATE)
+        spf.edit {
+            putString("name", args.name)
+            putString("phone", args.phone)
+            putBoolean("isDementia", false)
+            apply()
+        }
+
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        //viewModel.sendNokIdentity(binding.otpEt.text.toString(), args.name, args.phone)
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
