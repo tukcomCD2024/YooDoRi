@@ -1,10 +1,12 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Context
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -18,10 +20,9 @@ import okhttp3.Interceptor.Companion.invoke
 
 class PatientIdentifyFragment :
     BaseFragment<FragmentPatientIdentifyBinding>(R.layout.fragment_patient_identify) {
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by activityViewModels()
     private lateinit var navigator: NavController
     override fun initObserver() {
-        viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
         binding.viewModel = viewModel
 
         viewModel.apiSuccess.observe(this@PatientIdentifyFragment) {
@@ -35,6 +36,7 @@ class PatientIdentifyFragment :
     override fun initView() {
         navigator = findNavController()
         binding.view = this
+        binding.phoneNumberEt.addTextChangedListener(PhoneNumberFormattingTextWatcher())
         with(binding) {
             nameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
                 if (validName()) {
@@ -49,7 +51,7 @@ class PatientIdentifyFragment :
                     phoneNumberTextInputLayout.error = null
                     phoneNumberEt.hideKeyboard()
                 } else {
-                    phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n입력 예시) 01012345678"
+                    phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n입력 예시) 010-1234-5678"
                 }
             }
         }
@@ -64,7 +66,7 @@ class PatientIdentifyFragment :
 
 
         if (!validPhone()) {
-            binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 01012345678"
+            binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 010-1234-5678"
             return
         }
 
@@ -82,6 +84,6 @@ class PatientIdentifyFragment :
 
     companion object {
         private const val REGEX_NAME = "^[가-힣]{2,}\$"
-        private const val REGEX_PHONE = "^01([016789])([0-9]{4})([0-9]{4})"
+        private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }

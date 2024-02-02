@@ -1,7 +1,9 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgs
@@ -16,16 +18,16 @@ import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.showKeyboard
 
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {
-        private lateinit var viewModel: LoginViewModel
+        private val viewModel: LoginViewModel by activityViewModels()
 
     override fun initObserver() {
-        viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
         binding.viewModel = viewModel
     }
 
     override fun initView() {
         Log.d("nokbackstack", findNavController().currentBackStackEntry.toString())
         binding.view = this
+        binding.phoneNumberEt.addTextChangedListener(PhoneNumberFormattingTextWatcher())
         with(binding) {
             nameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT){
                 if(validName()){
@@ -55,7 +57,7 @@ class NokIdentityFragment :
         binding.nameTextInputLayout.error = if(!validName()) "최소 2자의 한글을 입력해주세요" else null
 
         if (!validPhone()){
-            binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 01012345678"
+            binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 010-1234-5678"
             return
         }
 
@@ -73,6 +75,6 @@ class NokIdentityFragment :
 
     companion object {
         private const val REGEX_NAME = "^[가-힣]{2,}\$"
-        private const val REGEX_PHONE = "^01([016789])([0-9]{4})([0-9]{4})"
+        private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }

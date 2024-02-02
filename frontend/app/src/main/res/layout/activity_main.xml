@@ -26,7 +26,7 @@
         style="@style/Widget.MyApp.BottomNavigationView.Material2"
         android:backgroundTint="@color/white"
         android:padding="8dp"
-        app:itemIconSize="48dp"
+        app:itemIconSize="24dp"
         app:itemIconTint="@drawable/bottom_color_selector"
         app:itemRippleColor="@null"
         app:labelVisibilityMode="unlabeled"

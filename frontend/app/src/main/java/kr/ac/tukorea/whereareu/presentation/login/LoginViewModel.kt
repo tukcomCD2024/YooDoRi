@@ -10,6 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kr.ac.tukorea.whereareu.data.model.CheckConnect
+import kr.ac.tukorea.whereareu.data.model.CheckConnectedResponse
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.data.model.NokIdentity
@@ -40,8 +42,8 @@ class LoginViewModel @Inject constructor(
     private val _nokOtp = MutableLiveData<String>()
     val nokOtp: LiveData<String> get() = _nokOtp
 
-    private val _isConnect = MutableLiveData<Boolean>()
-    val isConnect: LiveData<Boolean> get() = _isConnect
+    private val _isConnect = MutableLiveData<String>()
+    val isConnect: LiveData<String> get() = _isConnect
 
     fun resetApiSuccess(reset: String){
         _apiSuccess.value = reset
@@ -86,4 +88,22 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun checkConnected(otp: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = handleApi({
+                repository.checkConnected(CheckConnect(otp))
+            }, { CheckConnectedResponse -> CheckConnectedResponse })
+            withContext(Dispatchers.Main) {
+                result.onSuccess {
+                    Log.d("Connected Success", it.toString())
+                    _isConnect.value = it.status
+                }
+                result.onFail { _apiError.value = "api 연동 실패" }
+                result.onError { _apiError.value = "api 연동 error: $it" }
+                result.onException { _apiError.value = "api 연동 exception: $it" }
+            }
+        }
+    }
+
 }

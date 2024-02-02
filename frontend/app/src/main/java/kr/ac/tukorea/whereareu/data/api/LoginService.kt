@@ -1,5 +1,7 @@
 package kr.ac.tukorea.whereareu.data.api
 
+import kr.ac.tukorea.whereareu.data.model.CheckConnect
+import kr.ac.tukorea.whereareu.data.model.CheckConnectedResponse
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.data.model.NokIdentity
@@ -14,4 +16,7 @@ interface LoginService {
 
     @POST("receive-dementia-info")
     suspend fun postDementiaIdentity(@Body request: DementiaIdentity): Response<DementiaIdentityResponse>
+
+    @POST("is-connected")
+    suspend fun checkConnected(@Body request: CheckConnect): Response<CheckConnectedResponse>
 }

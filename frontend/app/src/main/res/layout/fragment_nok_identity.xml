@@ -109,8 +109,9 @@
                 android:id="@+id/phone_number_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="전화번호 (숫자만 입력해주세요)"
-                android:inputType="number"
+                android:hint="전화번호"
+                android:inputType="phone"
+                android:maxLength="13"
                 android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                 android:textColorHint="@color/gray60" />
 

@@ -3,6 +3,7 @@ package kr.ac.tukorea.whereareu.presentation.login
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
@@ -16,30 +17,18 @@ import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
+    private val viewModel: LoginViewModel by viewModels()
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel: LoginViewModel
-
-    /*private val callback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-                navController.popBackStack()
-            Log.d("current", navController.currentBackStackEntry.toString())
-            if(navController.currentBackStackEntry == null){
-                finish()
-            }
-        }
-    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        //this.onBackPressedDispatcher.addCallback(this, callback)
     }
 }
