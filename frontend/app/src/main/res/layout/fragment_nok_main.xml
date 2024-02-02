@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/main_cv"
+            android:layout_width="360dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/yellow"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="350dp"
+                android:layout_height="90dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rectangle_corner_10"
+                android:backgroundTint="#ffffff" />
+
+            <View
+                android:id="@+id/oval"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/oval" />
+
+            <TextView
+                android:id="@+id/poatitent_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="110dp"
+                android:layout_marginTop="20dp"
+                android:text=""
+                android:textAppearance="@style/TextAppearance.App.24sp.ExtraBold"
+                app:layout_constraintStart_toEndOf="@+id/oval"
+                tools:text="황순권" />
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="20dp"
+                android:text="이동상태:"
+                android:textAppearance="@style/TextAppearance.App.24sp.ExtraBold"
+                app:layout_constraintStart_toEndOf="@+id/oval" />
+
+            <TextView
+                android:id="@+id/state_tv"
+                text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="305dp"
+                android:layout_marginTop="20dp"
+                android:textAppearance="@style/TextAppearance.App.24sp.Regular"
+                tools:text="도보" />
+
+
+            <View
+                android:layout_width="220dp"
+                android:layout_height="0.5dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp" />
+
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src=""
+
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="40dp"
+            android:background="@drawable/oval"
+            app:layout_constraintBottom_toBottomOf="@+id/main_cv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/main_cv" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
