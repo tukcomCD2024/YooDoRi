@@ -50,7 +50,7 @@
                 android:id="@+id/state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="210dp"
+                android:layout_marginStart="190dp"
                 android:layout_marginTop="20dp"
                 android:text="이동상태:"
                 android:textAppearance="@style/TextAppearance.App.24sp.ExtraBold"
@@ -61,7 +61,7 @@
                 text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="305dp"
+                android:layout_marginStart="285dp"
                 android:layout_marginTop="20dp"
                 android:textAppearance="@style/TextAppearance.App.24sp.Regular"
                 tools:text="도보" />
@@ -75,21 +75,67 @@
 
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src=""
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_wifi_on"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="110dp"
+                />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wifi_tv"
+                android:text=""
+                tools:text="on"
+                android:layout_marginTop="55dp"
+                android:textAppearance="@style/TextAppearance.App.24sp.ExtraBold"
+                android:layout_marginStart="150dp"
+                />
+            
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/gps_iv"
+                android:src="@drawable/ic_gps_on"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="180dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gps_tv"
+                android:text=""
+                tools:text="on"
+                android:layout_marginTop="55dp"
+                android:textAppearance="@style/TextAppearance.App.24sp.ExtraBold"
+                android:layout_marginStart="220dp"
+                />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/battery_iv"
+                android:src="@drawable/ic_battery"
+                android:layout_marginTop="55dp"
+                android:layout_marginStart="260dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/battery_tv"
+                android:text=""
+                tools:text="100%"
+                android:layout_marginTop="63dp"
+                android:textAppearance="@style/TextAppearance.App.16sp.ExtraBold"
+                android:layout_marginStart="300dp"
+                />
 
         </androidx.cardview.widget.CardView>
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="40dp"
-            android:background="@drawable/oval"
-            app:layout_constraintBottom_toBottomOf="@+id/main_cv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/main_cv" />
+
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
