@@ -2,14 +2,15 @@ import numpy as np
 import pandas as pd
 import sys
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
 from io import StringIO
+import pickle
 #from flask import Flask
 
 # app = Flask(__name__)
 
 # Fixme 데이터 저장 위치 변경 필요
 # 데이터 불러오기
+"""
 url = 'C:\\Users\\sk002\\OneDrive\\바탕 화면\\학교\\Yoodori\\data.csv'
 df = pd.read_csv(url)
 
@@ -23,6 +24,12 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # DecisionTreeClassifier 모델 생성 및 학습
 model = DecisionTreeClassifier(random_state=0)
 model.fit(X_train, y_train)
+"""
+
+# 저장된 모델 불러오기
+model_filename = 'decision_tree_model.pkl'
+with open(model_filename, 'rb') as model_file:
+    model = pickle.load(model_file)
 
 # 예측 함수
 def predict(data):
