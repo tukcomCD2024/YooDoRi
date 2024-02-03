@@ -3,6 +3,7 @@ import pandas as pd
 import sys
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
+from io import StringIO
 #from flask import Flask
 
 # app = Flask(__name__)
@@ -33,20 +34,22 @@ def predict(data):
 # 전처리 함수
 def preprocessing(data):
     # 클라이언트에서 넘어온 데이터를 입력으로 사용
-    data = pd.DataFrame([row.split(',') for row in data],
-                  columns=['시간', 'x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'])
+
+    data = pd.read_csv(StringIO(data), header=None, names=['시간', 'x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'])
     data = data.drop(['시간'], axis=1)
 
     return data
 
 if __name__ == '__main__':
     # 파일 경로 가져오기
+    # 지금은 데이터가 저장된 파일의 경로를 실행할 때 입력
+    # 추후 수정 가능
     file_path = sys.argv[1]
 
     f = open(file_path, 'r')
     data = f.read()
     f.close()
-
+    
     prepro_data = preprocessing(data)
     res = predict(prepro_data)
     
