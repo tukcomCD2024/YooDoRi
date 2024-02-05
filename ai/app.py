@@ -1,30 +1,9 @@
-import numpy as np
 import pandas as pd
 import sys
 from sklearn.tree import DecisionTreeClassifier
 from io import StringIO
 import pickle
-#from flask import Flask
 
-# app = Flask(__name__)
-
-# Fixme 데이터 저장 위치 변경 필요
-# 데이터 불러오기
-"""
-url = 'C:\\Users\\sk002\\OneDrive\\바탕 화면\\학교\\Yoodori\\data.csv'
-df = pd.read_csv(url)
-
-# Data split
-X = df.drop(['label'], axis=1)  # 'label' 컬럼 제외한 나머지를 특성으로 사용
-y = df['label']  # 'label' 컬럼을 타겟으로 사용
-
-# train : valid : test = 0.8 : 0.2
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-
-# DecisionTreeClassifier 모델 생성 및 학습
-model = DecisionTreeClassifier(random_state=0)
-model.fit(X_train, y_train)
-"""
 
 # 저장된 모델 불러오기
 model_filename = 'decision_tree_model.pkl'
