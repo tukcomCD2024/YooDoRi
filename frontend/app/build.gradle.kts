@@ -13,7 +13,7 @@ plugins {
 }
 
 val properties = Properties().apply{
-    load(FileInputStream(rootProject.file("naver.properties")))
+    load(FileInputStream(rootProject.file("local.properties")))
 }
 
 android {
