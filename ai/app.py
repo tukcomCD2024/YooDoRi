@@ -6,7 +6,8 @@ import pickle
 
 
 # 저장된 예측 모델 불러오기
-model_filename = 'decision_tree_model.pkl'
+# 랜덤 포레스트 모델 사용
+model_filename = 'random_forest_model.pkl'
 with open(model_filename, 'rb') as model_file:
     model = pickle.load(model_file)
 
