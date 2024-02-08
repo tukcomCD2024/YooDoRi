@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="인증번호"
-                android:text="@{viewModel.nokOtp}"
+                android:text=""
                 android:inputType="text"
                 android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                 android:textColorHint="@color/gray60" />

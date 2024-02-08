@@ -7,17 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kr.ac.tukorea.whereareu.data.model.CheckConnect
-import kr.ac.tukorea.whereareu.data.model.CheckConnectedResponse
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
-import kr.ac.tukorea.whereareu.data.model.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.data.model.NokIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentityResponse
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
-import kr.ac.tukorea.whereareu.util.NetworkResult
 import kr.ac.tukorea.whereareu.util.handleApi
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onException
@@ -30,78 +32,51 @@ class LoginViewModel @Inject constructor(
     private val repository: LoginRepositoryImpl
 ) : ViewModel() {
 
-    private val _apiError = MutableLiveData<String>()
-    val apiError: LiveData<String> get() = _apiError
+    private val _eventFlow = MutableSharedFlow<Event>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
-    private val _apiSuccess = MutableLiveData<String>()
-    val apiSuccess: LiveData<String> get() = _apiSuccess
+    private val _dementiaKeyFlow = MutableStateFlow("000000")
+    val dementiaKeyFlow = _dementiaKeyFlow.asStateFlow()
 
-    private val _dementiaOtp = MutableLiveData<String>()
-    val dementiaOtp: LiveData<String> get() = _dementiaOtp
-
-    private val _nokOtp = MutableLiveData<String>()
-    val nokOtp: LiveData<String> get() = _nokOtp
-
-    private val _isConnect = MutableLiveData<String>()
-    val isConnect: LiveData<String> get() = _isConnect
-
-    fun resetApiSuccess(reset: String){
-        _apiSuccess.value = reset
+    private fun event(event: Event) {
+        viewModelScope.launch {
+            _eventFlow.emit(event)
+        }
     }
 
-    fun sendNokIdentity(otp: String, name: String, phoneNumber: String) {
+    sealed class Event {
+        data object NavigateToMain : Event()
+        data object NavigateToPatientOtp : Event()
+        data object Fail : Event()
+    }
+
+    private fun isSuccess(result: String, event: Event) {
+        event(if (result == "success") event else Event.Fail)
+    }
+
+    fun sendNokIdentity(request: NokIdentity) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = handleApi({
-                repository.sendNokIdentity(
-                    NokIdentity(otp, name, phoneNumber)
-                )
-            }, { NokIdentityResponse -> NokIdentityResponse })
-            withContext(Dispatchers.Main) {
-                result.onSuccess {
-                    Log.d("NokIdentity Success", it.toString())
-                    _apiSuccess.value = it.status
-                }
-                result.onFail { _apiError.value = "api 연동 실패" }
-                result.onError { _apiError.value = "api 연동 error: $it" }
-                result.onException { _apiError.value = "api 연동 exception: $it" }
+            repository.sendNokIdentity(request).onSuccess {
+                isSuccess(it.status, Event.NavigateToMain)
             }
         }
     }
 
 
-    fun sendDementiaIdentity(name: String, phoneNumber: String) {
+    fun sendDementiaIdentity(request: DementiaIdentity) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = handleApi({
-                repository.sendDementiaIdentity(
-                    DementiaIdentity(name, phoneNumber)
-                )
-            }, { DementiaIdentityResponse -> DementiaIdentityResponse })
-            withContext(Dispatchers.Main) {
-                result.onSuccess {
-                    Log.d("DementiaIdentity Success", it.toString())
-                    _dementiaOtp.value = it.dementiaKey
-                    _apiSuccess.value = it.status
-                }
-                result.onFail { _apiError.value = "api 연동 실패" }
-                result.onError { _apiError.value = "api 연동 error: $it" }
-                result.onException { _apiError.value = "api 연동 exception: $it" }
+            repository.sendDementiaIdentity(request).onSuccess {
+                isSuccess(it.status, Event.NavigateToPatientOtp)
+                _dementiaKeyFlow.emit(it.dementiaKey)
             }
         }
     }
 
-    fun checkConnected(otp: String) {
+    fun checkConnected(request: CheckConnect) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = handleApi({
-                repository.checkConnected(CheckConnect(otp))
-            }, { CheckConnectedResponse -> CheckConnectedResponse })
-            withContext(Dispatchers.Main) {
-                result.onSuccess {
-                    Log.d("Connected Success", it.toString())
-                    _isConnect.value = it.status
-                }
-                result.onFail { _apiError.value = "api 연동 실패" }
-                result.onError { _apiError.value = "api 연동 error: $it" }
-                result.onException { _apiError.value = "api 연동 exception: $it" }
+            repository.checkInterConnected(request).onSuccess {
+                isSuccess(it.status, Event.NavigateToMain)
+                Log.d("되나", it.toString())
             }
         }
     }
