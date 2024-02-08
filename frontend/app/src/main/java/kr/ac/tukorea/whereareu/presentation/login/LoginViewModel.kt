@@ -20,6 +20,7 @@ import kr.ac.tukorea.whereareu.data.model.CheckConnect
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
 import kr.ac.tukorea.whereareu.data.model.NokIdentity
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
+import kr.ac.tukorea.whereareu.util.NetworkResult
 import kr.ac.tukorea.whereareu.util.handleApi
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onException

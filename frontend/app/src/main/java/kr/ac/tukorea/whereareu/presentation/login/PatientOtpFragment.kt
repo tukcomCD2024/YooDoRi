@@ -30,6 +30,17 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                 handleEvent(it)
             }
         }
+
+        /*viewModel.isConnect.observe(this){
+            if(it == "success"){
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+            else{
+                Toast.makeText(requireContext(), "아직 보호자와 연결이 되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }*/
     }
 
     override fun initView() {

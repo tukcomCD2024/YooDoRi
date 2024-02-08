@@ -16,8 +16,8 @@ class SettingFragment: BaseFragment<FragmentSettingBinding>(R.layout.fragment_se
 
         val isDementia = spf.getBoolean("isDementia", true)
         binding.userTypeTv.text = if(isDementia) "보호대상자" else "보호자"
-        binding.otherNameTv.text = if(isDementia) "보호대상자 이름" else "보호자 이름"
-        binding.otherPhoneTv.text = if(isDementia) "보호대상자 전화번호" else "보호자 전화번호"
+        binding.otherNameTv.text = if(isDementia) "보호자 이름" else "보호대상자 이름"
+        binding.otherPhoneTv.text = if(isDementia) "보호자 전화번호" else "보호대상자 전화번호"
         binding.userNameTv.text = spf.getString("name", "")
         binding.userPhoneNumberTv.text = spf.getString("phone", "")
 

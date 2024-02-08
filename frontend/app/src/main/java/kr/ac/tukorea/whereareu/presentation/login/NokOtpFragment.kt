@@ -36,7 +36,10 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             viewModel.eventFlow.collect {
                 handleEvent(it)
             }
-        }
+            else{
+                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
+            }
+        }*/
     }
 
     override fun initView() {
