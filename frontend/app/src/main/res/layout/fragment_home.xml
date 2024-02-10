@@ -16,17 +16,20 @@
             android:name="com.naver.maps.map.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="home"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -106,81 +109,122 @@
             app:layout_constraintTop_toBottomOf="@+id/patitent_tv" />
 
         <ImageView
+            android:id="@+id/wifi_iv"
             android:layout_width="27dp"
             android:layout_height="25dp"
-            android:src="@drawable/ic_wifi_on"
-            app:layout_constraintStart_toEndOf="@+id/oval_v"
-            app:layout_constraintTop_toBottomOf="@+id/line_v"
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
-            android:id="@+id/wifi_iv"
-            />
+            android:src="@drawable/ic_wifi_on"
+            app:layout_constraintStart_toEndOf="@+id/oval_v"
+            app:layout_constraintTop_toBottomOf="@+id/line_v" />
 
         <TextView
+            android:id="@+id/wifi_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/wifi_tv"
-            android:text=""
-            tools:text="on"
-            android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
-            app:layout_constraintStart_toEndOf="@+id/wifi_iv"
-            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
             android:layout_marginStart="10dp"
-            />
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
+            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
+            app:layout_constraintStart_toEndOf="@+id/wifi_iv"
+            tools:text="on" />
 
         <ImageView
+            android:id="@+id/gps_iv"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/ic_gps_on"
-            android:id="@+id/gps_iv"
-            app:layout_constraintStart_toEndOf="@+id/wifi_tv"
-            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
             android:layout_marginStart="40dp"
-            />
+            android:src="@drawable/ic_gps_on"
+            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
+            app:layout_constraintStart_toEndOf="@+id/wifi_tv" />
 
         <TextView
             android:id="@+id/gps_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            tools:text="on"
-            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
             android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@+id/gps_iv"
+            android:text=""
             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
-            />
+            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
+            app:layout_constraintStart_toEndOf="@+id/gps_iv"
+            tools:text="on" />
 
         <ImageView
+            android:id="@+id/battery_iv"
             android:layout_width="27dp"
             android:layout_height="17dp"
-            android:id="@+id/battery_iv"
-            android:src="@drawable/ic_battery"
-            app:layout_constraintStart_toEndOf="@+id/gps_tv"
-            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
             android:layout_marginStart="40dp"
-            />
+            android:src="@drawable/ic_battery"
+            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
+            app:layout_constraintStart_toEndOf="@+id/gps_tv" />
 
         <TextView
+            android:id="@+id/battery_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/battery_tv"
+            android:layout_marginStart="10dp"
             android:text=""
-            tools:text="100"
+            android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
             app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
             app:layout_constraintStart_toEndOf="@+id/battery_iv"
-            android:layout_marginStart="10dp"
-            android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
-            />
+            tools:text="100" />
 
         <TextView
+            android:id="@+id/battery_percent_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/battery_percent_tv"
-            android:text="%"
-            app:layout_constraintStart_toEndOf="@+id/battery_tv"
-            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
             android:layout_marginStart="2dp"
-            />
+            android:text="%"
+            app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
+            app:layout_constraintStart_toEndOf="@+id/battery_tv" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/predict_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/oval"
+            android:backgroundTint="@color/yellow"
+            app:layout_constraintBottom_toTopOf="@+id/emergency_btn"
+            app:layout_constraintEnd_toEndOf="@+id/emergency_btn"
+            app:layout_constraintStart_toStartOf="@+id/emergency_btn"
+            app:shapeAppearance="@drawable/oval" />
+
+        <TextView
+            android:id="@+id/predict_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suite_extrabold"
+            android:text="위치\n예측"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/predict_btn"
+            app:layout_constraintEnd_toEndOf="@+id/predict_btn"
+            app:layout_constraintStart_toStartOf="@+id/predict_btn"
+            app:layout_constraintTop_toTopOf="@+id/predict_btn" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/emergency_btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/oval"
+            android:backgroundTint="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+            app:shapeAppearance="@drawable/oval" />
+
+        <TextView
+            android:id="@+id/emergency_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suite_extrabold"
+            android:text="긴급\n도움"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/emergency_btn"
+            app:layout_constraintEnd_toEndOf="@+id/emergency_btn"
+            app:layout_constraintStart_toStartOf="@+id/emergency_btn"
+            app:layout_constraintTop_toTopOf="@+id/emergency_btn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
