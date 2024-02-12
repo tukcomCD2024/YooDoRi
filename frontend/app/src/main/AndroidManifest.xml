@@ -27,7 +27,7 @@
             android:name=".presentation.login.SplashActivity"
             android:exported="true"
             android:label="@string/title_activity_splash"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.WhereAreU">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +36,8 @@
         </activity>
         <activity
             android:name=".presentation.MainActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:theme="@style/Theme.WhereAreU"/>
         <activity
             android:name=".presentation.login.LoginActivity"
             android:exported="false"
