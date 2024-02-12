@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
 from .models import db, dementia_info, nok_info, location_info
 from .random_generator import RandomNumberGenerator
+from .update_user_status import UpdateUserStatus
 from sqlalchemy import text
+
 
 # 블루프린트 생성
 nok_info_routes = Blueprint('nok_info_routes', __name__)
@@ -10,7 +12,6 @@ is_connected_routes = Blueprint('is_connected_routes', __name__)
 location_info_routes = Blueprint('location_info_routes', __name__)
 send_location_info_routes = Blueprint('send_live_location_info_routes', __name__)
 user_login_routes = Blueprint('user_login_routes', __name__)
-
 
 @nok_info_routes.route('/receive-nok-info', methods=['POST'])
 def receive_nok_info():
@@ -128,13 +129,22 @@ def receive_location_info():
         existing_dementia = dementia_info.query.filter_by(dementia_key=_dementia_key).first()
 
         if existing_dementia:
+            # UpdateUserStatus 클래스의 인스턴스 생성
+            user_status_updater = UpdateUserStatus()
+            
+            # 데이터 전처리
+            preprocessed_data = user_status_updater.preprocessing(data)
+
+            # 예측 수행
+            prediction = user_status_updater.predict(preprocessed_data)
+
             new_location = location_info(
                 dementia_key=data.get('dementia_key'),
                 date=data.get('date'),
                 time=data.get('time'),
                 latitude=data.get('latitude'),
                 longitude=data.get('longitude'),
-                user_status=data.get('user_status'), # 0: 정지, 1: 도보, 2: 달리기, 3: 차량
+                user_status=prediction,  # 예측 결과로 업데이트
                 accelerationsensor_x=data.get('accelerationsensor_x'),
                 accelerationsensor_y=data.get('accelerationsensor_y'),
                 accelerationsensor_z=data.get('accelerationsensor_z'),
@@ -150,6 +160,8 @@ def receive_location_info():
                 isGpsOn=data.get('isGpsOn'),
                 isRingstoneOn=data.get('isRingstoneOn')
             )
+
+
             db.session.add(new_location)
             db.session.commit()
             response_data = {'status': 'success', 'message': 'Location data received successfully'}
