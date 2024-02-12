@@ -3,6 +3,7 @@ from .models import db, dementia_info, nok_info, location_info
 from .random_generator import RandomNumberGenerator
 from .update_user_status import UpdateUserStatus
 from sqlalchemy import text
+import json
 
 
 # 블루프린트 생성
@@ -123,6 +124,7 @@ def receive_user_login():
 def receive_location_info():
     try:
         data = request.json
+        json_data = json.dumps(data)
         
         _dementia_key = data.get('dementia_key')
         
@@ -131,12 +133,9 @@ def receive_location_info():
         if existing_dementia:
             # UpdateUserStatus 클래스의 인스턴스 생성
             user_status_updater = UpdateUserStatus()
-            
-            # 데이터 전처리
-            preprocessed_data = user_status_updater.preprocessing(data)
 
             # 예측 수행
-            prediction = user_status_updater.predict(preprocessed_data)
+            prediction = user_status_updater.predict(json_data)
 
             new_location = location_info(
                 dementia_key=data.get('dementia_key'),
@@ -144,7 +143,7 @@ def receive_location_info():
                 time=data.get('time'),
                 latitude=data.get('latitude'),
                 longitude=data.get('longitude'),
-                user_status=prediction,  # 예측 결과로 업데이트
+                user_status=int(prediction[0]),  # 예측 결과로 업데이트
                 accelerationsensor_x=data.get('accelerationsensor_x'),
                 accelerationsensor_y=data.get('accelerationsensor_y'),
                 accelerationsensor_z=data.get('accelerationsensor_z'),
@@ -161,6 +160,7 @@ def receive_location_info():
                 isRingstoneOn=data.get('isRingstoneOn')
             )
 
+            print(int(prediction[0]))
 
             db.session.add(new_location)
             db.session.commit()
@@ -190,7 +190,7 @@ def send_location_info():
                 'message': 'Location data sent successfully',
                 'latitude': latest_location.latitude,
                 'longitude': latest_location.longitude,
-                'user_status': latest_location.user_status, # 0: 정지, 1: 도보, 2: 달리기, 3: 차량
+                'user_status': latest_location.user_status, # 1: 정지, 2: 도보, 3: 차량, 4: 지하철
                 'accelerationsensor_x': latest_location.accelerationsensor_x,
                 'accelerationsensor_y': latest_location.accelerationsensor_y,
                 'accelerationsensor_z': latest_location.accelerationsensor_z,

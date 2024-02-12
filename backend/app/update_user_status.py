@@ -20,20 +20,34 @@ class UpdateUserStatus:
         return prediction
 
     def preprocessing(self, data):
-        # 만약 이미 JSON 문자열이라면 변환할 필요가 없음
-        try:
-           json_data = json.loads(data)
-        except json.JSONDecodeError:
-            # 이미 JSON 형식이라면 변환할 필요 없음
-            json_data = data
+        
+        #column_names = ['x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3']
+        #df = pd.DataFrame(data, columns=column_names)
 
-        # 딕셔너리를 데이터프레임으로 변환
-        df = pd.DataFrame([json_data])
+        #df['x1'] = data.get('accelerometer_x')
+        #df['y1'] = data.get('accelerometer_y')
+        #df['z1'] = data.get('accelerometer_z')
+        #df['x2'] = data.get('gyroscope_x')
+        #df['y2'] = data.get('gyroscope_y')
+        #df['z2'] = data.get('gyroscope_z')
+        #df['x3'] = data.get('magnetometer_x')
+        #df['y3'] = data.get('magnetometer_y')
+        #df['z3'] = data.get('magnetometer_z')
 
-        # 가속도 센서, 자이로 센서, 방향 센서 값만 추출
-        selected_columns = ['accelerationsensor_x', 'accelerationsensor_y', 'accelerationsensor_z',
-                            'gyrosensor_x', 'gyrosensor_y', 'gyrosensor_z',
-                            'directionsensor_x', 'directionsensor_y', 'directionsensor_z']
-        data = df[selected_columns]
+        json_data = json.loads(data)
 
-        return data
+        processed_data = [{
+            'x1': json_data.get('accelerationsensor_x'),
+            'y1': json_data.get('accelerationsensor_y'),
+            'z1': json_data.get('accelerationsensor_z'),
+            'x2': json_data.get('gyrosensor_x'),
+            'y2': json_data.get('gyrosensor_y'),
+            'z2': json_data.get('gyrosensor_z'),
+            'x3': json_data.get('directionsensor_x'),
+            'y3': json_data.get('directionsensor_y'),
+            'z3': json_data.get('directionsensor_z'),
+        }]
+
+        df = pd.DataFrame(processed_data)
+
+        return df
