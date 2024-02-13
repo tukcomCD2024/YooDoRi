@@ -18,5 +18,5 @@ interface LoginService {
     suspend fun postDementiaIdentity(@Body request: DementiaIdentity): Response<DementiaIdentityResponse>
 
     @POST("is-connected")
-    suspend fun checkConnected(@Body request: CheckConnect): Response<CheckConnectedResponse>
+    suspend fun postIsConnected(@Body request: CheckConnect): Response<CheckConnectedResponse>
 }

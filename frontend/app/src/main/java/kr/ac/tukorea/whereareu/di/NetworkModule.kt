@@ -11,6 +11,7 @@ import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.WhereAreUApplication
 import kr.ac.tukorea.whereareu.data.api.LoginService
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -26,11 +27,15 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOKHttpClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
         return OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(5, TimeUnit.SECONDS)
-            .addInterceptor(HttpRequestInterceptor())
+            .addInterceptor(interceptor)
             .retryOnConnectionFailure(false)
             .build()
     }
@@ -40,7 +45,7 @@ object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(WhereAreUApplication.getString(R.string.base_url))
+            .baseUrl(WhereAreUApplication.getString(R.string. base_url))
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
