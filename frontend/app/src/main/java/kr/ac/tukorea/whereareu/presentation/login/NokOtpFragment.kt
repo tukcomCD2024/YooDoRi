@@ -54,6 +54,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                 }
             }
         }
+        Log.d("name", args.name+args.phone)
     }
 
     fun onClickBackBtn() {
@@ -75,7 +76,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
         val intent = Intent(requireContext(), MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-        //viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name, args.phone))
+        viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name, args.phone))
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()

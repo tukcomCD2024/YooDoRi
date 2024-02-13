@@ -65,10 +65,12 @@ class LoginViewModel @Inject constructor(
 
 
     fun sendDementiaIdentity(request: DementiaIdentity) {
+        Log.d("request", request.toString())
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendDementiaIdentity(request).onSuccess {
                 isSuccess(it.status, Event.NavigateToPatientOtp)
                 _dementiaKeyFlow.emit(it.dementiaKey)
+                Log.d("test", it.toString())
             }
         }
     }

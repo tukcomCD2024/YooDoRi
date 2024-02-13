@@ -1,6 +1,5 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.os.Build.VERSION_CODES.R
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
