@@ -54,7 +54,10 @@ class NokIdentityFragment :
     }
 
     fun onClickInputDone() {
-        binding.nameTextInputLayout.error = if(!validName()) "최소 2자의 한글을 입력해주세요" else null
+        if(!validName()){
+            binding.nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
+            return
+        }
 
         if (!validPhone()){
             binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 010-1234-5678"
@@ -62,7 +65,7 @@ class NokIdentityFragment :
         }
 
         val action = NokIdentityFragmentDirections.actionNokIdentityFragmentToNokOtpFragment(
-            binding.nameEt.text.toString(), binding.phoneNumberEt.text.toString())
+            binding.nameEt.text.toString().trim(), binding.phoneNumberEt.text.toString())
         findNavController().navigate(action)
     }
 
@@ -74,7 +77,7 @@ class NokIdentityFragment :
             && REGEX_PHONE.toRegex().matches(binding.phoneNumberEt.text!!)
 
     companion object {
-        private const val REGEX_NAME = "^[가-힣]{2,}\$"
+        private const val REGEX_NAME = "^[가-힣]{2,}\n?$"
         private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }

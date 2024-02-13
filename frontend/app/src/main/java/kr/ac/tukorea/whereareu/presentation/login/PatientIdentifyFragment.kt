@@ -10,15 +10,21 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
+import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientIdentifyBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.showKeyboard
+import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 import okhttp3.Interceptor.Companion.invoke
 
 class PatientIdentifyFragment :
@@ -27,19 +33,18 @@ class PatientIdentifyFragment :
     private lateinit var navigator: NavController
     override fun initObserver() {
         binding.viewModel = viewModel
-
-        /*viewModel.apiSuccess.observe(this@PatientIdentifyFragment) {
-            if (it == "success") {
+        repeatOnStarted {
+            viewModel.eventFlow.collect {
                 navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
-                viewModel.resetApiSuccess("reset")
             }
-        }*/
+        }
     }
 
     override fun initView() {
         navigator = findNavController()
         binding.view = this
         binding.phoneNumberEt.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+
         with(binding) {
             nameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
                 if (validName()) {
@@ -65,7 +70,10 @@ class PatientIdentifyFragment :
     }
 
     fun onClickInputDone() {
-        binding.nameTextInputLayout.error = if (!validName()) "최소 2자의 한글을 입력해주세요" else null
+        if(!validName()){
+            binding.nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
+        }
+
 
 
         if (!validPhone()) {
@@ -81,11 +89,12 @@ class PatientIdentifyFragment :
             apply()
         }
 
-        /*viewModel.sendDementiaIdentity(
-            binding.nameEt.text.toString(),
-            binding.phoneNumberEt.text.toString()
-        )*/
-        navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+        viewModel.sendDementiaIdentity(
+            DementiaIdentity(
+                binding.nameEt.text.toString().trim(),
+                binding.phoneNumberEt.text.toString()
+            )
+        )
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()
@@ -95,7 +104,7 @@ class PatientIdentifyFragment :
             && REGEX_PHONE.toRegex().matches(binding.phoneNumberEt.text!!)
 
     companion object {
-        private const val REGEX_NAME = "^[가-힣]{2,}\$"
+        private const val REGEX_NAME = "^[가-힣]{2,}\n?$"
         private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }

@@ -6,5 +6,6 @@ data class NokIdentity(
     @SerializedName("keyfromdementia")
     val dementiaKey: String,
     val name: String,
+    @SerializedName("phone_number")
     val phoneNumber: String
 )

@@ -1,3 +1,8 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import org.bouncycastle.util.Properties
+import java.io.FileInputStream
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,6 +10,10 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
+}
+
+val properties = Properties().apply{
+    load(FileInputStream(rootProject.file("local.properties")))
 }
 
 android {
@@ -22,8 +31,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"] as String
+        }
         release {
             isMinifyEnabled = false
+            manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"] as String
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -40,6 +54,7 @@ android {
     buildFeatures{
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 
@@ -93,6 +108,8 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.47")
     kapt ("com.google.dagger:hilt-compiler:2.47")
 
+    //naver map
+    implementation("com.naver.maps:map-sdk:3.17.0")
 }
 kapt {
     correctErrorTypes = true
