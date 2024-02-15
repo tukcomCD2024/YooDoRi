@@ -158,6 +158,7 @@ def receive_location_info():
                 latitude=data.get('latitude'),
                 longitude=data.get('longitude'),
                 user_status=int(prediction[0]),  # 예측 결과로 업데이트
+                current_speed=data.get('current_speed'),
                 accelerationsensor_x=data.get('accelerationsensor_x'),
                 accelerationsensor_y=data.get('accelerationsensor_y'),
                 accelerationsensor_z=data.get('accelerationsensor_z'),
