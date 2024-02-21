@@ -1,5 +1,6 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,12 +14,14 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kr.ac.tukorea.whereareu.data.model.CheckConnect
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
 import kr.ac.tukorea.whereareu.data.model.NokIdentity
+import kr.ac.tukorea.whereareu.data.model.NokIdentityResponse
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
 import kr.ac.tukorea.whereareu.util.NetworkResult
 import kr.ac.tukorea.whereareu.util.handleApi
@@ -38,6 +41,15 @@ class LoginViewModel @Inject constructor(
 
     private val _dementiaKeyFlow = MutableStateFlow("000000")
     val dementiaKeyFlow = _dementiaKeyFlow.asStateFlow()
+
+    private val _dementiaNameFlow = MutableStateFlow("사용자")
+    val dementiaNameFlow = _dementiaNameFlow.asStateFlow()
+
+    private val _dementiaPhoneFlow = MutableStateFlow("010-0000-0000")
+    val dementiaPhoneFlow = _dementiaPhoneFlow.asStateFlow()
+
+    private val _dementiaIdentityFlow = MutableStateFlow(DementiaIdentity())
+    val dementiaIdentityFlow = _dementiaIdentityFlow.asStateFlow()
 
     private fun event(event: Event) {
         viewModelScope.launch {
@@ -59,10 +71,21 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendNokIdentity(request).onSuccess {
                 isSuccess(it.status, Event.NavigateToMain)
+
+                _dementiaIdentityFlow.emit(DementiaIdentity(it.dementiaInfo.dementiaName, it.dementiaInfo.dementiaPhonenumber))
             }
         }
     }
 
+//    fun getDementiaName(): String {
+//        Log.d("doyoung", "getDementiaName : ${dementiaNameFlow.value}")
+//        return dementiaNameFlow.value
+//        return dementiaNameFlow.value
+//    }
+//    fun getDementiaPhone() : String {
+//        return dementiaPhoneFlow.value
+//        return dementiaPhoneFlow.value?.dementiaInfo?.dementiaName
+//    }
 
     fun sendDementiaIdentity(request: DementiaIdentity) {
         viewModelScope.launch(Dispatchers.IO) {

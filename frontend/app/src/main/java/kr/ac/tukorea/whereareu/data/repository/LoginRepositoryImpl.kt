@@ -16,7 +16,7 @@ class LoginRepositoryImpl @Inject constructor(
     private val api: LoginService
 ): LoginRepository {
     override suspend fun sendNokIdentity(request: NokIdentity): NetworkResult<NokIdentityResponse> {
-        return handleApi({api.postNokIdentity(request)}) {NokIdentityResponse(it.message, it.nokKey, it.status)}
+        return handleApi({api.postNokIdentity(request)}) {NokIdentityResponse(it.dementiaInfo, it.message, it.nokKey, it.status)}
     }
 
     override suspend fun sendDementiaIdentity(request: DementiaIdentity): NetworkResult<DementiaIdentityResponse> {

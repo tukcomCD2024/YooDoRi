@@ -1,6 +1,7 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.util.Log
 import android.view.inputmethod.EditorInfo
@@ -32,13 +33,20 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
     override fun initObserver() {
         binding.viewModel = viewModel
 
-        repeatOnStarted {
-            viewModel.eventFlow.collect {
-                handleEvent(it)
+        lifecycleScope.launch{
+            viewModel.dementiaIdentityFlow.collect{
+                if (it.name != "사용자") {
+
+                    val spf = requireActivity().getSharedPreferences("DementiaInfoSP", Context.MODE_PRIVATE)
+                    spf.edit{
+                        putString("name", it.name)
+                        putString("phone", it.phoneNumber)
+                    }
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                }
             }
-//            else{
-//                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
-//            }
         }
     }
 
@@ -72,28 +80,39 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             putBoolean("isDementia", false)
             apply()
         }
-        val intent = Intent(requireContext(), MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        //viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name, args.phone))
+
+        viewModel.sendNokIdentity(
+            NokIdentity(
+                binding.otpEt.text.toString(),
+                spf.getString("name", ""),
+                spf.getString("phone", "")
+            )
+        )
+//        Log.d("doyoung", "OtpFragment : ${viewModel.dementiaNameFlow.value}")
+
+
+//        val intent = Intent(requireContext(), MainActivity::class.java)
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        startActivity(intent)
+
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
             && REGEX_OTP.toRegex().matches(binding.otpEt.text!!)
 
-    private fun handleEvent(event: LoginViewModel.Event) {
-        when (event) {
-            LoginViewModel.Event.Fail -> {
-                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
-            }
-
-            else -> {
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
-        }
-    }
+//    private fun handleEvent(event: LoginViewModel.Event) {
+//        when (event) {
+//            LoginViewModel.Event.Fail -> {
+//                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
+//            }
+//
+//            else -> {
+//                val intent = Intent(requireContext(), MainActivity::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                startActivity(intent)
+//            }
+//        }
+//    }
 
     companion object {
         private const val REGEX_OTP = "^([0-9]{6})"
