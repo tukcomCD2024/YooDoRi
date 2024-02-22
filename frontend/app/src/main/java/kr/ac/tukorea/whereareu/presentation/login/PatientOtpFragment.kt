@@ -1,19 +1,11 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.CheckConnect
+import kr.ac.tukorea.whereareu.data.model.login.CheckConnect
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding
 import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment

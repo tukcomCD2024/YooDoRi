@@ -83,7 +83,7 @@ class NokIdentityFragment :
             && REGEX_PHONE.toRegex().matches(binding.phoneNumberEt.text!!)
 
     companion object {
-        private const val REGEX_NAME = "^[가-힣]{2,}\$"
+        private const val REGEX_NAME = "^[가-힣]{2,}\n?"
         private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }

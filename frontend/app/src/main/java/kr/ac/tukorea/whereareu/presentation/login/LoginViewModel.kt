@@ -1,33 +1,19 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kr.ac.tukorea.whereareu.data.model.CheckConnect
-import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentityResponse
+import kr.ac.tukorea.whereareu.data.model.login.CheckConnect
+import kr.ac.tukorea.whereareu.data.model.login.DementiaIdentity
+import kr.ac.tukorea.whereareu.data.model.login.NokIdentity
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
-import kr.ac.tukorea.whereareu.util.NetworkResult
-import kr.ac.tukorea.whereareu.util.handleApi
-import kr.ac.tukorea.whereareu.util.onError
-import kr.ac.tukorea.whereareu.util.onException
-import kr.ac.tukorea.whereareu.util.onFail
 import kr.ac.tukorea.whereareu.util.onSuccess
 import javax.inject.Inject
 

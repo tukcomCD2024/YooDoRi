@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.model
+package kr.ac.tukorea.whereareu.data.model.login
 
 data class CheckConnectedResponse(
     val message: String,
