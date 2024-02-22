@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
-import kr.ac.tukorea.whereareu.presentation.MainActivity
+import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
@@ -32,7 +32,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                         putString("name", it.name)
                         putString("phone", it.phoneNumber)
                     }
-                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    val intent = Intent(requireContext(), MainNokActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 }
@@ -70,7 +70,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             putBoolean("isDementia", false)
             apply()
         }
-        val intent = Intent(requireContext(), MainActivity::class.java)
+        val intent = Intent(requireContext(), MainNokActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         //viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name, args.phone))

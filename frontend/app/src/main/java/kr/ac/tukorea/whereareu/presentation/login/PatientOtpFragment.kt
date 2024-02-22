@@ -7,8 +7,9 @@ import androidx.navigation.fragment.findNavController
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.CheckConnect
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding
-import kr.ac.tukorea.whereareu.presentation.MainActivity
+import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
+import kr.ac.tukorea.whereareu.presentation.dementia.MainDementiaActivity
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
 class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.fragment_patient_otp) {
@@ -43,7 +44,11 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
     }
 
     fun onClickInputDone() {
-        viewModel.checkConnected(CheckConnect(binding.displayOtpTv.text.toString()))
+        //viewModel.checkConnected(CheckConnect(binding.displayOtpTv.text.toString()))
+        val intent = Intent(requireContext(), MainDementiaActivity::class.java)
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     private fun handleEvent(event: LoginViewModel.Event) {
@@ -57,7 +62,7 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
             }
 
             else -> {
-                val intent = Intent(requireContext(), MainActivity::class.java)
+                val intent = Intent(requireContext(), MainDementiaActivity::class.java)
                 intent.flags =
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)

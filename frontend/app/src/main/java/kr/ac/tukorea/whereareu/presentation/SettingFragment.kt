@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 //import kotlinx.coroutines.flow.EmptyFlow.collect
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.observeOn
@@ -19,6 +20,7 @@ import kr.ac.tukorea.whereareu.presentation.login.LoginViewModel
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 import kr.ac.tukorea.whereareu.util.handleApi
 
+@AndroidEntryPoint
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
     private val viewModel: LoginViewModel by activityViewModels()
     override fun initObserver() {

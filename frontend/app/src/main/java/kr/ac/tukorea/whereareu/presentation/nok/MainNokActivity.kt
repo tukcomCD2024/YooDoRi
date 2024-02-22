@@ -1,27 +1,24 @@
-package kr.ac.tukorea.whereareu.presentation
+package kr.ac.tukorea.whereareu.presentation.nok
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowManager
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.databinding.ActivityMainBinding
+import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
+import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
+import kr.ac.tukorea.whereareu.presentation.home.SensorWorker
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        /*window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)*/
+class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
+    override fun initView() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
@@ -29,10 +26,18 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setupWithNavController(navController)
         binding.mainLayout.setPadding(0,0, 0, 0)
 
-
-
-        // extention.kt
+        val periodicWorkRequest = PeriodicWorkRequestBuilder<SensorWorker>(15, TimeUnit.MINUTES)
+            .build()
+        val workManager = WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork("test",
+                ExistingPeriodicWorkPolicy.REPLACE,
+                periodicWorkRequest)
     }
+
+    override fun initObserver() {
+
+    }
+
     fun getStatusBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
 
@@ -50,5 +55,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             0
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("MainActivity", "destroy")
     }
 }

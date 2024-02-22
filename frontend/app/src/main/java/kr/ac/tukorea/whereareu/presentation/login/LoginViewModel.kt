@@ -14,6 +14,9 @@ import kr.ac.tukorea.whereareu.data.model.login.CheckConnect
 import kr.ac.tukorea.whereareu.data.model.login.DementiaIdentity
 import kr.ac.tukorea.whereareu.data.model.login.NokIdentity
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
+import kr.ac.tukorea.whereareu.util.onError
+import kr.ac.tukorea.whereareu.util.onException
+import kr.ac.tukorea.whereareu.util.onFail
 import kr.ac.tukorea.whereareu.util.onSuccess
 import javax.inject.Inject
 

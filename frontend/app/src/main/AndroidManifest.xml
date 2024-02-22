@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.nok.MainNokActivity"
             android:exported="false"
             android:theme="@style/Theme.WhereAreU"/>
         <activity
