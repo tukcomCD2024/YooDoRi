@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import kr.ac.tukorea.whereareu.util.NetworkConnectionChecker
 import dagger.hilt.android.HiltAndroidApp
 
@@ -37,5 +39,10 @@ class WhereAreUApplication: Application(), DefaultLifecycleObserver {
 
         private lateinit var networkConnectionChecker: NetworkConnectionChecker
         fun isOnline() = networkConnectionChecker.isOnline()
+
+        private lateinit var instance: WhereAreUApplication
+        fun applicationContext() : Context {
+            return instance.applicationContext
+        }
     }
 }

@@ -9,12 +9,18 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationManagerCompat.requestLocationUpdates
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -24,18 +30,31 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
+import kr.ac.tukorea.whereareu.data.model.LocationInfo
 import kr.ac.tukorea.whereareu.data.model.sensor.Accelerometer
 import kr.ac.tukorea.whereareu.databinding.FragmentHomeBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.concurrent.Flow
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), SensorEventListener,
-    OnMapReadyCallback {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), SensorEventListener,
+    OnMapReadyCallback, LocationListener {
     /*private val sensorManager: SensorManager by lazy {
         requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }*/
+    private val viewModel: HomeViewModel by viewModels()
     private val sensorManager: SensorManager by lazy {
         requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
@@ -49,8 +68,24 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
     }
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
-    override fun initObserver() {
+    private val gpsManager by lazy {
+        requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
 
+    //private var axisFlow = kotlinx.coroutines.flow.Flow<List<Accelerometer>>
+    private var axisList = mutableListOf<Accelerometer>()
+    private val _axisListFlow = MutableSharedFlow<List<Accelerometer>>()
+    private var locationList = mutableListOf<kr.ac.tukorea.whereareu.data.model.Location>()
+
+    //private var axisFlow = flowOf()
+    override fun initObserver() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _axisListFlow.collect {
+                    Log.d("axis collect", it.toString())
+                }
+            }
+        }
     }
 
     override fun initView() {
@@ -64,6 +99,11 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
         } else {
 
         }
+
+        gpsManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER, 1000, 10f, this
+        )
+        makeDummy()
 
         //val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -81,7 +121,8 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
     }
 
     fun getNaviBarHeight(context: Context): Int {
-        val resourceId: Int = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        val resourceId: Int =
+            context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
         return if (resourceId > 0) {
             context.resources.getDimensionPixelSize(resourceId)
         } else {
@@ -89,7 +130,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
         }
     }
 
-    private fun initSensorManager(){
+    private fun initSensorManager() {
         sensorList.apply {
             add(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!)
             add(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!)
@@ -97,18 +138,23 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        if (event.sensor == accSeonsor) {
-            val xAxis = event.values[0]
-            val yAxis = event.values[1]
-            val zAxis = event.values[2]
-            //Log.d("sensor", "$xAxis, $yAxis, $zAxis")
-            val axis = Accelerometer(xAxis, yAxis, zAxis)
-            /*if(axis != lastAxis){
-                Log.d("sensor", "$xAxis, $yAxis, $zAxis")
-                lastAxis = axis
-            }*/
+        lifecycleScope.launch {
+            if (event.sensor == accSeonsor) {
+                val xAxis = event.values[0]
+                val yAxis = event.values[1]
+                val zAxis = event.values[2]
+                //Log.d("sensor", "$xAxis, $yAxis, $zAxis")
+                val axis = Accelerometer(xAxis, yAxis, zAxis)
+                if (axis != lastAxis) {
+                    //Log.d("sensor", "$xAxis, $yAxis, $zAxis")
+                    lastAxis = axis
+                    axisList.add(axis)
+                    //Log.d("axis", axisList.toString())
+                    _axisListFlow.emit(axisList)
+                        //axisList.asFlow()
+                }
+            }
         }
-
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -169,7 +215,10 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
                     // location을 사용하여 현재 위치에 대한 작업 수행
                     val latitude = location.latitude
                     val longitude = location.longitude
+                    locationList.add(kr.ac.tukorea.whereareu.data.model.Location(latitude, longitude))
+                    increaseLocation(location)
                     Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
+
                 }
             }
             .addOnFailureListener { e ->
@@ -180,5 +229,60 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
 
     override fun onMapReady(p0: NaverMap) {
 
+    }
+
+    override fun onLocationChanged(location: Location) {
+        val latitude = location.latitude
+        val longitude = location.longitude
+        // 위치 정보 사용
+        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
+    }
+
+    private fun increaseLocation(location: Location){
+        lifecycleScope.launch{
+            while (true){
+                locationList.add(kr.ac.tukorea.whereareu.data.model.Location(location.latitude++, location.longitude++))
+                delay(1000)
+                Log.d("loca list", locationList.toString())
+            }
+        }
+    }
+
+    private fun makeDummy(){
+        lifecycleScope.launch{
+            while (true){
+                delay(60000)
+                val axislast = axisList.last()
+                val locaLast = locationList.last()
+                Log.d("last", "$axislast, $locaLast")
+                val currentDate = Date(System.currentTimeMillis())
+                val sdf = SimpleDateFormat("YYYY-MM-DD")
+                val date = sdf.format(currentDate)
+                Log.d("date", date.toString())
+                viewModel.postLocationInfo(LocationInfo(
+                    "227609",
+                    locaLast.latitude,
+                    locaLast.longitude,
+                    "지금",
+                    date,
+                    0f,
+                    axislast.xAxis,
+                    axislast.yAxis,
+                    axislast.zAxis,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    80.0f,
+                    true,
+                    true,
+                    true
+                ))
+                delay(5000)
+            }
+        }
     }
 }

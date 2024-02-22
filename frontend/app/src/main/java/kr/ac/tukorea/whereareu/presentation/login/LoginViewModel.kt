@@ -60,8 +60,9 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendNokIdentity(request).onSuccess {
                 isSuccess(it.status, Event.NavigateToMain)
-
-                _dementiaIdentityFlow.emit(DementiaIdentity(it.dementiaInfo.dementiaName, it.dementiaInfo.dementiaPhonenumber))
+                //_dementiaIdentityFlow.emit(DementiaIdentity(it.dementiaInfo.dementiaName, it.dementiaInfo.dementiaPhonenumber))
+            }.onError {
+                Log.d("error", it.toString())
             }
         }
     }

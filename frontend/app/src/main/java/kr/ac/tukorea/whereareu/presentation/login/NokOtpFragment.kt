@@ -10,11 +10,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
+import kr.ac.tukorea.whereareu.data.model.login.NokIdentity
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
 import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
+import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
 class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
     private val viewModel: LoginViewModel by activityViewModels()
@@ -23,7 +25,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
     override fun initObserver() {
         binding.viewModel = viewModel
 
-        lifecycleScope.launch{
+        /*lifecycleScope.launch{
             viewModel.dementiaIdentityFlow.collect{
                 if (it.name != "사용자") {
 
@@ -36,6 +38,11 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 }
+            }
+        }*/
+        repeatOnStarted {
+            viewModel.eventFlow.collect{
+                handleEvent(it)
             }
         }
     }
@@ -70,28 +77,28 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             putBoolean("isDementia", false)
             apply()
         }
-        val intent = Intent(requireContext(), MainNokActivity::class.java)
+        /*val intent = Intent(requireContext(), MainNokActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        //viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name, args.phone))
+        startActivity(intent)*/
+        viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name.trim(), args.phone))
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
             && REGEX_OTP.toRegex().matches(binding.otpEt.text!!)
 
-//    private fun handleEvent(event: LoginViewModel.Event) {
-//        when (event) {
-//            LoginViewModel.Event.Fail -> {
-//                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
-//            }
-//
-//            else -> {
-//                val intent = Intent(requireContext(), MainActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                startActivity(intent)
-//            }
-//        }
-//    }
+    private fun handleEvent(event: LoginViewModel.Event) {
+        when (event) {
+            LoginViewModel.Event.Fail -> {
+                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
+            }
+
+            else -> {
+                val intent = Intent(requireContext(), MainNokActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+        }
+    }
 
     companion object {
         private const val REGEX_OTP = "^([0-9]{6})"
