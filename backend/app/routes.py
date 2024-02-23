@@ -7,6 +7,7 @@ from sqlalchemy import and_
 import json
 
 
+
 # 블루프린트 생성
 nok_info_routes = Blueprint('nok_info_routes', __name__)
 dementia_info_routes = Blueprint('dementia_info_routes', __name__)
@@ -33,25 +34,20 @@ def receive_nok_info():
         # 인증번호 중복 여부 확인
         existing_dementia = dementia_info.query.filter_by(dementia_key=_keyfromdementia).first()
         print('[system] current : {}'.format(existing_dementia))
+
         if existing_dementia:
             print('[system] dementia key found({:s})'.format(_keyfromdementia))
+
             # 이미 등록된 인증번호에 해당하는 환자 정보가 있을 경우, 해당 환자의 key 값을 가져옴
             _nok_name = nok_data.get('name')
             _nok_phonenumber = nok_data.get('phoneNumber')
 
-            duplication_check = nok_info.query.filter(and_(nok_info.nok_name == _nok_name, nok_info.nok_phonenumber == _nok_phonenumber)).first()
+            duplication_check = nok_info.query.filter(and_(nok_info.nok_name == _nok_name, nok_info.nok_phonenumber == _nok_phonenumber, nok_info.dementia_info_key == _keyfromdementia)).first()
             if duplication_check:
-                response_data = {'status': 'error', 'message': 'Next of kin data already exists'}
-
-                print('[system] nok info already exists')
-                return jsonify(response_data), DUPERR, {'Content-Type': 'application/json; charset = utf-8' }
+                
+                _key = duplication_check.nok_key
             
             else:
-                dementia_info_record ={
-                    'dementiaKey': existing_dementia.dementia_key,
-                    'dementiaName': existing_dementia.dementia_name,
-                    'dementiaPhonenumber': existing_dementia.dementia_phonenumber
-                }
                 for _ in range(10):
                     unique_random_number = rng.generate_unique_random_number(100000, 999999)
             
@@ -62,10 +58,24 @@ def receive_nok_info():
                 db.session.add(new_user)
                 db.session.commit()
 
-                print('[system] {:s} nok info successfully uploaded'.format(nok_data.get('name')))
-                response_data = {'status': 'success', 'message': 'Next of kin data received successfully', 'nokKey' : _key, 'dementiaInfo': dementia_info_record}
 
-                return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            result = {
+                'dementiaInfoRecord' : {
+                        'dementiaKey' : existing_dementia.dementia_key,
+                        'dementiaName': existing_dementia.dementia_name,
+                        'dementiaPhoneNumber': existing_dementia.dementia_phonenumber
+                },
+                'nokKey': _key
+
+            } 
+            
+            
+            print('[system] {:s} nok info successfully uploaded'.format(nok_data.get('name')))
+
+            response_data = {'status': 'success', 'message': 'Next of kin data received successfully', 'result': result}
+
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+        
         else:
             # 인증번호가 등록되지 않은 경우, 오류 전송
             print('[system] dementia key not found')
@@ -90,10 +100,12 @@ def receive_dementia_info():
 
         duplicate_dementia = dementia_info.query.filter(and_(dementia_info.dementia_name == _dementia_name, dementia_info.dementia_phonenumber == _dementia_phonenumber)).first()
         if duplicate_dementia:
-            response_data = {'status': 'error', 'message': 'Dementia paitient data already exists'}
+
+            _dementia_key = duplicate_dementia.dementia_key
+
+            response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'dementiaKey': _dementia_key}
 
             print('[system] dementia info {} already exists'.format(_dementia_name))
-            return response_data, DUPERR, {'Content-Type': 'application/json; charset = utf-8' }
         
         else:
             # 인증번호 생성
@@ -110,7 +122,8 @@ def receive_dementia_info():
             print('[system] {:s} dementia info successfully uploaded'.format(_dementia_name))
             response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'dementiaKey': _dementia_key}
 
-            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            
+        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -125,12 +138,15 @@ def is_connected():
         existing_dementia = nok_info.query.filter_by(dementia_info_key=_dementia_key).first()
         
         if existing_dementia: #조회에 성공한 경우 nok 정보를 가져와 전송
-            nok_info_record = {
-            'nokKey': existing_dementia.nok_key,
-            'nokName': existing_dementia.nok_name,
-            'nokPhonenumber': existing_dementia.nok_phonenumber
-        }
-            response_data = {'status': 'success', 'message': 'Connected successfully', 'nokInfo': nok_info_record}
+            result = {
+                'nokInfoRecord' : {
+                    'nokKey': existing_dementia.nok_key,
+                    'nokName': existing_dementia.nok_name,
+                    'nokPhoneNumber': existing_dementia.nok_phonenumber
+                }
+            }
+            response_data = {'status': 'success', 'message': 'Connected successfully', 'result' : result}
+
         else:
             response_data = {'status': 'error', 'message': 'Connection failed'}
 
