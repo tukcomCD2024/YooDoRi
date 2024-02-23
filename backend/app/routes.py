@@ -17,6 +17,11 @@ user_login_routes = Blueprint('user_login_routes', __name__)
 user_info_modification_routes = Blueprint('user_info_modification_routes', __name__)
 caculate_dementia_avarage_walking_speed_routes = Blueprint('caculate_dementia_avarage_walking_speed', __name__)
 
+SUCCESS = 200
+DUPERR = 400
+KEYNOTFOUND = 450
+UNDEFERR = 500
+
 @nok_info_routes.route('/receive-nok-info', methods=['POST'])
 def receive_nok_info():
     try:
@@ -27,36 +32,51 @@ def receive_nok_info():
 
         # 인증번호 중복 여부 확인
         existing_dementia = dementia_info.query.filter_by(dementia_key=_keyfromdementia).first()
-        print(existing_dementia)
+        print('[system] current : {}'.format(existing_dementia))
         if existing_dementia:
             print('[system] dementia key found({:s})'.format(_keyfromdementia))
             # 이미 등록된 인증번호에 해당하는 환자 정보가 있을 경우, 해당 환자의 key 값을 가져옴
-            dementia_info_record ={
-                'dementiaKey': existing_dementia.dementia_key,
-                'dementiaName': existing_dementia.dementia_name,
-                'dementiaPhonenumber': existing_dementia.dementia_phonenumber
-            }
-            for _ in range(10):
-                unique_random_number = rng.generate_unique_random_number(100000, 999999)
+            _nok_name = nok_data.get('name')
+            _nok_phonenumber = nok_data.get('phoneNumber')
+
+            duplication_check = nok_info.query.filter(and_(nok_info.nok_name == _nok_name, nok_info.nok_phonenumber == _nok_phonenumber)).first()
+            if duplication_check:
+                response_data = {'status': 'error', 'message': 'Next of kin data already exists'}
+
+                print('[system] nok info already exists')
+                return jsonify(response_data), DUPERR, {'Content-Type': 'application/json; charset = utf-8' }
             
-            _key = str(unique_random_number)  # 키 값을 문자열로 변환
-            print('[system] nok_key({:s})', _key)
-            new_user = nok_info(nok_key=_key, nok_name=nok_data.get('name'), nok_phonenumber=nok_data.get('phoneNumber'), dementia_info_key = _keyfromdementia)
-            db.session.add(new_user)
-            db.session.commit()
-            print('[system] {:s} nok info successfully uploaded'.format(nok_data.get('name')))
-            response_data = {'status': 'success', 'message': 'Next of kin data received successfully', 'nokKey' : _key, 'dementiaInfo': dementia_info_record}
+            else:
+                dementia_info_record ={
+                    'dementiaKey': existing_dementia.dementia_key,
+                    'dementiaName': existing_dementia.dementia_name,
+                    'dementiaPhonenumber': existing_dementia.dementia_phonenumber
+                }
+                for _ in range(10):
+                    unique_random_number = rng.generate_unique_random_number(100000, 999999)
+            
+                _key = str(unique_random_number)  # 키 값을 문자열로 변환
+                print('[system] nok_key({:s})', _key)
+
+                new_user = nok_info(nok_key=_key, nok_name=nok_data.get('name'), nok_phonenumber=nok_data.get('phoneNumber'), dementia_info_key = _keyfromdementia)
+                db.session.add(new_user)
+                db.session.commit()
+
+                print('[system] {:s} nok info successfully uploaded'.format(nok_data.get('name')))
+                response_data = {'status': 'success', 'message': 'Next of kin data received successfully', 'nokKey' : _key, 'dementiaInfo': dementia_info_record}
+
+                return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
         else:
             # 인증번호가 등록되지 않은 경우, 오류 전송
             print('[system] dementia key not found')
-            response_data = {'status': 'error', 'message': 'Certification number not found'}
 
-        
-        return jsonify(response_data)
+            response_data = {'status': 'error', 'message': 'Certification number not found'}
+            
+            return jsonify(response_data), KEYNOTFOUND , {'Content-Type': 'application/json; charset = utf-8' }
 
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
     
 @dementia_info_routes.route('/receive-dementia-info', methods=['POST'])
 def receive_dementia_info():
@@ -65,24 +85,36 @@ def receive_dementia_info():
 
         rng = RandomNumberGenerator()
 
-        for _ in range(10):
-            unique_random_numberfordementia = rng.generate_unique_random_number(100000, 999999)
-    
-        _dementia_key = str(unique_random_numberfordementia)  # 키 값을 문자열로 변환
-    
         _dementia_name = dementia_data.get('name')
         _dementia_phonenumber = dementia_data.get('phoneNumber')
 
-        new_user = dementia_info(dementia_key=_dementia_key, dementia_name = _dementia_name, dementia_phonenumber=_dementia_phonenumber)
-        db.session.add(new_user)
-        db.session.commit()
-        print('[system] {:s} dementia info successfully uploaded'.format(_dementia_name))
-        response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'dementiaKey': _dementia_key}
-        return jsonify(response_data)
+        duplicate_dementia = dementia_info.query.filter(and_(dementia_info.dementia_name == _dementia_name, dementia_info.dementia_phonenumber == _dementia_phonenumber)).first()
+        if duplicate_dementia:
+            response_data = {'status': 'error', 'message': 'Dementia paitient data already exists'}
+
+            print('[system] dementia info {} already exists'.format(_dementia_name))
+            return response_data, DUPERR, {'Content-Type': 'application/json; charset = utf-8' }
+        
+        else:
+            # 인증번호 생성
+            for _ in range(10):
+                unique_random_numberfordementia = rng.generate_unique_random_number(100000, 999999)
+    
+                _dementia_key = str(unique_random_numberfordementia)  # 키 값을 문자열로 변환
+
+                new_user = dementia_info(dementia_key=_dementia_key, dementia_name = _dementia_name, dementia_phonenumber=_dementia_phonenumber)
+
+            db.session.add(new_user)
+            db.session.commit()
+
+            print('[system] {:s} dementia info successfully uploaded'.format(_dementia_name))
+            response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'dementiaKey': _dementia_key}
+
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
 
 @is_connected_routes.route('/is-connected', methods=['POST'])
 def is_connected():
@@ -102,11 +134,11 @@ def is_connected():
         else:
             response_data = {'status': 'error', 'message': 'Connection failed'}
 
-        return jsonify(response_data)
+        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
     
 @user_login_routes.route('/receive-user-login', methods=['POST'])
 def receive_user_login():
@@ -121,20 +153,24 @@ def receive_user_login():
             existing_nok = nok_info.query.filter_by(nok_key=_key).first()
             if existing_nok:
                 response_data = {'status': 'success', 'message': 'Login success'}
+
             else:
                 response_data = {'status': 'error', 'message': 'Login failed'}
+
+            
         elif _isdementia == 1: # dementia일 경우
             existing_dementia = dementia_info.query.filter_by(dementia_key=_key).first()
             if existing_dementia:
                 response_data = {'status': 'success', 'message': 'Login success'}
+
             else:
                 response_data = {'status': 'error', 'message': 'Login failed'}
 
-        return jsonify(response_data)
+        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
 
 @location_info_routes.route('/receive-location-info', methods=['POST'])
 def receive_location_info():
@@ -182,14 +218,14 @@ def receive_location_info():
             db.session.commit()
             response_data = {'status': 'success', 'message': 'Location data received successfully'}
         else:
-            response_data = {'status': 'error', 'message': 'Dementia data not found'}
+            response_data = {'status': 'error', 'message': 'Dementia info not found'}
             
-        return jsonify(response_data)
+        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         print(e)
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
 
 @send_location_info_routes.route('/send-live-location-info', methods=['GET'])
 def send_location_info():
@@ -225,11 +261,11 @@ def send_location_info():
         else:
             response_data = {'status': 'error', 'message': 'Location data not found'}
         
-        return jsonify(response_data)
+        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR
 
 @user_info_modification_routes.route('/modify-user-info', methods=['POST'])
 def modify_user_info():
@@ -268,11 +304,11 @@ def modify_user_info():
                 print('[system] Dementia info not found')
                 response_data = {'status': 'error', 'message': 'User info not found'}
 
-        return jsonify(response_data)
+        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
 
 @caculate_dementia_avarage_walking_speed_routes.route('/caculate-dementia-avarage-walking-speed', methods=['POST'])
 def caculate_dementia_average_walking_speed():
@@ -281,7 +317,7 @@ def caculate_dementia_average_walking_speed():
         _dementia_key = data.get('dementiaKey')
 
         if _dementia_key is None:
-            return jsonify({'status': 'error', 'message': 'Dementia key is missing'}), 400
+            return jsonify({'status': 'error', 'message': 'Dementia key is missing'}), DUPERR
 
         # dementia_key에 해당하는 환자의 최근 10개의 위치 정보를 가져옴
         location_info_list = location_info.query.filter(and_(location_info.dementia_key == _dementia_key, location_info.user_status == 2)).order_by(location_info.date.desc()).limit(10).all()
@@ -301,4 +337,4 @@ def caculate_dementia_average_walking_speed():
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), 500
+        return jsonify(response_data), UNDEFERR
