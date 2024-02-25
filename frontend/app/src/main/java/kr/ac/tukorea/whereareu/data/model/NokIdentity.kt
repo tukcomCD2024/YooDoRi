@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class NokIdentity(
     @SerializedName("keyFromDementia")
-    val dementiaKey: String,
+    val dementiaKey: String?,
     val name: String?,
     val phoneNumber: String?
 ) {
