@@ -4,22 +4,17 @@ import os
 import sys
 from pyclustering.cluster.gmeans import gmeans
 
-# 폴더 내의 모든 파일 읽음
+# 파일 읽기
 # 데이터 예시 (39.984702,116.318417,0,492,39744.1201851852,2008-10-23,02:53:04)
 # (위도, 경도, 0, 고도, 1899년 이후 경과한 시간, 날짜, 시간)
-# 하나의 파일로 수정 필요 *
-def fileReader(folderPath, filename):
+def fileReader(filename):
 
     latitude = []   # 위도
     longitude = []  # 경도
     date = []       # 날짜
     time = []       # 시간
 
-    filePath = os.path.join(folderPath, filename)
-            
-    # 텍스트 파일을 DataFrame에 추가
-
-    with open(filePath, 'r') as file: 
+    with open(filename, 'r') as file:
         data = file.read()
 
     # 데이터에 불필요한 부분 제거
@@ -51,44 +46,36 @@ def gmeansFit(df):
     return clusters, centers
     
 # 호출 함수
-def gmeansFunc(folder_path):
+def gmeansFunc(filename):
     
     j = 0
-    data_dict = {}
-    # 폴더 내의 모든 텍스트 파일을 읽음
-    for filename in os.listdir(folder_path):
+    df = fileReader(filename)
 
-        df = fileReader(folder_path, filename)
+    df['latitude'] = df['latitude'].astype(float)
+    df['longitude'] = df['longitude'].astype(float)
+    df['datetime'] = pd.to_datetime(df['date'] + ' ' + df['time'], format='%Y-%m-%d %H:%M:%S')
+    df['datetime'] = df['datetime'].dt.floor('T')
+    df = df.drop(['date', 'time'], axis=1)
+    df = df.drop_duplicates(['datetime'], ignore_index=True)
 
-        # 위도 경도 데이터 형식 변경
-        df['latitude'] = df['latitude'].astype(float)
-        df['longitude'] = df['longitude'].astype(float)
-        # 날짜, 시간 데이터 병합
-        df['datetime'] = pd.to_datetime(df['date'] + ' ' + df['time'], format='%Y-%m-%d %H:%M:%S')
-        df['datetime'] = df['datetime'].dt.floor('T')
-        df = df.drop(['date', 'time'], axis=1)
-        # 1분 단위로 데이터 병합
-        df = df.drop_duplicates(['datetime'], ignore_index=True)
+    clusters, centers = gmeansFit(df)
 
-        # 의미장소 추출
-        clusters, centers = gmeansFit(df)
+    data_df = pd.DataFrame({"clusters":clusters, "centers":centers})
         
-        # 딕셔너리 형식으로 데이터 저장
-        data_dict[j] = pd.DataFrame({"clusters":clusters, "centers":centers})
+    for k in range(len(data_df.clusters)):
+        if (len(data_df.clusters[k]) < 10):
+            data_df.drop(index=k, inplace=True)
+    data_df = data_df.sort_index(axis=1)
+    data_df = data_df.reset_index(drop=True)
+
+    # map(centers, j)
         
-        # 클러스터가 10개 미만인 의미장소 제거
-        for k in range(len(data_dict[j].clusters)):
-            if (len(data_dict[j].clusters[k]) < 10):
-                data_dict[j].drop(index=k, inplace=True)
-        data_dict[j] = data_dict[j].sort_index(axis=1)
-        
-        j += 1
-    return data_dict
+    j += 1
+    return data_df
 
 if __name__ == '__main__':
     # 파일 경로 가져오기
     # 지금은 데이터가 저장된 파일의 경로를 실행할 때 입력
-    # 추후 수정 가능
     file_path = sys.argv[1]
 
     f = open(file_path, 'r')
