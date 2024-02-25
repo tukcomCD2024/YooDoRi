@@ -37,7 +37,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             viewModel.dementiaIdentityFlow.collect{
                 if (it.name != "사용자") {
 
-                    val spf = requireActivity().getSharedPreferences("DementiaInfoSP", Context.MODE_PRIVATE)
+                    val spf = requireActivity().getSharedPreferences("OtherUser", Context.MODE_PRIVATE)
                     spf.edit{
                         putString("name", it.name)
                         putString("phone", it.phoneNumber)
@@ -88,13 +88,6 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                 spf.getString("phone", "")
             )
         )
-//        Log.d("doyoung", "OtpFragment : ${viewModel.dementiaNameFlow.value}")
-
-
-//        val intent = Intent(requireContext(), MainActivity::class.java)
-//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        startActivity(intent)
-
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()

@@ -16,7 +16,7 @@ class LoginRepositoryImpl @Inject constructor(
     private val api: LoginService
 ): LoginRepository {
     override suspend fun sendNokIdentity(request: NokIdentity): NetworkResult<NokIdentityResponse> {
-        return handleApi({api.postNokIdentity(request)}) {NokIdentityResponse(it.dementiaInfo, it.message, it.nokKey, it.status)}
+        return handleApi({api.postNokIdentity(request)}) {NokIdentityResponse(it.message, it.result, it.status)}
     }
 
     override suspend fun sendDementiaIdentity(request: DementiaIdentity): NetworkResult<DementiaIdentityResponse> {
@@ -24,7 +24,7 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkInterConnected(request: CheckConnect): NetworkResult<CheckConnectedResponse> {
-        return handleApi({api.postIsConnected(request)}) {CheckConnectedResponse(it.message, it.status)}
+        return handleApi({api.postIsConnected(request)}) {CheckConnectedResponse(it.message, it.result, it.status)}
     }
 
 //    override suspend fun checkConnected(request: CheckConnect): Response<CheckConnectedResponse> {
