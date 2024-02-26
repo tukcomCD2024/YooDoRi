@@ -19,6 +19,7 @@ import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kr.ac.tukorea.whereareu.data.model.CheckConnect
+import kr.ac.tukorea.whereareu.data.model.CheckConnectNokInfoRecord
 import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
 import kr.ac.tukorea.whereareu.data.model.NokIdentity
 import kr.ac.tukorea.whereareu.data.model.NokIdentityResponse
@@ -42,18 +43,17 @@ class LoginViewModel @Inject constructor(
     private val _dementiaKeyFlow = MutableStateFlow("000000")
     val dementiaKeyFlow = _dementiaKeyFlow.asStateFlow()
 
-    private val _dementiaNameFlow = MutableStateFlow("사용자")
-    val dementiaNameFlow = _dementiaNameFlow.asStateFlow()
-
-    private val _dementiaPhoneFlow = MutableStateFlow("010-0000-0000")
-    val dementiaPhoneFlow = _dementiaPhoneFlow.asStateFlow()
-
     private val _dementiaIdentityFlow = MutableStateFlow(DementiaIdentity())
     val dementiaIdentityFlow = _dementiaIdentityFlow.asStateFlow()
+
+    private val _nokIdentityFlow = MutableStateFlow(NokIdentity())
+    val nokIdentityFlow = _nokIdentityFlow.asStateFlow()
+
 
     private fun event(event: Event) {
         viewModelScope.launch {
             _eventFlow.emit(event)
+            Log.d("가냐", "_eventFlow")
         }
     }
 
@@ -72,20 +72,10 @@ class LoginViewModel @Inject constructor(
             repository.sendNokIdentity(request).onSuccess {
                 isSuccess(it.status, Event.NavigateToMain)
 
-                _dementiaIdentityFlow.emit(DementiaIdentity(it.dementiaInfo.dementiaName, it.dementiaInfo.dementiaPhonenumber))
+                _dementiaIdentityFlow.emit(DementiaIdentity(it.result.dementiaInfoRecord.dementiaName, it.result.dementiaInfoRecord.dementiaPhoneNumber))
             }
         }
     }
-
-//    fun getDementiaName(): String {
-//        Log.d("doyoung", "getDementiaName : ${dementiaNameFlow.value}")
-//        return dementiaNameFlow.value
-//        return dementiaNameFlow.value
-//    }
-//    fun getDementiaPhone() : String {
-//        return dementiaPhoneFlow.value
-//        return dementiaPhoneFlow.value?.dementiaInfo?.dementiaName
-//    }
 
     fun sendDementiaIdentity(request: DementiaIdentity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -100,6 +90,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.checkInterConnected(request).onSuccess {
                 isSuccess(it.status, Event.NavigateToMain)
+                _nokIdentityFlow.emit(NokIdentity(it.result.nokInfoRecord.nokKey, it.result.nokInfoRecord.nokName, it.result.nokInfoRecord.nokPhoneNumber))
                 Log.d("되나", it.toString())
             }
         }
