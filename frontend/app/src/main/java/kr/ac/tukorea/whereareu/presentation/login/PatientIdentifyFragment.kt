@@ -75,13 +75,13 @@ class PatientIdentifyFragment :
             apply()
         }
 
-        /*viewModel.sendDementiaIdentity(
+        viewModel.sendDementiaIdentity(
             DementiaIdentity(
                 binding.nameEt.text.toString(),
                 binding.phoneNumberEt.text.toString()
             )
-        )*/
-        navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+        )
+        //navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()

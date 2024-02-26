@@ -11,6 +11,8 @@ import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.WhereAreUApplication
 import kr.ac.tukorea.whereareu.data.api.HomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
+import kr.ac.tukorea.whereareu.data.repository.HomeRepositoryImpl
+import kr.ac.tukorea.whereareu.util.LocationService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

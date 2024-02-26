@@ -7,7 +7,12 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat.stopForeground
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ServiceScoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable.start
@@ -17,10 +22,17 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kr.ac.tukorea.whereareu.R
+import kr.ac.tukorea.whereareu.data.model.LocationInfo
+import kr.ac.tukorea.whereareu.data.repository.HomeRepository
+import kr.ac.tukorea.whereareu.data.repository.HomeRepositoryImpl
+import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
 import okhttp3.internal.notify
+import javax.inject.Inject
 
-class LocationService : Service() {
-
+@AndroidEntryPoint
+class LocationService: Service() {
+    @Inject
+    lateinit var repository: HomeRepositoryImpl
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
 
@@ -60,6 +72,34 @@ class LocationService : Service() {
                 val lat = location.latitude.toString()
                 val long = location.longitude.toString()
                 Log.d("location", "$lat, $long")
+                repository.postLocationInfo(
+                    LocationInfo(
+                    "227609",
+                    location.latitude,
+                    location.longitude,
+                    "지금",
+                    "이순간",
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    0f,
+                    80.0f,
+                    true,
+                    true,
+                    true)
+                ).onSuccess {
+                    Log.d("success", it.toString())
+                }.onException {
+                    Log.d("error", it.toString())
+                }
+                sendLocation(location.latitude, location.longitude)
                 val updatedNotification = notification.setContentText(
                     "Location: ($lat, $long)"
                 )
@@ -67,6 +107,13 @@ class LocationService : Service() {
             }.launchIn(serviceScope)
 
         startForeground(1, notification.build())
+    }
+
+    private fun sendLocation(lat: Double, long: Double){
+        val intent = Intent("gps")
+        intent.putExtra("location", doubleArrayOf(lat, long))
+        //intent.putExtra("long", long)
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
     }
 
     private fun stop(){

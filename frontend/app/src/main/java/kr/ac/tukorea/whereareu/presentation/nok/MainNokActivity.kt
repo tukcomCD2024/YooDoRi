@@ -1,10 +1,12 @@
 package kr.ac.tukorea.whereareu.presentation.nok
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.content.IntentFilter
+import android.os.Parcelable
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -16,7 +18,10 @@ import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
 import kr.ac.tukorea.whereareu.presentation.home.SensorWorker
 import kr.ac.tukorea.whereareu.util.LocationService
+import java.lang.String
 import java.util.concurrent.TimeUnit
+import kotlin.Int
+import kotlin.apply
 
 @AndroidEntryPoint
 class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
@@ -41,7 +46,9 @@ class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     }
 
     override fun initObserver() {
-
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            mMessageReceiver, IntentFilter("gps")
+        )
     }
 
     fun getStatusBarHeight(context: Context): Int {
@@ -66,5 +73,14 @@ class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     override fun onDestroy() {
         super.onDestroy()
         Log.d("MainActivity", "destroy")
+    }
+
+    private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val location = intent?.getDoubleArrayExtra("location", )
+            //val long = intent?.getDoubleExtra("long", 0.0)
+            Log.d("location log", "${location?.get(0)}, ${location?.get(1)}")
+            // Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
     }
 }

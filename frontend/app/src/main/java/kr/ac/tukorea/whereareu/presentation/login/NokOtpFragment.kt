@@ -77,10 +77,10 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             putBoolean("isDementia", false)
             apply()
         }
-        val intent = Intent(requireContext(), MainNokActivity::class.java)
+        /*val intent = Intent(requireContext(), MainNokActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        //viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name.trim(), args.phone))
+        startActivity(intent)*/
+        viewModel.sendNokIdentity(NokIdentity(binding.otpEt.text.toString(), args.name.trim(), args.phone))
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
