@@ -2,6 +2,7 @@ package kr.ac.tukorea.whereareu.presentation.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Insets.add
 import android.hardware.Sensor
@@ -43,6 +44,7 @@ import kr.ac.tukorea.whereareu.data.model.LocationInfo
 import kr.ac.tukorea.whereareu.data.model.sensor.Accelerometer
 import kr.ac.tukorea.whereareu.databinding.FragmentHomeBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
+import kr.ac.tukorea.whereareu.util.LocationService
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.concurrent.Flow
