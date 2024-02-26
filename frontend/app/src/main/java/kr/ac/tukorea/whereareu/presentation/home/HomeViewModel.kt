@@ -14,14 +14,50 @@ import kr.ac.tukorea.whereareu.data.model.LocationInfo
 import kr.ac.tukorea.whereareu.data.model.sensor.Accelerometer
 import kr.ac.tukorea.whereareu.data.repository.HomeRepository
 import kr.ac.tukorea.whereareu.data.repository.HomeRepositoryImpl
+import kr.ac.tukorea.whereareu.util.AccelerometerSensor
+import kr.ac.tukorea.whereareu.util.GyroScopeSensor
+import kr.ac.tukorea.whereareu.util.LightSensor
+import kr.ac.tukorea.whereareu.util.MagneticFieldSensor
+import kr.ac.tukorea.whereareu.util.MeasurableSensor
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onSuccess
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: HomeRepositoryImpl
+    private val repository: HomeRepositoryImpl,
+    private val magneticFieldSensor: MagneticFieldSensor,
+    private val lightSensor: LightSensor,
+    private val accelerometerSensor: AccelerometerSensor,
+    private val gyroScopeSensor: GyroScopeSensor
 ): ViewModel() {
+    val init: Int = 0
+
+    init {
+        lightSensor.startListening()
+        lightSensor.setOnSensorValuesChangedListener { values ->
+            val lux = values
+            Log.d("light Sensor", lux.toString())
+        }
+
+        magneticFieldSensor.startListening()
+        magneticFieldSensor.setOnSensorValuesChangedListener {values ->
+            val magneticField = values
+            Log.d("magnetic", magneticField.toString())
+        }
+
+        accelerometerSensor.startListening()
+        accelerometerSensor.setOnSensorValuesChangedListener { values ->
+            val accel = values
+            Log.d("accel", accel.toString())
+        }
+
+        gyroScopeSensor.startListening()
+        gyroScopeSensor.setOnSensorValuesChangedListener {values ->
+            val gyro = values
+            Log.d("gyro", gyro.toString())
+        }
+    }
 
 
     fun postLocationInfo(request: LocationInfo){

@@ -7,7 +7,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 
-class AndroidSensor(
+abstract class AndroidSensor(
     private val context: Context,
     private val sensorFeature: String,
     sensorType: Int

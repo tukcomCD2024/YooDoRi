@@ -49,19 +49,12 @@ import java.util.concurrent.Flow
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), SensorEventListener,
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
     OnMapReadyCallback, LocationListener {
     /*private val sensorManager: SensorManager by lazy {
         requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }*/
     private val viewModel: HomeViewModel by viewModels()
-    private val sensorManager: SensorManager by lazy {
-        requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    }
-    private var accSeonsor: Sensor? = null
-    private var lastAxis = Accelerometer()
-    private var gyroSensor: Sensor? = null
-    private var sensorList = mutableListOf<Sensor>()
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
     private val fusedLocationClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -89,21 +82,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
     }
 
     override fun initView() {
+        viewModel.init
         checkLocationPermission()
-        initSensorManager()
-        accSeonsor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        //gyroSensor = sensorManager.getSensorList(Sensor)
-
-        if (accSeonsor != null) {
-            sensorManager.registerListener(this, accSeonsor, SensorManager.SENSOR_DELAY_NORMAL)
-        } else {
-
-        }
-
         gpsManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 1000, 10f, this
         )
-        makeDummy()
+        //makeDummy()
 
         //val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -128,37 +112,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         } else {
             0
         }
-    }
-
-    private fun initSensorManager() {
-        sensorList.apply {
-            add(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!)
-            add(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!)
-        }
-    }
-
-    override fun onSensorChanged(event: SensorEvent) {
-        lifecycleScope.launch {
-            if (event.sensor == accSeonsor) {
-                val xAxis = event.values[0]
-                val yAxis = event.values[1]
-                val zAxis = event.values[2]
-                //Log.d("sensor", "$xAxis, $yAxis, $zAxis")
-                val axis = Accelerometer(xAxis, yAxis, zAxis)
-                if (axis != lastAxis) {
-                    //Log.d("sensor", "$xAxis, $yAxis, $zAxis")
-                    lastAxis = axis
-                    axisList.add(axis)
-                    //Log.d("axis", axisList.toString())
-                    _axisListFlow.emit(axisList)
-                        //axisList.asFlow()
-                }
-            }
-        }
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
     }
 
     private fun initMap() {
@@ -243,7 +196,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
             while (true){
                 locationList.add(kr.ac.tukorea.whereareu.data.model.Location(location.latitude++, location.longitude++))
                 delay(1000)
-                Log.d("loca list", locationList.toString())
+                //Log.d("loca list", locationList.toString())
             }
         }
     }
