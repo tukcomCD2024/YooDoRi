@@ -29,46 +29,46 @@ class SplashActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//        )
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            val intent = Intent(this, LoginActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            startActivity(intent)
-//        }, 1000)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }, 1000)
 
-        when{
-            isDementia -> {
-                viewModel.sendDementiaIdentity(
-                    DementiaIdentity(
-                        spf.getString("name", ""),
-                        spf.getString("phone", ""),
-                    )
-                )
-            }
-            isNok -> {
-                viewModel.sendNokIdentity(
-                    NokIdentity(
-                        spf.getString("key", ""),
-                        spf.getString("name", ""),
-                        spf.getString("phone", ""),
-                    )
-                )
-            }
-            else -> {
-                window.setFlags(
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                )
-                Handler(Looper.getMainLooper()).postDelayed({
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                }, 1000)
-            }
-        }
+//        when{
+//            isDementia -> {
+//                viewModel.sendDementiaIdentity(
+//                    DementiaIdentity(
+//                        spf.getString("name", ""),
+//                        spf.getString("phone", ""),
+//                    )
+//                )
+//            }
+//            isNok -> {
+//                viewModel.sendNokIdentity(
+//                    NokIdentity(
+//                        spf.getString("key", ""),
+//                        spf.getString("name", ""),
+//                        spf.getString("phone", ""),
+//                    )
+//                )
+//            }
+//            else -> {
+//                window.setFlags(
+//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//                )
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    val intent = Intent(this, LoginActivity::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                    startActivity(intent)
+//                }, 1000)
+//            }
+//        }
 
 //        super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_splash)
