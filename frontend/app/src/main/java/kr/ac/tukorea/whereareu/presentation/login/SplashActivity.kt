@@ -15,8 +15,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import kr.ac.tukorea.whereareu.BuildConfig
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentity
 import kr.ac.tukorea.whereareu.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {

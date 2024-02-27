@@ -1,6 +1,7 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.edit

@@ -3,8 +3,11 @@ package kr.ac.tukorea.whereareu.presentation.login
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.CheckConnect
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding

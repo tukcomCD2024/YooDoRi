@@ -11,11 +11,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kr.ac.tukorea.whereareu.data.model.CheckConnect
 import kr.ac.tukorea.whereareu.data.model.CheckConnectNokInfoRecord
-import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentityResponse
+import kr.ac.tukorea.whereareu.data.model.login.CheckConnect
+import kr.ac.tukorea.whereareu.data.model.login.DementiaIdentity
+import kr.ac.tukorea.whereareu.data.model.login.NokIdentity
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onException
