@@ -43,17 +43,22 @@ class LoginViewModel @Inject constructor(
     private val _dementiaKeyFlow = MutableStateFlow("000000")
     val dementiaKeyFlow = _dementiaKeyFlow.asStateFlow()
 
-    private val _dementiaIdentityFlow = MutableStateFlow(DementiaIdentity())
-    val dementiaIdentityFlow = _dementiaIdentityFlow.asStateFlow()
+    private val _dementiaIdentityFlow = MutableSharedFlow<DementiaIdentity>()
+    val dementiaIdentityFlow = _dementiaIdentityFlow.asSharedFlow()
+
+    /*private val _dementiaIdentityFlow = MutableStateFlow(DementiaIdentity())
+    val dementiaIdentityFlow = _dementiaIdentityFlow.asStateFlow()*/
 
     private val _nokIdentityFlow = MutableStateFlow(NokIdentity())
     val nokIdentityFlow = _nokIdentityFlow.asStateFlow()
+
+    private val _dementiaIdentityEvent = MutableSharedFlow<Boolean>()
+    val dementiaIdentityEvent = _dementiaIdentityEvent.asSharedFlow()
 
 
     private fun event(event: Event) {
         viewModelScope.launch {
             _eventFlow.emit(event)
-            Log.d("가냐", "_eventFlow")
         }
     }
 
@@ -63,16 +68,16 @@ class LoginViewModel @Inject constructor(
         data object Fail : Event()
     }
 
-    private fun isSuccess(result: String, event: Event) {
+    /*private fun isSuccess(result: String, event: Event) {
         event(if (result == "success") event else Event.Fail)
-    }
+    }*/
 
     fun sendNokIdentity(request: NokIdentity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendNokIdentity(request).onSuccess {
-                isSuccess(it.status, Event.NavigateToMain)
-
-                _dementiaIdentityFlow.emit(DementiaIdentity(it.result.dementiaInfoRecord.dementiaName, it.result.dementiaInfoRecord.dementiaPhoneNumber))
+                //isSuccess(it., Event.NavigateToMain)
+                event(Event.NavigateToMain)
+                _dementiaIdentityFlow.emit(DementiaIdentity(it.dementiaInfoRecord.dementiaName, it.dementiaInfoRecord.dementiaPhoneNumber))
             }
         }
     }
@@ -80,8 +85,11 @@ class LoginViewModel @Inject constructor(
     fun sendDementiaIdentity(request: DementiaIdentity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendDementiaIdentity(request).onSuccess {
-                isSuccess(it.status, Event.NavigateToPatientOtp)
+                //isSuccess(it.status, Event.NavigateToPatientOtp)
+                //event(Event.NavigateToPatientOtp)
                 _dementiaKeyFlow.emit(it.dementiaKey)
+            }.onError {
+                Log.d("send demenita", it.toString())
             }
         }
     }
@@ -89,8 +97,9 @@ class LoginViewModel @Inject constructor(
     fun checkConnected(request: CheckConnect) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.checkInterConnected(request).onSuccess {
-                isSuccess(it.status, Event.NavigateToMain)
-                _nokIdentityFlow.emit(NokIdentity(it.result.nokInfoRecord.nokKey, it.result.nokInfoRecord.nokName, it.result.nokInfoRecord.nokPhoneNumber))
+                //isSuccess(it.status, Event.NavigateToMain)
+                event(Event.NavigateToMain)
+                _nokIdentityFlow.emit(NokIdentity(it.nokInfoRecord.nokKey, it.nokInfoRecord.nokName, it.nokInfoRecord.nokPhoneNumber))
                 Log.d("되나", it.toString())
             }
         }

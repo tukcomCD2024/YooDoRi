@@ -34,8 +34,17 @@ class PatientIdentifyFragment :
     override fun initObserver() {
         binding.viewModel = viewModel
         repeatOnStarted {
-            viewModel.eventFlow.collect {
-                navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+            viewModel.dementiaKeyFlow.collect {
+                if(it != "000000") {
+                    val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+                    spf.edit {
+                        putString("name", binding.nameEt.text.toString().trim())
+                        putString("phone", binding.phoneNumberEt.text.toString().trim())
+                        putBoolean("isDementia", true)
+                        commit()
+                    }
+                    navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+                }
             }
         }
     }
@@ -78,19 +87,8 @@ class PatientIdentifyFragment :
             return
         }
 
-        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-        spf.edit {
-            putString("name", binding.nameEt.text.toString())
-            putString("phone", binding.phoneNumberEt.text.toString())
-            putBoolean("isDementia", true)
-            apply()
-        }
-
         viewModel.sendDementiaIdentity(
-            DementiaIdentity(
-                binding.nameEt.text.toString(),
-                binding.phoneNumberEt.text.toString()
-            )
+            DementiaIdentity(binding.nameEt.text.toString().trim(), binding.phoneNumberEt.text.toString().trim())
         )
     }
 
@@ -101,7 +99,7 @@ class PatientIdentifyFragment :
             && REGEX_PHONE.toRegex().matches(binding.phoneNumberEt.text!!)
 
     companion object {
-        private const val REGEX_NAME = "^[가-힣]{2,}\$"
+        private const val REGEX_NAME = "^[가-힣]{2,}\n?$"
         private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }

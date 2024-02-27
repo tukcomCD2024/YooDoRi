@@ -4,5 +4,4 @@ import com.google.gson.annotations.SerializedName
 
 data class CheckConnectResponseResult(
     val nokInfoRecord: CheckConnectNokInfoRecord,
-
 )

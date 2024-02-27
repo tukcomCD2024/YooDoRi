@@ -83,13 +83,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             apply()
         }
 
-        viewModel.sendNokIdentity(
-            NokIdentity(
-                spf.getString("key", ""),
-                spf.getString("name", ""),
-                spf.getString("phone", "")
-            )
-        )
+        viewModel.sendNokIdentity(NokIdentity(key, args.name, args.phone))
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
