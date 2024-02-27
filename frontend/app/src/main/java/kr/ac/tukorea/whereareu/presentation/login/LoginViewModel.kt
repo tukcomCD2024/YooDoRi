@@ -66,12 +66,6 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendDementiaIdentity(request).onSuccess {
                 _dementiaKeyFlow.emit(it.dementiaKey)
-            }.onError {
-                Log.d("send demenita", it.toString())
-            }.onException {
-                Log.d("excetion", it.toString())
-            }.onFail {
-                Log.d("fail", it.toString())
             }
         }
     }

@@ -9,14 +9,16 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding
 import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
-import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
+import kr.ac.tukorea.whereareu.presentation.dementia.MainDementiaActivity
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
+@AndroidEntryPoint
 class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.fragment_patient_otp) {
     private val viewModel: LoginViewModel by activityViewModels()
     private val navigator by lazy {
@@ -50,7 +52,7 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                     commit()
                 }
 
-                val intent = Intent(requireContext(), MainActivity::class.java)
+                val intent = Intent(requireContext(), MainDementiaActivity::class.java)
                 intent.flags =
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)

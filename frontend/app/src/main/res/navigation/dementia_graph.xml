@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dementia_graph"
+    app:startDestination="@id/settingFragment2">
+
+    <fragment
+        android:id="@+id/settingFragment2"
+        android:name="kr.ac.tukorea.whereareu.presentation.SettingFragment"
+        android:label="SettingFragment" />
+</navigation>

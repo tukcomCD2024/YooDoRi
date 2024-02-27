@@ -6,8 +6,8 @@ import kr.ac.tukorea.whereareu.data.api.LoginService
 import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.data.model.login.response.CheckInterConnectResponse
 import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
-import kr.ac.tukorea.whereareu.data.model.login.response.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.data.model.ResponseBody
+import kr.ac.tukorea.whereareu.data.model.login.response.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.util.NetworkResult
 import kr.ac.tukorea.whereareu.util.handleApi
 import javax.inject.Inject

@@ -3,8 +3,8 @@ package kr.ac.tukorea.whereareu.data.repository
 import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.data.model.login.response.CheckInterConnectResponse
 import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
-import kr.ac.tukorea.whereareu.data.model.login.response.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
+import kr.ac.tukorea.whereareu.data.model.login.response.DementiaIdentityResponse
 import kr.ac.tukorea.whereareu.data.model.login.response.NokIdentityResponse
 import kr.ac.tukorea.whereareu.util.NetworkResult
 
