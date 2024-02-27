@@ -1,31 +1,20 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kr.ac.tukorea.whereareu.data.model.CheckConnect
-import kr.ac.tukorea.whereareu.data.model.CheckConnectNokInfoRecord
-import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentity
-import kr.ac.tukorea.whereareu.data.model.NokIdentityResponse
+import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
+import kr.ac.tukorea.whereareu.domain.login.CheckConnectNokInfoRecord
+import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
+import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
-import kr.ac.tukorea.whereareu.util.NetworkResult
-import kr.ac.tukorea.whereareu.util.handleApi
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onException
 import kr.ac.tukorea.whereareu.util.onFail
@@ -43,14 +32,17 @@ class LoginViewModel @Inject constructor(
     private val _dementiaKeyFlow = MutableStateFlow("000000")
     val dementiaKeyFlow = _dementiaKeyFlow.asStateFlow()
 
-    private val _dementiaIdentityFlow = MutableSharedFlow<DementiaIdentity>()
+    private val _dementiaIdentityFlow = MutableSharedFlow<DementiaIdentityRequest>()
     val dementiaIdentityFlow = _dementiaIdentityFlow.asSharedFlow()
 
     /*private val _dementiaIdentityFlow = MutableStateFlow(DementiaIdentity())
     val dementiaIdentityFlow = _dementiaIdentityFlow.asStateFlow()*/
 
-    private val _nokIdentityFlow = MutableStateFlow(NokIdentity())
-    val nokIdentityFlow = _nokIdentityFlow.asStateFlow()
+    /*private val _nokIdentityFlow = MutableStateFlow(NokIdentity())
+    val nokIdentityFlow = _nokIdentityFlow.asStateFlow()*/
+
+    private val _nokIdentityFlow = MutableSharedFlow<CheckConnectNokInfoRecord>()
+    val nokIdentityFlow = _nokIdentityFlow.asSharedFlow()
 
     private val _dementiaIdentityEvent = MutableSharedFlow<Boolean>()
     val dementiaIdentityEvent = _dementiaIdentityEvent.asSharedFlow()
@@ -72,17 +64,17 @@ class LoginViewModel @Inject constructor(
         event(if (result == "success") event else Event.Fail)
     }*/
 
-    fun sendNokIdentity(request: NokIdentity) {
+    fun sendNokIdentity(request: NokIdentityRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendNokIdentity(request).onSuccess {
                 //isSuccess(it., Event.NavigateToMain)
                 event(Event.NavigateToMain)
-                _dementiaIdentityFlow.emit(DementiaIdentity(it.dementiaInfoRecord.dementiaName, it.dementiaInfoRecord.dementiaPhoneNumber))
+                _dementiaIdentityFlow.emit(DementiaIdentityRequest(it.dementiaInfoRecord.dementiaName, it.dementiaInfoRecord.dementiaPhoneNumber))
             }
         }
     }
 
-    fun sendDementiaIdentity(request: DementiaIdentity) {
+    fun sendDementiaIdentity(request: DementiaIdentityRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendDementiaIdentity(request).onSuccess {
                 //isSuccess(it.status, Event.NavigateToPatientOtp)
@@ -90,16 +82,20 @@ class LoginViewModel @Inject constructor(
                 _dementiaKeyFlow.emit(it.dementiaKey)
             }.onError {
                 Log.d("send demenita", it.toString())
+            }.onException {
+                Log.d("excetion", it.toString())
+            }.onFail {
+                Log.d("fail", it.toString())
             }
         }
     }
 
-    fun checkConnected(request: CheckConnect) {
+    fun checkConnected(request: CheckInterConnectRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.checkInterConnected(request).onSuccess {
                 //isSuccess(it.status, Event.NavigateToMain)
                 event(Event.NavigateToMain)
-                _nokIdentityFlow.emit(NokIdentity(it.nokInfoRecord.nokKey, it.nokInfoRecord.nokName, it.nokInfoRecord.nokPhoneNumber))
+                _nokIdentityFlow.emit(CheckConnectNokInfoRecord(it.nokInfoRecord.nokKey, it.nokInfoRecord.nokName, it.nokInfoRecord.nokPhoneNumber))
                 Log.d("되나", it.toString())
             }
         }

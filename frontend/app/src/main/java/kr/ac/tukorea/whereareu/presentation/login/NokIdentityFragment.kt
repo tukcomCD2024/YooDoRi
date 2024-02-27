@@ -1,23 +1,15 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.content.Context.MODE_PRIVATE
-import android.media.MediaCodec.MetricsConstants.MODE
 import android.telephony.PhoneNumberFormattingTextWatcher
-import android.util.Log
 import android.view.inputmethod.EditorInfo
-import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokIdentityBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.showKeyboard
+import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
+import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
+import kr.ac.tukorea.whereareu.util.EditTextUtil.showKeyboard
 
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {

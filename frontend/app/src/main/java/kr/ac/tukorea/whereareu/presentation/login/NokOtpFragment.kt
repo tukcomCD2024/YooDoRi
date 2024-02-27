@@ -1,30 +1,21 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.util.Log
 import android.view.inputmethod.EditorInfo
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.NokIdentity
+import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
 import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
-import kr.ac.tukorea.whereareu.util.LoginUtil
-import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
+import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
+import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
 
 class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
     private val viewModel: LoginViewModel by activityViewModels()
@@ -83,7 +74,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             apply()
         }
 
-        viewModel.sendNokIdentity(NokIdentity(key, args.name, args.phone))
+        viewModel.sendNokIdentity(NokIdentityRequest(key, args.name, args.phone))
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
