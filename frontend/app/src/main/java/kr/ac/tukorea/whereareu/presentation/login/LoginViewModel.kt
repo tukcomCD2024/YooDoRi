@@ -34,9 +34,6 @@ class LoginViewModel @Inject constructor(
     private val _dementiaKeyFlow = MutableSharedFlow<String>(replay = 1)
     val dementiaKeyFlow = _dementiaKeyFlow.asSharedFlow()
 
-    private val _nokKeyFlow = MutableSharedFlow<String>()
-    val nokKeyFlow = _nokKeyFlow.asSharedFlow()
-
     private val _navigateToNokMainEvent = MutableSharedFlow<NokIdentityResponse>()
     val navigateToNokMainEvent = _navigateToNokMainEvent.asSharedFlow()
 
@@ -55,6 +52,9 @@ class LoginViewModel @Inject constructor(
 
     private val _isOnBackPressedAtDementiaOtp = MutableStateFlow(false)
     val isOnBackPressedAtDementiaOtp = _isOnBackPressedAtDementiaOtp.asStateFlow()
+
+    private val _toastEvent = MutableSharedFlow<String>()
+    val toastEvent = _toastEvent.asSharedFlow()
 
     fun onBackPressedAtDementiaOtp(isPressed: Boolean){
         viewModelScope.launch {
@@ -89,14 +89,13 @@ class LoginViewModel @Inject constructor(
             repository.sendNokIdentity(request).onSuccess {
                 //isSuccess(it., Event.NavigateToMain)
                 event(Event.NavigateToMain)
-                _nokKeyFlow.emit(it.nokKey)
                 _navigateToNokMainEvent.emit(it)
             }.onError {
                 Log.d("error", it.toString())
             }.onException {
                 Log.d("exception", it.toString())
             }.onFail {
-                Log.d("fail", it.toString())
+                _toastEvent.emit("올바른 인증번호를 입력해주세요.")
             }
         }
     }
@@ -124,6 +123,12 @@ class LoginViewModel @Inject constructor(
                 event(Event.NavigateToMain)
                 _nokIdentityFlow.emit(CheckConnectNokInfoRecord(it.nokInfoRecord.nokKey, it.nokInfoRecord.nokName, it.nokInfoRecord.nokPhoneNumber))
                 Log.d("되나", it.toString())
+            }.onError {
+                Log.d("send demenita", it.toString())
+            }.onException {
+                Log.d("excetion", it.toString())
+            }.onFail {
+                _toastEvent.emit("보호자의 연결 상태를 확인해주세요.")
             }
         }
     }

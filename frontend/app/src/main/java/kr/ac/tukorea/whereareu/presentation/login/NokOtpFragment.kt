@@ -2,7 +2,11 @@ package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +16,7 @@ import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
+import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
 import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
@@ -49,6 +54,21 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.toastEvent.collect{
+                val binding = ToastLayoutBinding.inflate(layoutInflater)
+                binding.run{
+                    tv.text = it
+                    val toast = Toast(requireContext())
+                    toast.view = binding.root
+
+                    binding.root.setBackgroundResource(R.drawable.toast_bg)
+                    toast.setGravity(Gravity.BOTTOM, 0, 400)
+                    toast.show()
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ package kr.ac.tukorea.whereareu.presentation.login
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.util.Log
+import android.view.Gravity
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.edit
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding
+import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
 import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
@@ -60,6 +62,21 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                 intent.flags =
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+            }
+        }
+
+        repeatOnStarted {
+            viewModel.toastEvent.collect{
+                val binding = ToastLayoutBinding.inflate(layoutInflater)
+                binding.run{
+                    tv.text = it
+                    val toast = Toast(requireContext())
+                    toast.view = binding.root
+
+                    binding.root.setBackgroundResource(R.drawable.toast_bg)
+                    toast.setGravity(Gravity.BOTTOM, 0, 400)
+                    toast.show()
+                }
             }
         }
 
