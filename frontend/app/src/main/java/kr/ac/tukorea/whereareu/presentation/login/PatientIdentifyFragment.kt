@@ -36,6 +36,7 @@ class PatientIdentifyFragment :
             viewModel.isOnBackPressedAtDementiaOtp.collect{ isOnBackPressedAtDementiaOtp ->
                 if (!isOnBackPressedAtDementiaOtp){
                     viewModel.dementiaKeyFlow.collect {dementiaKey ->
+
                         //보호대상자 정보 저장
                         val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
                         spf.edit {

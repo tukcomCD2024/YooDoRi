@@ -20,12 +20,8 @@ import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 import kr.ac.tukorea.whereareu.util.handleApi
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
-    private val viewModel: LoginViewModel by activityViewModels()
     override fun initObserver() {
-        repeatOnStarted {
-            viewModel.eventFlow.collect {
-            }
-        }
+
     }
 
 

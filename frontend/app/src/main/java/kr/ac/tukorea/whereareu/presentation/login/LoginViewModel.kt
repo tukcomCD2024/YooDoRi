@@ -47,11 +47,6 @@ class LoginViewModel @Inject constructor(
             _isOnBackPressedAtDementiaOtp.emit(isPressed)
         }
     }
-    fun resetDementiaKey(){
-        viewModelScope.launch {
-            _dementiaKeyFlow.emit("000000")
-        }
-    }
 
     fun sendNokIdentity(request: NokIdentityRequest) {
         viewModelScope.launch(Dispatchers.IO) {

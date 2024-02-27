@@ -57,6 +57,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             }
         }
 
+        // 에러 메시지 Toast로 출력
         repeatOnStarted {
             viewModel.toastEvent.collect{
                 val binding = ToastLayoutBinding.inflate(layoutInflater)
@@ -88,7 +89,6 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
     }
 
     fun onClickBackBtn() {
-        viewModel.resetDementiaKey()
         findNavController().popBackStack()
     }
 
