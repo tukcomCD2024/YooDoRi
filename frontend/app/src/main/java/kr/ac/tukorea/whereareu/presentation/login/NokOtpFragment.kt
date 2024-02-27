@@ -29,7 +29,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             viewModel.dementiaIdentityFlow.collect{
                 if (it.name != "사용자") {
 
-                    val spf = requireActivity().getSharedPreferences("DementiaInfoSP", Context.MODE_PRIVATE)
+                    val spf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
                     spf.edit{
                         putString("name", it.name)
                         putString("phone", it.phoneNumber)
@@ -70,11 +70,13 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             binding.otpTextInputLayout.error = "6자리의 인증번호를 입력해주세요."
             return
         }
-        val spf = requireActivity().getSharedPreferences("User", Context.MODE_PRIVATE)
+        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+        val key = binding.otpEt.text.toString()
         spf.edit {
+            putString("key", key)
             putString("name", args.name)
             putString("phone", args.phone)
-            putBoolean("isDementia", false)
+            putBoolean("isNok", true)
             apply()
         }
         /*val intent = Intent(requireContext(), MainNokActivity::class.java)

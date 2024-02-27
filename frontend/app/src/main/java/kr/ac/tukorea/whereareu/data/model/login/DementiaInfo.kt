@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 data class DementiaInfo(
     val dementiaKey: String,
     val dementiaName: String,
-    val dementiaPhonenumber: String
+    val dementiaPhoneNumber: String
 )

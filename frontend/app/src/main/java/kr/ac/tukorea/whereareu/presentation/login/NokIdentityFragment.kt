@@ -68,10 +68,11 @@ class NokIdentityFragment :
             binding.nameEt.text.toString(), binding.phoneNumberEt.text.toString())
         findNavController().navigate(action)
 
-        val spf = requireActivity().getSharedPreferences("NokInfo", MODE_PRIVATE)
+        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
         spf.edit{
             putString("name", binding.nameEt.text.toString())
             putString("phone", binding.phoneNumberEt.text.toString())
+            putBoolean("isDementia", false)
         }
     }
 

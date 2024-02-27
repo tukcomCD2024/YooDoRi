@@ -33,7 +33,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     override fun initView() {
         val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-        val dementiaInfoSpf = requireActivity().getSharedPreferences("DementiaInfoSP", Context.MODE_PRIVATE)
+        val otherSpf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
         binding.userNameTv.text = spf.getString("name", "")
 
         val isDementia = spf.getBoolean("isDementia", true)
@@ -43,50 +43,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.userNameTv.text = spf.getString("name", "")
         binding.userPhoneNumberTv.text = spf.getString("phone", "")
 
-        if (isDementia) {
-
-        } else {
-            binding.otherNameEditTv.setText(dementiaInfoSpf.getString("name", ""))
-            binding.otherPhoneNumberTv.setText((dementiaInfoSpf.getString("phone", "")))
-
-        }
-
-//        if (isDementia) {
-//            binding.otherNameEditTv.text = "보호대상자"
-//
-//        } else {
-////            binding.otherNameEditTv.text = viewModel.dementiaNameFlow.value
-//            lifecycleScope.launch {
-//                viewModel.dementaNameFlow.collect {
-//                    binding.otherNameEditTv.text = it?.dementiaInfo?.dementiaName
-//                }
-//            }
-////            lifecycleScope.launch {
-////                viewModel.dementiaPhoneFlow.collect {
-////                    binding.otherPhoneNumberTv.text = it
-////                }
-////            }
-//
-//            val dementiaName = viewModel.getDementiaName()
-//            binding.otherNameEditTv.text = dementiaName
-//
-//            val dementiaPhone = viewModel.getDementiaPhone()
-//            binding.otherPhoneNumberTv.text = dementiaPhone
-//
-////            lifecycleScope.launch{
-////                repeatOnLifecycle(Lifecycle.State.CREATED) {
-////                    launch{
-////                        viewModel.dementiaNameFlow.collect{
-////                            binding.otherNameEditTv.text = it
-////                        }
-////                        viewModel.dementiaPhoneFlow.collect{
-////                            binding.otherPhoneNumberTv.text = it
-////                        }
-////                    }
-////                }
-////            }
-//
-//        }
+        binding.otherNameEditTv.setText(otherSpf.getString("name", ""))
+        binding.otherPhoneNumberTv.setText((otherSpf.getString("phone", "")))
 
     }
 }
