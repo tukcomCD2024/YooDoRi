@@ -8,10 +8,11 @@ import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val spf: SharedPreferences = getSharedPreferences("User", MODE_PRIVATE)

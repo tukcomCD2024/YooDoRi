@@ -4,6 +4,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokIdentityBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
@@ -11,6 +12,7 @@ import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.EditTextUtil.showKeyboard
 
+@AndroidEntryPoint
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {
         private val viewModel: LoginViewModel by activityViewModels()
