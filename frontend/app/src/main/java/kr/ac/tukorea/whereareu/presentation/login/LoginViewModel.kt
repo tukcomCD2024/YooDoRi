@@ -14,7 +14,9 @@ import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.domain.login.CheckConnectNokInfoRecord
 import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
+import kr.ac.tukorea.whereareu.data.model.login.response.NokIdentityResponse
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
+import kr.ac.tukorea.whereareu.domain.login.DementiaInfo
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onException
 import kr.ac.tukorea.whereareu.util.onFail
@@ -29,11 +31,14 @@ class LoginViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private val _dementiaKeyFlow = MutableStateFlow("000000")
-    val dementiaKeyFlow = _dementiaKeyFlow.asStateFlow()
+    private val _dementiaKeyFlow = MutableSharedFlow<String>(replay = 1)
+    val dementiaKeyFlow = _dementiaKeyFlow.asSharedFlow()
 
-    private val _dementiaIdentityFlow = MutableSharedFlow<DementiaIdentityRequest>()
-    val dementiaIdentityFlow = _dementiaIdentityFlow.asSharedFlow()
+    private val _nokKeyFlow = MutableSharedFlow<String>()
+    val nokKeyFlow = _nokKeyFlow.asSharedFlow()
+
+    private val _navigateToNokMainEvent = MutableSharedFlow<NokIdentityResponse>()
+    val navigateToNokMainEvent = _navigateToNokMainEvent.asSharedFlow()
 
     /*private val _dementiaIdentityFlow = MutableStateFlow(DementiaIdentity())
     val dementiaIdentityFlow = _dementiaIdentityFlow.asStateFlow()*/
@@ -46,6 +51,21 @@ class LoginViewModel @Inject constructor(
 
     private val _dementiaIdentityEvent = MutableSharedFlow<Boolean>()
     val dementiaIdentityEvent = _dementiaIdentityEvent.asSharedFlow()
+
+
+    private val _isOnBackPressedAtDementiaOtp = MutableStateFlow(false)
+    val isOnBackPressedAtDementiaOtp = _isOnBackPressedAtDementiaOtp.asStateFlow()
+
+    fun onBackPressedAtDementiaOtp(isPressed: Boolean){
+        viewModelScope.launch {
+            _isOnBackPressedAtDementiaOtp.emit(isPressed)
+        }
+    }
+    fun resetDementiaKey(){
+        viewModelScope.launch {
+            _dementiaKeyFlow.emit("000000")
+        }
+    }
 
 
     private fun event(event: Event) {
@@ -69,7 +89,14 @@ class LoginViewModel @Inject constructor(
             repository.sendNokIdentity(request).onSuccess {
                 //isSuccess(it., Event.NavigateToMain)
                 event(Event.NavigateToMain)
-                _dementiaIdentityFlow.emit(DementiaIdentityRequest(it.dementiaInfoRecord.dementiaName, it.dementiaInfoRecord.dementiaPhoneNumber))
+                _nokKeyFlow.emit(it.nokKey)
+                _navigateToNokMainEvent.emit(it)
+            }.onError {
+                Log.d("error", it.toString())
+            }.onException {
+                Log.d("exception", it.toString())
+            }.onFail {
+                Log.d("fail", it.toString())
             }
         }
     }

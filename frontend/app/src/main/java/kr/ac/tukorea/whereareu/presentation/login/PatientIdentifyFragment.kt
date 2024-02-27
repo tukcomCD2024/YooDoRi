@@ -2,11 +2,17 @@ package kr.ac.tukorea.whereareu.presentation.login
 
 import android.content.Context.MODE_PRIVATE
 import android.telephony.PhoneNumberFormattingTextWatcher
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientIdentifyBinding
@@ -19,27 +25,38 @@ import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 class PatientIdentifyFragment :
     BaseFragment<FragmentPatientIdentifyBinding>(R.layout.fragment_patient_identify) {
     private val viewModel: LoginViewModel by activityViewModels()
-    private lateinit var navigator: NavController
+    private val navigator by lazy {
+        findNavController()
+    }
     override fun initObserver() {
         binding.viewModel = viewModel
+
         repeatOnStarted {
-            viewModel.dementiaKeyFlow.collect {
-                if(it != "000000") {
-                    val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-                    spf.edit {
-                        putString("name", binding.nameEt.text.toString().trim())
-                        putString("phone", binding.phoneNumberEt.text.toString().trim())
-                        putBoolean("isDementia", true)
-                        commit()
+            //OtpFragment에서 뒤로가기 버튼을 눌렀는지 여부에 따른 분기
+            viewModel.isOnBackPressedAtDementiaOtp.collect{ isOnBackPressedAtDementiaOtp ->
+                if (!isOnBackPressedAtDementiaOtp){
+                    viewModel.dementiaKeyFlow.collect {
+
+                        //보호대상자 정보 저장
+                        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+                        spf.edit {
+                            putString("name", binding.nameEt.text.toString().trim())
+                            putString("phone", binding.phoneNumberEt.text.toString().trim())
+                            putBoolean("isDementia", true)
+                            commit()
+                        }
+
+                        //currentDestination 오류를 막기 위한 예외처리
+                        if (navigator.currentDestination?.id == R.id.patientIdentifyFragment) {
+                            navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+                        }
                     }
-                    navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
                 }
             }
         }
     }
 
     override fun initView() {
-        navigator = findNavController()
         binding.view = this
         binding.phoneNumberEt.addTextChangedListener(PhoneNumberFormattingTextWatcher())
 
@@ -79,6 +96,9 @@ class PatientIdentifyFragment :
         viewModel.sendDementiaIdentity(
             DementiaIdentityRequest(binding.nameEt.text.toString().trim(), binding.phoneNumberEt.text.toString().trim())
         )
+
+        // navigate 활성화를 위한 boolean 값 업데이트
+        viewModel.onBackPressedAtDementiaOtp(false)
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()

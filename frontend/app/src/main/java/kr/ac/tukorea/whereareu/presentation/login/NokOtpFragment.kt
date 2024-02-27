@@ -16,6 +16,7 @@ import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
+import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
 class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
     private val viewModel: LoginViewModel by activityViewModels()
@@ -23,20 +24,31 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
 
     override fun initObserver() {
         binding.viewModel = viewModel
-
-        lifecycleScope.launch{
-            viewModel.dementiaIdentityFlow.collect{
-                if (it.name != "사용자") {
-
-                    val spf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
-                    spf.edit{
-                        putString("name", it.name)
-                        putString("phone", it.phoneNumber)
-                    }
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
+        repeatOnStarted{
+            viewModel.navigateToNokMainEvent.collect {
+                // 보호자 정보 저장
+                val nokSpf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+                nokSpf.edit {
+                    putString("key", it.nokKey)
+                    putString("name", args.name)
+                    putString("phone", args.phone)
+                    commit()
                 }
+
+                // 보호대상자 정보 저장
+                val dementiaInfo = it.dementiaInfoRecord
+                val dementiaSpf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
+                dementiaSpf.edit {
+                    putString("name", dementiaInfo.dementiaName)
+                    putString("phone", dementiaInfo.dementiaPhoneNumber)
+                    putString("key", dementiaInfo.dementiaKey)
+                    commit()
+                }
+
+                // 보호자 메인화면으로 이동
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
             }
         }
     }
@@ -56,6 +68,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
     }
 
     fun onClickBackBtn() {
+        viewModel.resetDementiaKey()
         findNavController().popBackStack()
     }
 
@@ -64,16 +77,8 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             binding.otpTextInputLayout.error = "6자리의 인증번호를 입력해주세요."
             return
         }
-        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-        val key = binding.otpEt.text.toString()
-        spf.edit {
-            putString("key", key)
-            putString("name", args.name)
-            putString("phone", args.phone)
-            putBoolean("isNok", true)
-            apply()
-        }
 
+        val key = binding.otpEt.text.toString()
         viewModel.sendNokIdentity(NokIdentityRequest(key, args.name, args.phone))
     }
 
