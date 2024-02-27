@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".WhereAreUApplication"
@@ -19,6 +23,8 @@
         android:theme="@style/Theme.WhereAreU"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service android:name=".util.LocationService" android:foregroundServiceType="location"
+            tools:ignore="ForegroundServicePermission" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
@@ -35,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.nok.MainNokActivity"
             android:exported="false"
             android:theme="@style/Theme.WhereAreU"/>
         <activity

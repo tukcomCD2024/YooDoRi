@@ -12,17 +12,19 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
 import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
-import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
+import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
 import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
+@AndroidEntryPoint
 class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
     private val viewModel: LoginViewModel by activityViewModels()
     private val args: NokOtpFragmentArgs by navArgs()
@@ -51,7 +53,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                 }
 
                 // 보호자 메인화면으로 이동
-                val intent = Intent(requireContext(), MainActivity::class.java)
+                val intent = Intent(requireContext(), MainNokActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }
@@ -104,20 +106,6 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()
             && REGEX_OTP.toRegex().matches(binding.otpEt.text!!)
-
-//    private fun handleEvent(event: LoginViewModel.Event) {
-//        when (event) {
-//            LoginViewModel.Event.Fail -> {
-//                binding.otpTextInputLayout.error = "올바른 인증번호를 입력해주세요."
-//            }
-//
-//            else -> {
-//                val intent = Intent(requireContext(), MainActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                startActivity(intent)
-//            }
-//        }
-//    }
 
     companion object {
         private const val REGEX_OTP = "^([0-9]{6})"

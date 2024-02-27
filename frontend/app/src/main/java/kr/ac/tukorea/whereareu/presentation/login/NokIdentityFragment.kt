@@ -4,6 +4,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokIdentityBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
@@ -11,6 +12,7 @@ import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.EditTextUtil.showKeyboard
 
+@AndroidEntryPoint
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {
         private val viewModel: LoginViewModel by activityViewModels()
@@ -71,7 +73,7 @@ class NokIdentityFragment :
             && REGEX_PHONE.toRegex().matches(binding.phoneNumberEt.text!!)
 
     companion object {
-        private const val REGEX_NAME = "^[가-힣]{2,}\n?$"
+        private const val REGEX_NAME = "^[가-힣]{2,}\n?"
         private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }
