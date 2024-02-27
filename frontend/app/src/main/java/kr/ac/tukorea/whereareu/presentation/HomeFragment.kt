@@ -11,16 +11,12 @@ import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentHomeBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 
-class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), SensorEventListener {
-    private val sensorManager: SensorManager by lazy {
-        requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    }
+class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun initObserver() {
 
     }
 
     override fun initView() {
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         //binding.homeFragment.setPadding(0,getStatusBarHeight(requireContext()), 0, getNaviBarHeight(requireContext()))
     }
 
@@ -41,18 +37,5 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), S
         } else {
             0
         }
-    }
-
-    override fun onSensorChanged(event: SensorEvent) {
-        if(event.sensor.type == Sensor.TYPE_ACCELEROMETER){
-            val xAxis = event.values[0]
-            val yAxis = event.values[1]
-            val zAxis = event.values[2]
-            Log.d("sensor", "$xAxis, $yAxis, $zAxis")
-        }
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
     }
 }

@@ -1,29 +1,26 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
+import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.NokIdentity
+import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
+import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
 import kr.ac.tukorea.whereareu.presentation.MainActivity
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
-import kr.ac.tukorea.whereareu.util.LoginUtil
+import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
+import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
 class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
@@ -32,19 +29,46 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
 
     override fun initObserver() {
         binding.viewModel = viewModel
+        repeatOnStarted{
+            viewModel.navigateToNokMainEvent.collect {
+                // 보호자 정보 저장
+                val nokSpf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+                nokSpf.edit {
+                    putString("key", it.nokKey)
+                    putString("name", args.name)
+                    putString("phone", args.phone)
+                    commit()
+                }
 
-        lifecycleScope.launch{
-            viewModel.dementiaIdentityFlow.collect{
-                if (it.name != "사용자") {
+                // 보호대상자 정보 저장
+                val dementiaInfo = it.dementiaInfoRecord
+                val dementiaSpf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
+                dementiaSpf.edit {
+                    putString("name", dementiaInfo.dementiaName)
+                    putString("phone", dementiaInfo.dementiaPhoneNumber)
+                    putString("key", dementiaInfo.dementiaKey)
+                    commit()
+                }
 
-                    val spf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
-                    spf.edit{
-                        putString("name", it.name)
-                        putString("phone", it.phoneNumber)
-                    }
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
+                // 보호자 메인화면으로 이동
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+        }
+
+        // 에러 메시지 Toast로 출력
+        repeatOnStarted {
+            viewModel.toastEvent.collect{
+                val binding = ToastLayoutBinding.inflate(layoutInflater)
+                binding.run{
+                    tv.text = it
+                    val toast = Toast(requireContext())
+                    toast.view = binding.root
+
+                    binding.root.setBackgroundResource(R.drawable.toast_bg)
+                    toast.setGravity(Gravity.BOTTOM, 0, 400)
+                    toast.show()
                 }
             }
         }
@@ -73,23 +97,9 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
             binding.otpTextInputLayout.error = "6자리의 인증번호를 입력해주세요."
             return
         }
-        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-        val key = binding.otpEt.text.toString()
-        spf.edit {
-            putString("key", key)
-            putString("name", args.name)
-            putString("phone", args.phone)
-            putBoolean("isNok", true)
-            apply()
-        }
 
-        viewModel.sendNokIdentity(
-            NokIdentity(
-                spf.getString("key", ""),
-                spf.getString("name", ""),
-                spf.getString("phone", "")
-            )
-        )
+        val key = binding.otpEt.text.toString()
+        viewModel.sendNokIdentity(NokIdentityRequest(key, args.name, args.phone))
     }
 
     private fun validOtp() = !binding.otpEt.text.isNullOrBlank()

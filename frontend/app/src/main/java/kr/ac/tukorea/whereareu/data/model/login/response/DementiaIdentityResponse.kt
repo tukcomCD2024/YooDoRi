@@ -1,9 +1,7 @@
-package kr.ac.tukorea.whereareu.data.model
+package kr.ac.tukorea.whereareu.data.model.login.response
 
 import com.google.gson.annotations.SerializedName
 
 data class DementiaIdentityResponse(
     val dementiaKey: String,
-    val message: String,
-    val status: String
 )
