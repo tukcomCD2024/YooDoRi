@@ -7,15 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.viewModels
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import kr.ac.tukorea.whereareu.BuildConfig
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModels()

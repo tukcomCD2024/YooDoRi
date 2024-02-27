@@ -17,7 +17,6 @@ import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by viewModels()
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var binding: ActivityLoginBinding
@@ -29,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-       navHostFragment =
+        navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
     }

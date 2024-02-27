@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kr.ac.tukorea.whereareu.data.model.CheckConnectNokInfoRecord
-import kr.ac.tukorea.whereareu.data.model.login.CheckConnect
-import kr.ac.tukorea.whereareu.data.model.login.DementiaIdentity
-import kr.ac.tukorea.whereareu.data.model.login.NokIdentity
+import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
+import kr.ac.tukorea.whereareu.domain.login.NokInfo
+import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
+import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
+import kr.ac.tukorea.whereareu.data.model.login.response.NokIdentityResponse
 import kr.ac.tukorea.whereareu.data.repository.LoginRepositoryImpl
 import kr.ac.tukorea.whereareu.util.onError
 import kr.ac.tukorea.whereareu.util.onException
@@ -27,61 +27,66 @@ class LoginViewModel @Inject constructor(
     private val repository: LoginRepositoryImpl
 ) : ViewModel() {
 
-    private val _eventFlow = MutableSharedFlow<Event>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    private val _dementiaKeyFlow = MutableSharedFlow<String>(replay = 1)
+    val dementiaKeyFlow = _dementiaKeyFlow.asSharedFlow()
 
-    private val _dementiaKeyFlow = MutableStateFlow("000000")
-    val dementiaKeyFlow = _dementiaKeyFlow.asStateFlow()
+    private val _navigateToNokMainEvent = MutableSharedFlow<NokIdentityResponse>()
+    val navigateToNokMainEvent = _navigateToNokMainEvent.asSharedFlow()
 
-    private val _dementiaIdentityFlow = MutableStateFlow(DementiaIdentity())
-    val dementiaIdentityFlow = _dementiaIdentityFlow.asStateFlow()
+    private val _navigateToDementiaMainEvent = MutableSharedFlow<NokInfo>()
+    val navigateToDementiaMainEvent = _navigateToDementiaMainEvent.asSharedFlow()
 
-    private val _nokIdentityFlow = MutableStateFlow(NokIdentity())
-    val nokIdentityFlow = _nokIdentityFlow.asStateFlow()
+    private val _isOnBackPressedAtDementiaOtp = MutableStateFlow(false)
+    val isOnBackPressedAtDementiaOtp = _isOnBackPressedAtDementiaOtp.asStateFlow()
 
+    private val _toastEvent = MutableSharedFlow<String>()
+    val toastEvent = _toastEvent.asSharedFlow()
 
-    private fun event(event: Event) {
+    fun onBackPressedAtDementiaOtp(isPressed: Boolean){
         viewModelScope.launch {
-            _eventFlow.emit(event)
-            Log.d("가냐", "_eventFlow")
+            _isOnBackPressedAtDementiaOtp.emit(isPressed)
         }
     }
 
-    sealed class Event {
-        data object NavigateToMain : Event()
-        data object NavigateToPatientOtp : Event()
-        data object Fail : Event()
-    }
-
-    private fun isSuccess(result: String, event: Event) {
-        event(if (result == "success") event else Event.Fail)
-    }
-
-    fun sendNokIdentity(request: NokIdentity) {
+    fun sendNokIdentity(request: NokIdentityRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendNokIdentity(request).onSuccess {
-                isSuccess(it.status, Event.NavigateToMain)
-
-                _dementiaIdentityFlow.emit(DementiaIdentity(it.result.dementiaInfoRecord.dementiaName, it.result.dementiaInfoRecord.dementiaPhoneNumber))
+                _navigateToNokMainEvent.emit(it)
+            }.onError {
+                Log.d("error", it.toString())
+            }.onException {
+                Log.d("exception", it.toString())
+            }.onFail {
+                _toastEvent.emit("올바른 인증번호를 입력해주세요.")
             }
         }
     }
 
-    fun sendDementiaIdentity(request: DementiaIdentity) {
+    fun sendDementiaIdentity(request: DementiaIdentityRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendDementiaIdentity(request).onSuccess {
-                isSuccess(it.status, Event.NavigateToPatientOtp)
                 _dementiaKeyFlow.emit(it.dementiaKey)
+            }.onError {
+                Log.d("send demenita", it.toString())
+            }.onException {
+                Log.d("excetion", it.toString())
+            }.onFail {
+                Log.d("fail", it.toString())
             }
         }
     }
 
-    fun checkConnected(request: CheckConnect) {
+    fun checkConnected(request: CheckInterConnectRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.checkInterConnected(request).onSuccess {
-                isSuccess(it.status, Event.NavigateToMain)
-                _nokIdentityFlow.emit(NokIdentity(it.result.nokInfoRecord.nokKey, it.result.nokInfoRecord.nokName, it.result.nokInfoRecord.nokPhoneNumber))
+                _navigateToDementiaMainEvent.emit(NokInfo(it.nokInfoRecord.nokKey, it.nokInfoRecord.nokName, it.nokInfoRecord.nokPhoneNumber))
                 Log.d("되나", it.toString())
+            }.onError {
+                Log.d("send demenita", it.toString())
+            }.onException {
+                Log.d("excetion", it.toString())
+            }.onFail {
+                _toastEvent.emit("보호자의 연결 상태를 확인해주세요.")
             }
         }
     }

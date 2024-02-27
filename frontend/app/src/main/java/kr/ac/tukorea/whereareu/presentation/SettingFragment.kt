@@ -22,12 +22,8 @@ import kr.ac.tukorea.whereareu.util.handleApi
 
 @AndroidEntryPoint
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
-    private val viewModel: LoginViewModel by activityViewModels()
     override fun initObserver() {
-        repeatOnStarted {
-            viewModel.eventFlow.collect {
-            }
-        }
+
     }
 
 
