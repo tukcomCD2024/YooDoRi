@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.presentation.login
+package kr.ac.tukorea.whereareu.util
 
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
