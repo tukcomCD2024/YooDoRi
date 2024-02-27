@@ -27,8 +27,4 @@ class LoginRepositoryImpl @Inject constructor(
         return handleApi({api.postIsConnected(request)}) { response: ResponseBody<CheckInterConnectResponse> -> response.result}
     }
 
-//    override suspend fun checkConnected(request: CheckConnect): Response<CheckConnectedResponse> {
-//        return api.checkConnected(request)
-//    }
-
 }

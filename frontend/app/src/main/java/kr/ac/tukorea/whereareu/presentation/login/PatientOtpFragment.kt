@@ -8,9 +8,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding
@@ -42,15 +40,8 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
         }
 
         repeatOnStarted {
-            viewModel.nokIdentityFlow.collect {
-                /*if (it.name != "사용자"){
-                    val spf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
-                    spf.edit{
-                        putString("name", it.name)
-                        putString("phone", it.phoneNumber)
-                    }
-                }*/
-                Log.d("event", it.toString())
+            viewModel.navigateToDementiaMainEvent.collect {
+                //보호자 정보 저장
                 val spf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
                 spf.edit {
                     putString("name", it.nokName)
@@ -58,6 +49,7 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                     putString("key", it.nokKey)
                     commit()
                 }
+
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 intent.flags =
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -79,12 +71,6 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                 }
             }
         }
-
-        /*repeatOnStarted {
-            viewModel.eventFlow.collect {
-                handleEvent(it)
-            }
-        }*/
     }
 
     override fun initView() {
@@ -104,24 +90,5 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
 
     fun onClickInputDone() {
         viewModel.checkConnected(CheckInterConnectRequest(binding.displayOtpTv.text.toString()))
-    }
-
-    private fun handleEvent(event: LoginViewModel.Event) {
-        when (event) {
-            LoginViewModel.Event.Fail -> {
-                Toast.makeText(
-                    requireContext(),
-                    "아직 보호자와 연결이 되지 않았습니다.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            else -> {
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
-        }
     }
 }

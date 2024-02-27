@@ -35,13 +35,13 @@ class PatientIdentifyFragment :
             //OtpFragment에서 뒤로가기 버튼을 눌렀는지 여부에 따른 분기
             viewModel.isOnBackPressedAtDementiaOtp.collect{ isOnBackPressedAtDementiaOtp ->
                 if (!isOnBackPressedAtDementiaOtp){
-                    viewModel.dementiaKeyFlow.collect {
-
+                    viewModel.dementiaKeyFlow.collect {dementiaKey ->
                         //보호대상자 정보 저장
                         val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
                         spf.edit {
                             putString("name", binding.nameEt.text.toString().trim())
                             putString("phone", binding.phoneNumberEt.text.toString().trim())
+                            putString("key", dementiaKey)
                             putBoolean("isDementia", true)
                             commit()
                         }
