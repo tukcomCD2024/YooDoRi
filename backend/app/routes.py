@@ -102,8 +102,11 @@ def receive_dementia_info():
         if duplicate_dementia:
 
             _dementia_key = duplicate_dementia.dementia_key
-
-            response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'dementiaKey': _dementia_key}
+            
+            result = {
+                'dementiaKey' : _dementia_key
+            }
+            response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'result': result}
 
             print('[system] dementia info {} already exists'.format(_dementia_name))
         
@@ -112,15 +115,17 @@ def receive_dementia_info():
             for _ in range(10):
                 unique_random_numberfordementia = rng.generate_unique_random_number(100000, 999999)
     
-                _dementia_key = str(unique_random_numberfordementia)  # 키 값을 문자열로 변환
+            _dementia_key = str(unique_random_numberfordementia)  # 키 값을 문자열로 변환
 
-                new_user = dementia_info(dementia_key=_dementia_key, dementia_name = _dementia_name, dementia_phonenumber=_dementia_phonenumber)
-
+            new_user = dementia_info(dementia_key=_dementia_key, dementia_name = _dementia_name, dementia_phonenumber=_dementia_phonenumber)
+            result = {
+                'dementiaKey' : _dementia_key
+            }
             db.session.add(new_user)
             db.session.commit()
 
             print('[system] {:s} dementia info successfully uploaded'.format(_dementia_name))
-            response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'dementiaKey': _dementia_key}
+            response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'result': result}
 
             
         return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
@@ -253,7 +258,7 @@ def send_location_info():
         latest_location = location_info.query.filter_by(dementia_key=dementia_key).order_by(location_info.date.desc()).first()
         
         if latest_location:
-            response_data = {
+            result = {
                 'status': 'success',
                 'message': 'Location data sent successfully',
                 'latitude': latest_location.latitude,
@@ -274,6 +279,7 @@ def send_location_info():
                 'isGpsOn': latest_location.isGpsOn,
                 'isRingstoneOn': latest_location.isRingstoneOn
             }
+            response_data = {'status': 'success', 'message': 'Location data sent successfully', 'result': result}
         else:
             response_data = {'status': 'error', 'message': 'Location data not found'}
         
