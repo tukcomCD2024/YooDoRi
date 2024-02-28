@@ -29,6 +29,14 @@ def fileReader(filename):
 
     df = pd.DataFrame({"latitude":latitude, "longitude":longitude, "date":date, "time":time})
 
+    
+    df['latitude'] = df['latitude'].astype(float)
+    df['longitude'] = df['longitude'].astype(float)
+    df['datetime'] = pd.to_datetime(df['date'] + ' ' + df['time'], format='%Y-%m-%d %H:%M:%S')
+    df['datetime'] = df['datetime'].dt.floor('T')
+    df = df.drop(['date', 'time'], axis=1)
+    df = df.drop_duplicates(['datetime'], ignore_index=True)
+
     return df
 
 # 의미장소 추출
@@ -46,23 +54,14 @@ def gmeansFit(df):
     return clusters, centers
     
 # 호출 함수
-def gmeansFunc(filename):
+def gmeansFunc(df):
     
     j = 0
-    df = fileReader(filename)
-
-    df['latitude'] = df['latitude'].astype(float)
-    df['longitude'] = df['longitude'].astype(float)
-    df['datetime'] = pd.to_datetime(df['date'] + ' ' + df['time'], format='%Y-%m-%d %H:%M:%S')
-    df['datetime'] = df['datetime'].dt.floor('T')
-    df = df.drop(['date', 'time'], axis=1)
-    df = df.drop_duplicates(['datetime'], ignore_index=True)
 
     clusters, centers = gmeansFit(df)
 
     data_df = pd.DataFrame({"clusters":clusters, "centers":centers})
-    
-    # 클러스터가 10개 이하면 중요도가 낮다고 판단해 제거
+        
     for k in range(len(data_df.clusters)):
         if (len(data_df.clusters[k]) < 10):
             data_df.drop(index=k, inplace=True)
@@ -70,6 +69,7 @@ def gmeansFunc(filename):
     data_df = data_df.reset_index(drop=True)
 
     # map(centers, j)
+
         
     j += 1
     return data_df
@@ -79,10 +79,8 @@ if __name__ == '__main__':
     # 지금은 데이터가 저장된 파일의 경로를 실행할 때 입력
     file_path = sys.argv[1]
 
-    f = open(file_path, 'r')
-    data = f.read()
-    f.close()
+    df = fileReader(file_path)
 
-    dataDict = gmeansFunc(data)
+    dataDict = gmeansFunc(df)
     
     print(dataDict)
