@@ -61,7 +61,8 @@ def gmeansFunc(filename):
     clusters, centers = gmeansFit(df)
 
     data_df = pd.DataFrame({"clusters":clusters, "centers":centers})
-        
+    
+    # 클러스터가 10개 이하면 중요도가 낮다고 판단해 제거
     for k in range(len(data_df.clusters)):
         if (len(data_df.clusters[k]) < 10):
             data_df.drop(index=k, inplace=True)
