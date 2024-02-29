@@ -14,7 +14,7 @@ data class LocationInfo(
     val gyrosensor: List<Float>,
     val directionsensor: List<Float>,
     val lightsensor: List<Float>,
-    val battery: Float,
+    val battery: Int,
     val isInternetOn: Boolean,
     val isGpsOn: Boolean,
     val isRingstoneOn: Boolean
