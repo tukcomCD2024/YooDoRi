@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from .models import db, dementia_info, nok_info, location_info
 from .random_generator import RandomNumberGenerator
 from .update_user_status import UpdateUserStatus
-from sqlalchemy import text
 from sqlalchemy import and_
 import json
 
@@ -18,9 +17,11 @@ user_login_routes = Blueprint('user_login_routes', __name__)
 user_info_modification_routes = Blueprint('user_info_modification_routes', __name__)
 caculate_dementia_avarage_walking_speed_routes = Blueprint('caculate_dementia_avarage_walking_speed', __name__)
 
+# 상태코드 정의
 SUCCESS = 200
-DUPERR = 400
-KEYNOTFOUND = 450
+KEYNOTFOUND = 600
+LOGINSUCCESS = 700
+LOGINFAILED = 750
 UNDEFERR = 500
 
 @nok_info_routes.route('/receive-nok-info', methods=['POST'])
@@ -152,10 +153,12 @@ def is_connected():
             }
             response_data = {'status': 'success', 'message': 'Connected successfully', 'result' : result}
 
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+
         else:
             response_data = {'status': 'error', 'message': 'Connection failed'}
 
-        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+        return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -175,8 +178,12 @@ def receive_user_login():
             if existing_nok:
                 response_data = {'status': 'success', 'message': 'Login success'}
 
+                return jsonify(response_data), LOGINSUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+
             else:
                 response_data = {'status': 'error', 'message': 'Login failed'}
+
+                return jsonify(response_data), LOGINFAILED, {'Content-Type': 'application/json; charset = utf-8' }
 
             
         elif _isdementia == 1: # dementia일 경우
@@ -184,10 +191,12 @@ def receive_user_login():
             if existing_dementia:
                 response_data = {'status': 'success', 'message': 'Login success'}
 
+                return jsonify(response_data), LOGINSUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+
             else:
                 response_data = {'status': 'error', 'message': 'Login failed'}
 
-        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), LOGINFAILED, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -238,10 +247,13 @@ def receive_location_info():
             db.session.add(new_location)
             db.session.commit()
             response_data = {'status': 'success', 'message': 'Location data received successfully'}
+
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+        
         else:
             response_data = {'status': 'error', 'message': 'Dementia info not found'}
-            
-        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+
+            return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         print(e)
@@ -280,10 +292,12 @@ def send_location_info():
                 'isRingstoneOn': latest_location.isRingstoneOn
             }
             response_data = {'status': 'success', 'message': 'Location data sent successfully', 'result': result}
+
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
         else:
             response_data = {'status': 'error', 'message': 'Location data not found'}
-        
-        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+
+            return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -308,9 +322,15 @@ def modify_user_info():
                 db.session.commit()
                 print('[system] NOK info modified successfully')
                 response_data = {'status': 'success', 'message': 'User info modified successfully'}
+
+                return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            
             else:
                 print('[system] NOK info not found')
                 response_data = {'status': 'error', 'message': 'User info not found'}
+
+                return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+            
         elif is_dementia == 1: # 보호 대상자
             existing_dementia = dementia_info.query.filter_by(dementia_key=data.get('key')).first()
             if existing_dementia:
@@ -322,11 +342,14 @@ def modify_user_info():
                 db.session.commit()
                 print('[system] Dementia info modified successfully')
                 response_data = {'status': 'success', 'message': 'User info modified successfully'}
+
+                return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            
             else:
                 print('[system] Dementia info not found')
                 response_data = {'status': 'error', 'message': 'User info not found'}
 
-        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
