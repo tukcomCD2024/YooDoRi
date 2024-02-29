@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.login.PatientSettingFragment">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="kr.ac.tukorea.whereareu.presentation.login.LoginViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
