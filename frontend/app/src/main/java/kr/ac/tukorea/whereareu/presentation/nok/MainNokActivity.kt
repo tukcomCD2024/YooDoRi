@@ -6,7 +6,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.LocationManager
 import android.os.Parcelable
+import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -27,14 +29,14 @@ import kotlin.apply
 @AndroidEntryPoint
 class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
     override fun initView() {
-        val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val isGpsEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(
-            LocationManager.GPS_PROVIDER)
+        //gps off시 gps 설정화면으로 이동
+        checkGpsStatus()
 
         Intent(applicationContext, LocationService::class.java).apply {
             action = LocationService.ACTION_START
             startService(this)
         }
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
@@ -54,6 +56,22 @@ class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver, IntentFilter("gps")
         )
+    }
+
+    private fun requestSystemGPSEnable() {
+        Toast.makeText(this, "핸드폰 GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(intent)
+    }
+
+    private fun checkGpsStatus(){
+        val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isGpsEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(
+            LocationManager.GPS_PROVIDER)
+
+        if (!isGpsEnable){
+            requestSystemGPSEnable()
+        }
     }
 
     fun getStatusBarHeight(context: Context): Int {
