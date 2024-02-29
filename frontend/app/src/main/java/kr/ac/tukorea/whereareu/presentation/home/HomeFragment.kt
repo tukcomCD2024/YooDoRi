@@ -199,42 +199,4 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
             }
         }
     }
-
-    private fun makeDummy(){
-        lifecycleScope.launch{
-            while (true){
-                delay(60000)
-                val axislast = axisList.last()
-                val locaLast = locationList.last()
-                Log.d("last", "$axislast, $locaLast")
-                val currentDate = Date(System.currentTimeMillis())
-                val sdf = SimpleDateFormat("YYYY-MM-DD")
-                val date = sdf.format(currentDate)
-                Log.d("date", date.toString())
-                viewModel.postLocationInfo(LocationInfo(
-                    "227609",
-                    locaLast.latitude,
-                    locaLast.longitude,
-                    "지금",
-                    date,
-                    0f,
-                    axislast.xAxis,
-                    axislast.yAxis,
-                    axislast.zAxis,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    80.0f,
-                    true,
-                    true,
-                    true
-                ))
-                delay(5000)
-            }
-        }
-    }
 }

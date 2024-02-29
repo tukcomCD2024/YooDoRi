@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
 import android.os.IBinder
+import android.text.TextUtils.split
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
@@ -31,6 +32,8 @@ import kr.ac.tukorea.whereareu.data.repository.HomeRepository
 import kr.ac.tukorea.whereareu.data.repository.HomeRepositoryImpl
 import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
 import okhttp3.internal.notify
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +52,7 @@ class LocationService: Service() {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var sensorValueList = mutableListOf<List<Float>>(emptyList(), emptyList(), emptyList(), emptyList())
     private val locationList = mutableListOf(0.0, 0.0)
+    private var currentSpeed = 0f
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -76,61 +80,59 @@ class LocationService: Service() {
 
         magneticFieldSensor.startListening()
         magneticFieldSensor.setOnSensorValuesChangedListener {values ->
-            val magneticField = values
             sensorValueList[MAGNETIC_SENSOR] = values
         }
 
         accelerometerSensor.startListening()
         accelerometerSensor.setOnSensorValuesChangedListener { values ->
-            val accel = values
             sensorValueList[ACCELEROMETER_SENSOR] = values
         }
 
         gyroScopeSensor.startListening()
         gyroScopeSensor.setOnSensorValuesChangedListener {values ->
-            val gyro = values
             sensorValueList[GYRO_SENSOR] = values
-            Log.d("sensorValues", sensorValueList.toString())
         }
     }
 
     private fun postLocationInfo(dementiaKey: String){
         serviceScope.launch {
             while (true){
-                delay(2000)
-                if (locationList.isNotEmpty()&&sensorValueList.isNotEmpty()) {
+                if (locationList.isNotEmpty()&& sensorValueList[MAGNETIC_SENSOR].isNotEmpty()
+                    && sensorValueList[LIGHT_SENSOR].isNotEmpty() && sensorValueList[ACCELEROMETER_SENSOR].isNotEmpty()
+                    && sensorValueList[GYRO_SENSOR].isNotEmpty()) {
+                    val currentTime = getCurrentTime()
                     val info = LocationInfo(
                         dementiaKey,
                         locationList[0], locationList[1],
-                        "21:29:01", "2024-01-11",
-                        0f,
-                        directionsensorX = sensorValueList[MAGNETIC_SENSOR][0],
-                        directionsensorY = sensorValueList[MAGNETIC_SENSOR][1],
-                        directionsensorZ = sensorValueList[MAGNETIC_SENSOR][2],
-                        gyrosensorX = sensorValueList[GYRO_SENSOR][0],
-                        gyrosensorY = sensorValueList[GYRO_SENSOR][1],
-                        gyrosensorZ = sensorValueList[GYRO_SENSOR][2],
-                        accelerationsensorX = sensorValueList[ACCELEROMETER_SENSOR][0],
-                        accelerationsensorY = sensorValueList[ACCELEROMETER_SENSOR][1],
-                        accelerationsensorZ = sensorValueList[ACCELEROMETER_SENSOR][2],
-                        lightsensor = sensorValueList[LIGHT_SENSOR][0],
+                        currentTime[1].trim(), currentTime[0],
+                        currentSpeed,
+                        accelerationsensor = sensorValueList[ACCELEROMETER_SENSOR],
+                        gyrosensor = sensorValueList[GYRO_SENSOR],
+                        directionsensor = sensorValueList[MAGNETIC_SENSOR],
+                        lightsensor = sensorValueList[LIGHT_SENSOR],
                         battery = 80.0f,
                         isGpsOn = locationClient.getGpsStatus(),
                         isInternetOn = true,
                         isRingstoneOn = true
                     )
                     Log.d("info", info.toString())
-                    repository.postLocationInfo(
-                        info
-                    ).onSuccess {
+                    repository.postLocationInfo(info).onSuccess {
                         Log.d("success", it.toString())
                     }.onException {
                         Log.d("error", it.toString())
                     }
+                    delay(60000)
                 }
-                delay(58000)
             }
         }
+    }
+
+    private fun getCurrentTime(): List<String>{
+        val currentTime = System.currentTimeMillis()
+        val date = Date(currentTime)
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val now = sdf.format(date)
+        return now.split(" ")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -150,15 +152,13 @@ class LocationService: Service() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val dementiaKeySpf = applicationContext.getSharedPreferences("OtherUser", MODE_PRIVATE)
-        val dementiaKey = dementiaKeySpf.getString("key", "")
-
         locationClient
             .getLocationUpdates(1000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
                 locationList[0] = location.latitude
                 locationList[1] = location.longitude
+                currentSpeed = location.speed
                 Log.d("speed", "${location.speed}")
                 sendLocation(location.latitude, location.longitude)
                 val updatedNotification = notification.setContentText(
