@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.AudioManager
 import android.os.BatteryManager
 import android.os.IBinder
 import android.util.Log
@@ -100,7 +101,7 @@ class LocationService: Service() {
                         directionsensor = sensorValueList[MAGNETIC_SENSOR],
                         lightsensor = sensorValueList[LIGHT_SENSOR],
                         battery = getBatteryPercent()!!,
-                        isGpsOn = locationClient.getGpsStatus(), isInternetOn = true, isRingstoneOn = true
+                        isGpsOn = locationClient.getGpsStatus(), isInternetOn = true, isRingstoneOn = getRingMode()
                     )
                     Log.d("info", info.toString())
                     repository.postLocationInfo(info).onSuccess {
@@ -143,10 +144,19 @@ class LocationService: Service() {
         }
     }
 
+    private fun getRingMode(): Boolean{
+        val audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        return when(audioManager.ringerMode){
+            // ringMode 2: 벨소리
+            2 -> true
+            else -> false
+        }
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when(intent?.action){
             ACTION_START -> start()
-            ACION_STOP -> stop()
+            ACTION_STOP -> stop()
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -196,7 +206,7 @@ class LocationService: Service() {
 
     companion object{
         const val ACTION_START = "ACTION_START"
-        const val ACION_STOP = "ACTION_STOP"
+        const val ACTION_STOP = "ACTION_STOP"
         const val LIGHT_SENSOR = 0
         const val GYRO_SENSOR = 1
         const val ACCELEROMETER_SENSOR = 2
