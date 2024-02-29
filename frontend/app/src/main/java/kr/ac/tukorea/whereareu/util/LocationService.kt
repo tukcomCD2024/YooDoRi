@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable.start
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -43,8 +44,10 @@ class LocationService: Service() {
     lateinit var gyroScopeSensor: GyroScopeSensor
     @Inject
     lateinit var lightSensor: LightSensor
-    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var sensorValueList = mutableListOf<List<Float>>(emptyList(), emptyList(), emptyList(), emptyList())
+    private val locationList = mutableListOf(0.0, 0.0)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -58,36 +61,74 @@ class LocationService: Service() {
             LocationServices.getFusedLocationProviderClient(applicationContext)
         )
 
-        serviceScope.launch {
-            while (true){
-
-            }
-        }
+        val dementiaKeySpf = applicationContext.getSharedPreferences("OtherUser", MODE_PRIVATE)
+        val dementiaKey = dementiaKeySpf.getString("key", "")
+        if (!dementiaKey.isNullOrBlank())
+            postLocationInfo(dementiaKey.toString())
     }
 
     private fun initSensor(){
         lightSensor.startListening()
         lightSensor.setOnSensorValuesChangedListener { values ->
-            val lux = values
-            Log.d("light Sensor", lux.toString())
+            sensorValueList[LIGHT_SENSOR] = values
         }
 
         magneticFieldSensor.startListening()
         magneticFieldSensor.setOnSensorValuesChangedListener {values ->
             val magneticField = values
-            Log.d("magnetic", magneticField.toString())
+            sensorValueList[MAGNETIC_SENSOR] = values
         }
 
         accelerometerSensor.startListening()
         accelerometerSensor.setOnSensorValuesChangedListener { values ->
             val accel = values
-            Log.d("accel", accel.toString())
+            sensorValueList[ACCELEROMETER_SENSOR] = values
         }
 
         gyroScopeSensor.startListening()
         gyroScopeSensor.setOnSensorValuesChangedListener {values ->
             val gyro = values
-            Log.d("gyro", gyro.toString())
+            sensorValueList[GYRO_SENSOR] = values
+            Log.d("sensorValues", sensorValueList.toString())
+        }
+    }
+
+    private fun postLocationInfo(dementiaKey: String){
+        serviceScope.launch {
+            while (true){
+                delay(2000)
+                if (locationList.isNotEmpty()&&sensorValueList.isNotEmpty()) {
+                    val info = LocationInfo(
+                        dementiaKey,
+                        locationList[0], locationList[1],
+                        "21:29:01", "2024-01-11",
+                        0f,
+                        directionsensorX = sensorValueList[MAGNETIC_SENSOR][0],
+                        directionsensorY = sensorValueList[MAGNETIC_SENSOR][1],
+                        directionsensorZ = sensorValueList[MAGNETIC_SENSOR][2],
+                        gyrosensorX = sensorValueList[GYRO_SENSOR][0],
+                        gyrosensorY = sensorValueList[GYRO_SENSOR][1],
+                        gyrosensorZ = sensorValueList[GYRO_SENSOR][2],
+                        accelerationsensorX = sensorValueList[ACCELEROMETER_SENSOR][0],
+                        accelerationsensorY = sensorValueList[ACCELEROMETER_SENSOR][1],
+                        accelerationsensorZ = sensorValueList[ACCELEROMETER_SENSOR][2],
+                        lightsensor = sensorValueList[LIGHT_SENSOR][0],
+                        battery = 80.0f,
+                        isGpsOn = true,
+                        isInternetOn = true,
+                        isRingstoneOn = true
+                    )
+                    Log.d("info", info.toString())
+                    repository.postLocationInfo(
+                        info
+                    ).onSuccess {
+                        Log.d("success", it.toString())
+                    }.onException {
+                        Log.d("error", it.toString())
+                    }
+                }
+                delay(58000)
+            }
         }
     }
 
@@ -112,42 +153,15 @@ class LocationService: Service() {
         val dementiaKey = dementiaKeySpf.getString("key", "")
 
         locationClient
-            .getLocationUpdates(10000L)
+            .getLocationUpdates(1000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
-                val lat = location.latitude.toString()
-                val long = location.longitude.toString()
-                Log.d("location", "$lat, $long")
-                repository.postLocationInfo(
-                    LocationInfo(
-                    dementiaKey.toString(),
-                    location.latitude,
-                    location.longitude,
-                    "21:29:01",
-                    "2024-01-11",
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    0f,
-                    80.0f,
-                    true,
-                    true,
-                    true)
-                ).onSuccess {
-                    Log.d("success", it.toString())
-                }.onException {
-                    Log.d("error", it.toString())
-                }
+                locationList[0] = location.latitude
+                locationList[1] = location.longitude
+                Log.d("speed", "${location.speed}")
                 sendLocation(location.latitude, location.longitude)
                 val updatedNotification = notification.setContentText(
-                    "Location: ($lat, $long)"
+                    "Location: (${location.latitude}, ${location.longitude}) speed: ${location.speed}"
                 )
                 notificationManager.notify(1, updatedNotification.build())
             }.launchIn(serviceScope)
@@ -174,5 +188,9 @@ class LocationService: Service() {
     companion object{
         const val ACTION_START = "ACTION_START"
         const val ACION_STOP = "ACTION_STOP"
+        const val LIGHT_SENSOR = 0
+        const val GYRO_SENSOR = 1
+        const val ACCELEROMETER_SENSOR = 2
+        const val MAGNETIC_SENSOR = 3
     }
 }
