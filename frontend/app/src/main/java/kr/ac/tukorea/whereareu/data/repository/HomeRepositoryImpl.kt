@@ -14,6 +14,4 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun postLocationInfo(request: LocationInfo): NetworkResult<LocationInfoResponse> {
         return handleApi({api.postLocationInfo(request)}) {response: LocationInfoResponse -> response}
     }
-
-
 }

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.location.LocationManager
 import android.os.Parcelable
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -26,6 +27,10 @@ import kotlin.apply
 @AndroidEntryPoint
 class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
     override fun initView() {
+        val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isGpsEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(
+            LocationManager.GPS_PROVIDER)
+
         Intent(applicationContext, LocationService::class.java).apply {
             action = LocationService.ACTION_START
             startService(this)

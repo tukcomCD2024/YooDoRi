@@ -2,10 +2,14 @@ package kr.ac.tukorea.whereareu.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
 import android.location.LocationRequest
 import android.os.Looper
+import android.provider.Settings
+import android.util.Log
+import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -18,27 +22,27 @@ class DefaultLocationClient(
     private val context: Context,
     private val client: FusedLocationProviderClient
 ): LocationClient {
+    private val locationManager by lazy {
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
     @SuppressLint("MissingPermission")
     override fun getLocationUpdates(interval: Long): Flow<Location> {
         return callbackFlow {
-            if(!context.hasLocationPermission()){
+            if (!context.hasLocationPermission()) {
                 throw LocationClient.LocationException("Missing location permission")
             }
 
-            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-            if(!isGpsEnabled && !isNetworkEnabled){
+            if (!getGpsStatus()) {
                 throw LocationClient.LocationException("GPS is disabled")
             }
 
             val request = com.google.android.gms.location.LocationRequest.Builder(interval)
                 .build()
 
-            val locationCallback = object : LocationCallback(){
+            val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
                     super.onLocationResult(result)
-                    result.locations.lastOrNull()?.let{location ->
+                    result.locations.lastOrNull()?.let { location ->
                         launch { send(location) }
                     }
                 }
@@ -54,5 +58,8 @@ class DefaultLocationClient(
                 client.removeLocationUpdates(locationCallback)
             }
         }
+    }
+    override fun getGpsStatus(): Boolean {
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 }
