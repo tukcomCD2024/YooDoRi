@@ -49,10 +49,7 @@ import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
-    OnMapReadyCallback, LocationListener {
-    /*private val sensorManager: SensorManager by lazy {
-        requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    }*/
+    OnMapReadyCallback {
     private val viewModel: HomeViewModel by viewModels()
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
     private val fusedLocationClient by lazy {
@@ -64,33 +61,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
         requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
-    //private var axisFlow = kotlinx.coroutines.flow.Flow<List<Accelerometer>>
-    private var axisList = mutableListOf<Accelerometer>()
-    private val _axisListFlow = MutableSharedFlow<List<Accelerometer>>()
-    private var locationList = mutableListOf<kr.ac.tukorea.whereareu.data.model.Location>()
-
-    //private var axisFlow = flowOf()
     override fun initObserver() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                _axisListFlow.collect {
-                    Log.d("axis collect", it.toString())
-                }
-            }
-        }
+
     }
 
     override fun initView() {
         viewModel.init
         checkLocationPermission()
-        gpsManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 1000, 10f, this
-        )
-        //makeDummy()
-
-        //val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        //binding.homeFragment.setPadding(0,getStatusBarHeight(requireContext()), 0, getNaviBarHeight(requireContext()))
     }
 
     fun getStatusBarHeight(context: Context): Int {
@@ -137,7 +114,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
             )
         } else {
             // 권한이 이미 허용된 경우 위치 업데이트 요청
-            requestLocationUpdates()
         }
     }
 
@@ -150,7 +126,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // 위치 권한이 허용된 경우 위치 업데이트 요청
-                    requestLocationUpdates()
                 } else {
                     // 권한이 거부된 경우 처리 (예: 사용자에게 권한이 필요하다고 알리기)
                 }
@@ -158,45 +133,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun requestLocationUpdates() {
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // 위치를 성공적으로 가져온 경우
-                if (location != null) {
-                    // location을 사용하여 현재 위치에 대한 작업 수행
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    locationList.add(kr.ac.tukorea.whereareu.data.model.Location(latitude, longitude))
-                    increaseLocation(location)
-                    Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
-
-                }
-            }
-            .addOnFailureListener { e ->
-                // 위치를 가져오지 못한 경우 처리
-                // 예: Log.e("Location", "Failed to get location: $e")
-            }
-    }
-
     override fun onMapReady(p0: NaverMap) {
 
     }
 
-    override fun onLocationChanged(location: Location) {
-        val latitude = location.latitude
-        val longitude = location.longitude
-        // 위치 정보 사용
-        Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
-    }
-
-    private fun increaseLocation(location: Location){
-        lifecycleScope.launch{
-            while (true){
-                locationList.add(kr.ac.tukorea.whereareu.data.model.Location(location.latitude++, location.longitude++))
-                delay(1000)
-                //Log.d("loca list", locationList.toString())
-            }
-        }
-    }
 }

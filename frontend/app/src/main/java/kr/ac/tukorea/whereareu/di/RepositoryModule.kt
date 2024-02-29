@@ -5,9 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import kr.ac.tukorea.whereareu.data.api.HomeService
+import kr.ac.tukorea.whereareu.data.api.NokHomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
-import kr.ac.tukorea.whereareu.data.repository.AxisDataSource
 import kr.ac.tukorea.whereareu.data.repository.HomeRepository
 import kr.ac.tukorea.whereareu.data.repository.HomeRepositoryImpl
 import kr.ac.tukorea.whereareu.data.repository.LoginRepository
@@ -26,6 +25,6 @@ object RepositoryModule {
     @ViewModelScoped
     @Provides
     fun providesHomeRepository(
-        homeService: HomeService
-    ): HomeRepository = HomeRepositoryImpl(homeService)
+        nokHomeService: NokHomeService
+    ): HomeRepository = HomeRepositoryImpl(nokHomeService)
 }

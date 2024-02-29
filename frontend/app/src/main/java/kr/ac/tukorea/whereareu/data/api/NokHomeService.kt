@@ -6,7 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface HomeService {
+interface NokHomeService {
     @POST("receive-location-info")
     suspend fun postLocationInfo(
         @Body request: LocationInfo

@@ -49,6 +49,7 @@
             android:exported="false"
             android:theme="@style/Theme.WhereAreU">
         </activity>
+        <activity android:name="kr.ac.tukorea.whereareu.presentation.dementia.MainDementiaActivity" />
     </application>
 
 </manifest>
