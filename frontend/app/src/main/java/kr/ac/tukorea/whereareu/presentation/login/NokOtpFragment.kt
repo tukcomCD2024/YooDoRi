@@ -88,7 +88,6 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                 }
             }
         }
-        Log.d("name", args.name+args.phone)
     }
 
     fun onClickBackBtn() {
