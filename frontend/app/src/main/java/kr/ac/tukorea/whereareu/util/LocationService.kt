@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import androidx.core.app.ServiceCompat.stopForeground
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -21,6 +22,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.LocationInfo
 import kr.ac.tukorea.whereareu.data.repository.HomeRepository
@@ -33,6 +35,14 @@ import javax.inject.Inject
 class LocationService: Service() {
     @Inject
     lateinit var repository: HomeRepositoryImpl
+    @Inject
+    lateinit var accelerometerSensor: AccelerometerSensor
+    @Inject
+    lateinit var magneticFieldSensor: MagneticFieldSensor
+    @Inject
+    lateinit var gyroScopeSensor: GyroScopeSensor
+    @Inject
+    lateinit var lightSensor: LightSensor
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
 
@@ -42,10 +52,43 @@ class LocationService: Service() {
 
     override fun onCreate() {
         super.onCreate()
+        initSensor()
         locationClient = DefaultLocationClient(
             applicationContext,
             LocationServices.getFusedLocationProviderClient(applicationContext)
         )
+
+        serviceScope.launch {
+            while (true){
+
+            }
+        }
+    }
+
+    private fun initSensor(){
+        lightSensor.startListening()
+        lightSensor.setOnSensorValuesChangedListener { values ->
+            val lux = values
+            Log.d("light Sensor", lux.toString())
+        }
+
+        magneticFieldSensor.startListening()
+        magneticFieldSensor.setOnSensorValuesChangedListener {values ->
+            val magneticField = values
+            Log.d("magnetic", magneticField.toString())
+        }
+
+        accelerometerSensor.startListening()
+        accelerometerSensor.setOnSensorValuesChangedListener { values ->
+            val accel = values
+            Log.d("accel", accel.toString())
+        }
+
+        gyroScopeSensor.startListening()
+        gyroScopeSensor.setOnSensorValuesChangedListener {values ->
+            val gyro = values
+            Log.d("gyro", gyro.toString())
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -65,6 +108,9 @@ class LocationService: Service() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        val dementiaKeySpf = applicationContext.getSharedPreferences("OtherUser", MODE_PRIVATE)
+        val dementiaKey = dementiaKeySpf.getString("key", "")
+
         locationClient
             .getLocationUpdates(10000L)
             .catch { e -> e.printStackTrace() }
@@ -74,11 +120,11 @@ class LocationService: Service() {
                 Log.d("location", "$lat, $long")
                 repository.postLocationInfo(
                     LocationInfo(
-                    "227609",
+                    dementiaKey.toString(),
                     location.latitude,
                     location.longitude,
-                    "지금",
-                    "이순간",
+                    "21:29:01",
+                    "2024-01-11",
                     0f,
                     0f,
                     0f,
@@ -105,7 +151,6 @@ class LocationService: Service() {
                 )
                 notificationManager.notify(1, updatedNotification.build())
             }.launchIn(serviceScope)
-
         startForeground(1, notification.build())
     }
 

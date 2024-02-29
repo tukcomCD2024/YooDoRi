@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(
 ): ViewModel() {
     val init: Int = 0
 
-    init {
+    /*init {
         lightSensor.startListening()
         lightSensor.setOnSensorValuesChangedListener { values ->
             val lux = values
@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
             val gyro = values
             Log.d("gyro", gyro.toString())
         }
-    }
+    }*/
 
 
     fun postLocationInfo(request: LocationInfo){
