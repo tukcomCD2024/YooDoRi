@@ -55,24 +55,23 @@ def gmeansFit(df):
     
 # 호출 함수
 def gmeansFunc(df):
-    
-    j = 0
+
 
     clusters, centers = gmeansFit(df)
 
     data_df = pd.DataFrame({"clusters":clusters, "centers":centers})
-        
+    
+    # 클러스터의 수가 10개 이하면 의미 장소의 중요도가 낮다고 판단해 제거
     for k in range(len(data_df.clusters)):
         if (len(data_df.clusters[k]) < 10):
             data_df.drop(index=k, inplace=True)
     data_df = data_df.sort_index(axis=1)
     data_df = data_df.reset_index(drop=True)
+    
+    # 이중 리스트 형태로 변환
+    result = data_df.centers.values.tolist()
 
-    # map(centers, j)
-
-        
-    j += 1
-    return data_df
+    return result
 
 if __name__ == '__main__':
     # 파일 경로 가져오기
@@ -81,6 +80,6 @@ if __name__ == '__main__':
 
     df = fileReader(file_path)
 
-    dataDict = gmeansFunc(df)
+    data = gmeansFunc(df)
     
-    print(dataDict)
+    print(data)
