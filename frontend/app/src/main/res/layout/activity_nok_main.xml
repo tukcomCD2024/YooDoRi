@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainLayout"
+        android:id="@+id/layout"
+        android:fitsSystemWindows="true"
         tools:context=".presentation.nok.MainNokActivity">
 
         <androidx.fragment.app.FragmentContainerView
@@ -30,12 +31,14 @@
             style="@style/Widget.MyApp.BottomNavigationView.Material2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_corner_15_strok_1_bottom_nav"
-            android:backgroundTint="@color/white"
+            android:clipToOutline="true"
+            android:background="@drawable/bg_bottom_navigation"
+            android:backgroundTint="@android:color/transparent"
             app:itemIconTint="@drawable/bottom_color_selector"
             app:itemRippleColor="@null"
             app:labelVisibilityMode="labeled"
             app:itemIconSize="32dp"
+            android:paddingVertical="16dp"
             app:itemPaddingTop="2dp"
             app:itemPaddingBottom="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -16,14 +16,19 @@ import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
+import kr.ac.tukorea.whereareu.util.navigationHeight
+import kr.ac.tukorea.whereareu.util.setStatusBarTransparent
+import kr.ac.tukorea.whereareu.util.statusBarHeight
 import kotlin.Int
 
 @AndroidEntryPoint
 class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
     private val viewModel: NokHomeViewModel by viewModels()
     override fun initView() {
+        //상태바 투명 설정
+        this.setStatusBarTransparent()
+        binding.layout.setPadding(0, this.statusBarHeight(), 0, 0)
         initNavigator()
-        binding.mainLayout.setPadding(0,0, 0, 0)
         getDementiaLocation()
     }
 
@@ -52,25 +57,6 @@ class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver, IntentFilter("gps")
         )
-    }
-
-    fun getStatusBarHeight(context: Context): Int {
-        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-
-        return if (resourceId > 0) {
-            context.resources.getDimensionPixelSize(resourceId)
-        } else {
-            0
-        }
-    }
-
-    fun getNaviBarHeight(context: Context): Int {
-        val resourceId: Int = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            context.resources.getDimensionPixelSize(resourceId)
-        } else {
-            0
-        }
     }
 
     override fun onDestroy() {

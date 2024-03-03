@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="40dp"
             android:padding="4dp"
             android:background="@drawable/rectangle_corner_50"
             android:backgroundTint="@color/yellow"
