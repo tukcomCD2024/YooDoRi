@@ -48,6 +48,7 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
     private fun updateDementiaStatus(dementiaStatus: GetLocationInfoResponse){
         with(binding){
             stateTv.text = updateDementiaMovementStatus(dementiaStatus.userStatus)
+            batteryTv.text = "${dementiaStatus.battery}%"
             if (dementiaStatus.isInternetOn){
                 internetStatusTv.text = "on"
                 wifiIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_wifi_on))
@@ -68,9 +69,9 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
                 ringModeTv.text = "벨소리"
                 ringModeIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_bell_24))
             } else {
-                
+                ringModeTv.text = "무음"
+                ringModeIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_bell_off_24))
             }
-
         }
     }
 
