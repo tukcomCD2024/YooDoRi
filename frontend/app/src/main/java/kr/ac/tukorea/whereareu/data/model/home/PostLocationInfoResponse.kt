@@ -1,6 +1,6 @@
 package kr.ac.tukorea.whereareu.data.model.home
 
-data class LocationInfoResponse(
+data class PostLocationInfoResponse(
     val message: String,
     val status: String,
 )

@@ -5,20 +5,27 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
+import kr.ac.tukorea.whereareu.presentation.home.NokHomeViewModel
 import kotlin.Int
 
 @AndroidEntryPoint
 class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
+    private val viewModel: NokHomeViewModel by viewModels()
     override fun initView() {
         initNavigator()
         binding.mainLayout.setPadding(0,0, 0, 0)
+        getDementiaLocation()
     }
 
     private fun initNavigator(){
@@ -27,6 +34,19 @@ class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         val navController = navHostFragment.navController
 
         binding.bottomNav.setupWithNavController(navController)
+    }
+
+    private fun getDementiaLocation(){
+        val spf = getSharedPreferences("OtherUser", MODE_PRIVATE)
+        val dementiaKey = spf.getString("key", "")
+        if (!dementiaKey.isNullOrEmpty()) {
+            lifecycleScope.launch {
+                while (true) {
+                    viewModel.getDementiaLocation(dementiaKey)
+                    delay(60000)
+                }
+            }
+        }
     }
 
     override fun initObserver() {

@@ -174,6 +174,7 @@ class LocationService: Service() {
             .getLocationUpdates(1000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
+                val bearing = location.bearing
                 locationInfo[0] = location.latitude
                 locationInfo[1] = location.longitude
                 currentSpeed = location.speed

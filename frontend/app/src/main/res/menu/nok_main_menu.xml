@@ -12,7 +12,7 @@
         android:title="의미장소" />
 
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/nokHomeFragment"
         android:icon="@drawable/ic_home"
         android:title="홈"/>
 
