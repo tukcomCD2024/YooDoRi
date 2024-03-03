@@ -6,7 +6,7 @@
 
         <variable
             name="view"
-            type="kr.ac.tukorea.whereareu.presentation.login.PatientOtpFragment" />
+            type="kr.ac.tukorea.whereareu.presentation.login.dementia.PatientOtpFragment" />
 
         <variable
             name="viewModel"

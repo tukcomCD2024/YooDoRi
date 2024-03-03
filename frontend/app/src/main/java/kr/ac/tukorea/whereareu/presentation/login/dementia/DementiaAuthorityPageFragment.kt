@@ -1,6 +1,5 @@
-package kr.ac.tukorea.whereareu.presentation.login
+package kr.ac.tukorea.whereareu.presentation.login.dementia
 
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -8,17 +7,14 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.databinding.FragmentNokAuthorityPageBinding
+import kr.ac.tukorea.whereareu.databinding.FragmentDementiaAuthorityPageBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.dementia.MainDementiaActivity
-import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
 
-class NokAuthorityPageFragment :
-    BaseFragment<FragmentNokAuthorityPageBinding>(R.layout.fragment_nok_authority_page) {
+class DementiaAuthorityPageFragment :
+    BaseFragment<FragmentDementiaAuthorityPageBinding>(R.layout.fragment_dementia_authority_page) {
     private val BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE = 456
     private val LOCATION_PERMISSION_REQUEST_CODE = 123
     override fun initObserver() {
@@ -36,7 +32,7 @@ class NokAuthorityPageFragment :
 
     private fun goMainActivity() {
         binding.finishBtn.setOnClickListener {
-            val intent = Intent(requireContext(), MainNokActivity::class.java)
+            val intent = Intent(requireContext(), MainDementiaActivity::class.java)
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

@@ -24,8 +24,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.LocationInfo
-import kr.ac.tukorea.whereareu.data.repository.HomeRepositoryImpl
+import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
+import kr.ac.tukorea.whereareu.data.repository.home.DementiaHomeRepositoryImpl
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -33,7 +33,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LocationService: Service() {
     @Inject
-    lateinit var repository: HomeRepositoryImpl
+    lateinit var repository: DementiaHomeRepositoryImpl
     @Inject
     lateinit var accelerometerSensor: AccelerometerSensor
     @Inject
@@ -109,7 +109,7 @@ class LocationService: Service() {
                     }.onException {
                         Log.d("error", it.toString())
                     }
-                    delay(60000)
+                    delay(55000)
                 }
             }
         }

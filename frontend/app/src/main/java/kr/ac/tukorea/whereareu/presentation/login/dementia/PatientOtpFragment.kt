@@ -1,8 +1,6 @@
-package kr.ac.tukorea.whereareu.presentation.login
+package kr.ac.tukorea.whereareu.presentation.login.dementia
 
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
-import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -15,7 +13,7 @@ import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding
 import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.dementia.MainDementiaActivity
+import kr.ac.tukorea.whereareu.presentation.login.LoginViewModel
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
 @AndroidEntryPoint

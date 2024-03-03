@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.repository
+package kr.ac.tukorea.whereareu.data.repository.login
 
 import kr.ac.tukorea.whereareu.data.model.login.request.CheckInterConnectRequest
 import kr.ac.tukorea.whereareu.data.model.login.response.CheckInterConnectResponse

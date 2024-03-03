@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.repository
+package kr.ac.tukorea.whereareu.data.repository.login
 
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.data.model.login.response.NokIdentityResponse

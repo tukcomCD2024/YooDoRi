@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.model
+package kr.ac.tukorea.whereareu.data.model.home
 
 import com.google.gson.annotations.SerializedName
 import java.util.Date

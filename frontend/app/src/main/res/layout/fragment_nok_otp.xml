@@ -5,7 +5,7 @@
     <data>
         <variable
             name="view"
-            type="kr.ac.tukorea.whereareu.presentation.login.NokOtpFragment" />
+            type="kr.ac.tukorea.whereareu.presentation.login.nok.NokOtpFragment" />
 
         <variable
             name="viewModel"

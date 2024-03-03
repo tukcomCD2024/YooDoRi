@@ -4,27 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.location.LocationManager
-import android.os.Parcelable
-import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
-import kr.ac.tukorea.whereareu.presentation.home.SensorWorker
-import kr.ac.tukorea.whereareu.util.LocationService
-import java.lang.String
-import java.util.concurrent.TimeUnit
 import kotlin.Int
-import kotlin.apply
 
 @AndroidEntryPoint
 class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {

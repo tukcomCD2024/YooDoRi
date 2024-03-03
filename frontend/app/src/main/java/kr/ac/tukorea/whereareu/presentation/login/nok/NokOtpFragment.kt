@@ -1,25 +1,20 @@
-package kr.ac.tukorea.whereareu.presentation.login
+package kr.ac.tukorea.whereareu.presentation.login.nok
 
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
 import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
 import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
+import kr.ac.tukorea.whereareu.presentation.login.LoginViewModel
 import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted

@@ -1,22 +1,17 @@
-package kr.ac.tukorea.whereareu.presentation.login
+package kr.ac.tukorea.whereareu.presentation.login.dementia
 
 import android.content.Context.MODE_PRIVATE
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientIdentifyBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
+import kr.ac.tukorea.whereareu.presentation.login.LoginViewModel
 import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.EditTextUtil.showKeyboard

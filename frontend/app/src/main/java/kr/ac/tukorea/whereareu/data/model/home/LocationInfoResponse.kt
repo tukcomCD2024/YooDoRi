@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.model
+package kr.ac.tukorea.whereareu.data.model.home
 
 data class LocationInfoResponse(
     val message: String,
