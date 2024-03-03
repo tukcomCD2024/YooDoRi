@@ -116,7 +116,7 @@ class LocationService: Service() {
     }
 
     private fun getDementiaKey(): String?{
-        val dementiaKeySpf = applicationContext.getSharedPreferences("OtherUser", MODE_PRIVATE)
+        val dementiaKeySpf = applicationContext.getSharedPreferences("User", MODE_PRIVATE)
         return dementiaKeySpf.getString("key", "")
     }
 

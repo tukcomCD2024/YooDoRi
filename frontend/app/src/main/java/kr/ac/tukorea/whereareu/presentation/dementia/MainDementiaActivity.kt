@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -48,7 +49,7 @@ class MainDementiaActivity: BaseActivity<ActivityDementiaMainBinding>(R.layout.a
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isGpsEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(
             LocationManager.GPS_PROVIDER)
-
+        Log.d("gps status", isGpsEnable.toString())
         if (!isGpsEnable){
             requestSystemGPSEnable()
         }

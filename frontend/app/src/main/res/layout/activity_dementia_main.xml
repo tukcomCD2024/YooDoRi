@@ -44,7 +44,7 @@
             app:itemTextColor="@drawable/bottom_color_selector"
             app:itemTextAppearanceInactive="@style/TextAppearance.App.14sp.SemiBold"
             app:itemTextAppearanceActive="@style/TextAppearance.App.14sp.SemiBold"
-            app:menu="@menu/main_menu" />
+            app:menu="@menu/dementia_main_menu" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

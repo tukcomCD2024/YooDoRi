@@ -28,6 +28,9 @@ import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
     private val viewModel: LoginViewModel by activityViewModels()
     private val args: NokOtpFragmentArgs by navArgs()
+    private val navigator by lazy {
+        findNavController()
+    }
 
     override fun initObserver() {
         binding.viewModel = viewModel
@@ -51,11 +54,12 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                     putString("key", dementiaInfo.dementiaKey)
                     commit()
                 }
-
+                navigator.navigate(R.id.action_nokOtpFragment_to_nokAuthorityPageFragment)
                 // 보호자 메인화면으로 이동
-                val intent = Intent(requireContext(), MainNokActivity::class.java)
+                /*val intent = Intent(requireContext(), MainNokActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                startActivity(intent)*/
+
             }
         }
 
@@ -91,7 +95,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
     }
 
     fun onClickBackBtn() {
-        findNavController().popBackStack()
+        navigator.popBackStack()
     }
 
     fun onClickInputDone() {

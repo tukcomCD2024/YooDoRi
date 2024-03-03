@@ -52,10 +52,11 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                     commit()
                 }
 
-                val intent = Intent(requireContext(), MainDementiaActivity::class.java)
+                /*val intent = Intent(requireContext(), MainDementiaActivity::class.java)
                 intent.flags =
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                startActivity(intent)*/
+                navigator.navigate(R.id.action_patientOtpFragment_to_dementiaAuthorityPageFragment)
             }
         }
 

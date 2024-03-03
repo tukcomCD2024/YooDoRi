@@ -46,6 +46,9 @@
         <argument
             android:name="phone"
             app:argType="string" />
+        <action
+            android:id="@+id/action_nokOtpFragment_to_nokAuthorityPageFragment"
+            app:destination="@id/nokAuthorityPageFragment" />
     </fragment>
 
 
@@ -61,6 +64,18 @@
     <fragment
         android:id="@+id/patientOtpFragment"
         android:name="kr.ac.tukorea.whereareu.presentation.login.PatientOtpFragment"
-        android:label="PatientOtpFragment" />
+        android:label="PatientOtpFragment" >
+        <action
+            android:id="@+id/action_patientOtpFragment_to_dementiaAuthorityPageFragment"
+            app:destination="@id/dementiaAuthorityPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dementiaAuthorityPageFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.DementiaAuthorityPageFragment"
+        android:label="DementiaAuthorityPageFragment" />
+    <fragment
+        android:id="@+id/nokAuthorityPageFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.NokAuthorityPageFragment"
+        android:label="NokAuthorityPageFragment" />
 
 </navigation>
