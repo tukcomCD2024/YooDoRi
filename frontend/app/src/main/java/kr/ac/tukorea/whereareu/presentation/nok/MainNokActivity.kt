@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
-import kr.ac.tukorea.whereareu.presentation.home.NokHomeViewModel
 import kotlin.Int
 
 @AndroidEntryPoint

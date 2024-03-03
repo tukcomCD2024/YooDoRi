@@ -3,28 +3,19 @@ package kr.ac.tukorea.whereareu.presentation.nok
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
-import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.util.FusedLocationSource
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
+import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
 import kr.ac.tukorea.whereareu.databinding.FragmentHomeBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.home.HomeViewModel
-import kr.ac.tukorea.whereareu.presentation.home.NokHomeViewModel
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
 
 @AndroidEntryPoint
@@ -37,22 +28,60 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
     override fun initObserver() {
         repeatOnStarted {
             viewModel.dementiaLocation.collect{ response ->
-                with(binding){
-                    stateTv.text = updateDementiaStatus(response.userStatus)
-
-                }
-                naverMap?.let {
-                    val coord = LatLng(response.latitude, response.longitude)
-                    //val coord = LatLng(location)
-
-                    val locationOverlay = it.locationOverlay
-                    locationOverlay.isVisible = true
-                    locationOverlay.position = coord
-                    //locationOverlay.bearing = location.bearing
-
-                    it.moveCamera(CameraUpdate.scrollTo(coord))
-                }
+                updateDementiaStatus(response)
+                val coord = LatLng(response.latitude, response.longitude)
+                trackingDementiaLocation(coord)
             }
+        }
+    }
+
+    private fun updateDementiaMovementStatus(status: Int): String{
+        return when(status){
+            0 -> "정지"
+            1 -> "도보"
+            2 -> "차량"
+            3 -> "지하철"
+            else -> "알수없음"
+        }
+    }
+
+    private fun updateDementiaStatus(dementiaStatus: GetLocationInfoResponse){
+        with(binding){
+            stateTv.text = updateDementiaMovementStatus(dementiaStatus.userStatus)
+            if (dementiaStatus.isInternetOn){
+                internetStatusTv.text = "on"
+                wifiIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_wifi_on))
+            } else {
+                internetStatusTv.text = "off"
+                wifiIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_wifi_off))
+            }
+
+            if (dementiaStatus.isGpsOn){
+                gpsStatusTv.text = "on"
+                gpsIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_gps_on_24))
+            } else {
+                gpsStatusTv.text = "off"
+                gpsIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_gps_off_24))
+            }
+
+            if (dementiaStatus.isRingstoneOn){
+                ringModeTv.text = "벨소리"
+                ringModeIv.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_bell_24))
+            } else {
+                
+            }
+
+        }
+    }
+
+    private fun trackingDementiaLocation(coord: LatLng){
+        naverMap?.let {
+            val locationOverlay = it.locationOverlay
+            locationOverlay.isVisible = true
+            locationOverlay.position = coord
+            //locationOverlay.bearing = location.bearing
+
+            it.moveCamera(CameraUpdate.scrollTo(coord))
         }
     }
 
@@ -67,16 +96,6 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         val dementiaName = spf.getString("name", "")
         if (!dementiaName.isNullOrBlank()){
             binding.dementiaNameTv.text = dementiaName
-        }
-    }
-
-    private fun updateDementiaStatus(status: Int): String{
-        return when(status){
-            0 -> "정지"
-            1 -> "도보"
-            2 -> "차량"
-            3 -> "지하철"
-            else -> "알수없음"
         }
     }
 

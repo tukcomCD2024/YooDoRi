@@ -29,12 +29,13 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="12dp"
             android:padding="4dp"
-            android:background="@drawable/rectangle_corner_10"
+            android:background="@drawable/rectangle_corner_50"
             android:backgroundTint="@color/yellow"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
@@ -42,7 +43,7 @@
                 android:layout_margin="1dp"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp"
-                android:background="@drawable/rectangle_corner_10"
+                android:background="@drawable/rectangle_corner_50"
                 android:backgroundTint="@color/white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -117,7 +118,7 @@
                     android:id="@+id/internet_status_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:text="on"
                     android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                     app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
@@ -128,8 +129,8 @@
                     android:id="@+id/gps_iv"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginStart="40dp"
-                    android:src="@drawable/ic_gps_on"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_gps_on_24"
                     app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
                     app:layout_constraintStart_toEndOf="@+id/internet_status_tv" />
 
@@ -137,7 +138,7 @@
                     android:id="@+id/gps_status_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:text="on"
                     android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                     app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
@@ -145,33 +146,43 @@
                     tools:text="on" />
 
                 <ImageView
+                    android:id="@+id/ring_mode_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bell_24"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@id/wifi_iv"
+                    app:layout_constraintStart_toEndOf="@id/gps_status_tv"/>
+
+                <TextView
+                    android:id="@+id/ring_mode_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/ring_mode_iv"
+                    app:layout_constraintStart_toEndOf="@id/ring_mode_iv"
+                    tools:text="벨소리"
+                    android:layout_marginStart="5dp"
+                    android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"/>
+
+                <ImageView
                     android:id="@+id/battery_iv"
                     android:layout_width="27dp"
                     android:layout_height="17dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="10dp"
                     android:src="@drawable/ic_battery"
                     app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
-                    app:layout_constraintStart_toEndOf="@+id/gps_status_tv" />
+                    app:layout_constraintStart_toEndOf="@+id/ring_mode_tv" />
 
                 <TextView
                     android:id="@+id/battery_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="100"
+                    android:layout_marginStart="5dp"
+                    android:text="100%"
                     android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
-                    app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
+                    app:layout_constraintBottom_toBottomOf="@+id/battery_iv"
                     app:layout_constraintStart_toEndOf="@+id/battery_iv"
-                    tools:text="100" />
-
-                <TextView
-                    android:id="@+id/battery_percent_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:text="%"
-                    app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
-                    app:layout_constraintStart_toEndOf="@+id/battery_tv" />
+                    tools:text="100%" />
 
 
 
