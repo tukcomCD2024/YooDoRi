@@ -114,7 +114,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/line_v" />
 
                 <TextView
-                    android:id="@+id/wifi_tv"
+                    android:id="@+id/internet_status_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -131,10 +131,10 @@
                     android:layout_marginStart="40dp"
                     android:src="@drawable/ic_gps_on"
                     app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
-                    app:layout_constraintStart_toEndOf="@+id/wifi_tv" />
+                    app:layout_constraintStart_toEndOf="@+id/internet_status_tv" />
 
                 <TextView
-                    android:id="@+id/gps_tv"
+                    android:id="@+id/gps_status_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -151,7 +151,7 @@
                     android:layout_marginStart="40dp"
                     android:src="@drawable/ic_battery"
                     app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
-                    app:layout_constraintStart_toEndOf="@+id/gps_tv" />
+                    app:layout_constraintStart_toEndOf="@+id/gps_status_tv" />
 
                 <TextView
                     android:id="@+id/battery_tv"

@@ -37,6 +37,10 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
     override fun initObserver() {
         repeatOnStarted {
             viewModel.dementiaLocation.collect{ response ->
+                with(binding){
+                    stateTv.text = updateDementiaStatus(response.userStatus)
+
+                }
                 naverMap?.let {
                     val coord = LatLng(response.latitude, response.longitude)
                     //val coord = LatLng(location)
@@ -54,6 +58,7 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     override fun initView() {
         checkLocationPermission()
+        updateDementiaName()
         initMap()
     }
 
@@ -61,6 +66,17 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         val spf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
         val dementiaName = spf.getString("name", "")
         if (!dementiaName.isNullOrBlank()){
+            binding.dementiaNameTv.text = dementiaName
+        }
+    }
+
+    private fun updateDementiaStatus(status: Int): String{
+        return when(status){
+            0 -> "정지"
+            1 -> "도보"
+            2 -> "차량"
+            3 -> "지하철"
+            else -> "알수없음"
         }
     }
 
