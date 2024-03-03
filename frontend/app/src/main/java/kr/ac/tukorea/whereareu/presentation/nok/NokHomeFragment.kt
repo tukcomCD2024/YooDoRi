@@ -57,6 +57,13 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         initMap()
     }
 
+    private fun updateDementiaName(){
+        val spf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
+        val dementiaName = spf.getString("name", "")
+        if (!dementiaName.isNullOrBlank()){
+        }
+    }
+
     fun getStatusBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
 
