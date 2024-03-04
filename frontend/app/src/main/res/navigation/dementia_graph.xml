@@ -9,10 +9,6 @@
         android:name="kr.ac.tukorea.whereareu.presentation.SettingFragment"
         android:label="SettingFragment" />
     <fragment
-        android:id="@+id/homeFragment2"
-        android:name="kr.ac.tukorea.whereareu.presentation.home.HomeFragment"
-        android:label="HomeFragment" />
-    <fragment
         android:id="@+id/locationHistoryFragment2"
         android:name="kr.ac.tukorea.whereareu.presentation.LocationHistoryFragment"
         android:label="LocationHistoryFragment" />
@@ -24,4 +20,8 @@
         android:id="@+id/meaningfulPlaceFragment2"
         android:name="kr.ac.tukorea.whereareu.presentation.MeaningfulPlaceFragment"
         android:label="MeaningfulPlaceFragment" />
+    <fragment
+        android:id="@+id/dementiaHomeFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.dementia.DementiaHomeFragment"
+        android:label="DementiaHomeFragment" />
 </navigation>

@@ -11,7 +11,7 @@
         android:title="의미장소" />
 
     <item
-        android:id="@+id/homeFragment2"
+        android:id="@+id/dementiaHomeFragment"
         android:icon="@drawable/ic_home"
         android:title="홈"/>
 
