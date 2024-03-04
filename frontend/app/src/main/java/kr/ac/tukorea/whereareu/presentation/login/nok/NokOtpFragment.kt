@@ -49,12 +49,9 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                     putString("key", dementiaInfo.dementiaKey)
                     commit()
                 }
-                navigator.navigate(R.id.action_nokOtpFragment_to_nokAuthorityPageFragment)
-                // 보호자 메인화면으로 이동
-                /*val intent = Intent(requireContext(), MainNokActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)*/
-
+                if (navigator.currentDestination?.id == R.id.nokOtpFragment) {
+                    navigator.navigate(R.id.action_nokOtpFragment_to_nokAuthorityPageFragment)
+                }
             }
         }
 

@@ -54,7 +54,9 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                 intent.flags =
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)*/
-                navigator.navigate(R.id.action_patientOtpFragment_to_dementiaAuthorityPageFragment)
+                if (navigator.currentDestination?.id == R.id.patientOtpFragment) {
+                    navigator.navigate(R.id.action_patientOtpFragment_to_dementiaAuthorityPageFragment)
+                }
             }
         }
 

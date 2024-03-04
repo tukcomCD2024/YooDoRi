@@ -121,13 +121,15 @@
 
             <Button
                 style="@style/Widget.App.Button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/rectangle_corner_10"
                 android:onClick="@{() -> view.onClickInputDone()}"
                 android:text="입력 완료"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

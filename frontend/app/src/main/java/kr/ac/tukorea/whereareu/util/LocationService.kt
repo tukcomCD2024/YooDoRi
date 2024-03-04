@@ -28,6 +28,7 @@ import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
 import kr.ac.tukorea.whereareu.data.repository.home.DementiaHomeRepositoryImpl
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -125,10 +126,12 @@ class LocationService: Service() {
 
     @SuppressLint("SimpleDateFormat")
     private fun getCurrentTime(): List<String>{
+        Locale.setDefault(Locale.KOREA)
         val currentTime = System.currentTimeMillis()
         val date = Date(currentTime)
-        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val now = sdf.format(date)
+        Log.d("now", now)
         return now.split(" ")
     }
 

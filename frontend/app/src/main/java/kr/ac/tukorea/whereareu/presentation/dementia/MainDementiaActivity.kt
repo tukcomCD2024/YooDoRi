@@ -14,11 +14,15 @@ import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityDementiaMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
 import kr.ac.tukorea.whereareu.util.LocationService
+import kr.ac.tukorea.whereareu.util.navigationHeight
+import kr.ac.tukorea.whereareu.util.setStatusBarTransparent
 
 @AndroidEntryPoint
 class MainDementiaActivity: BaseActivity<ActivityDementiaMainBinding>(R.layout.activity_dementia_main) {
     override fun initView() {
         initNavigator()
+        this.setStatusBarTransparent()
+        binding.layout.setPadding(0, 0, 0, this.navigationHeight())
         //gps off시 gps 설정화면으로 이동
         checkGpsStatus()
 

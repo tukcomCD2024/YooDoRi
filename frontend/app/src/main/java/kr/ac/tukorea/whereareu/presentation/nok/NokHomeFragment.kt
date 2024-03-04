@@ -3,6 +3,7 @@ package kr.ac.tukorea.whereareu.presentation.nok
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -26,13 +27,6 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
     private var naverMap: NaverMap? = null
 
     override fun initObserver() {
-        repeatOnStarted {
-            viewModel.dementiaLocation.collect{ response ->
-                updateDementiaStatus(response)
-                val coord = LatLng(response.latitude, response.longitude)
-                trackingDementiaLocation(coord, response.bearing)
-            }
-        }
     }
 
     private fun updateDementiaMovementStatus(status: Int): String{
@@ -172,6 +166,19 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
                 } else {
                     // 권한이 거부된 경우 처리 (예: 사용자에게 권한이 필요하다고 알리기)
                 }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("resume", "resume")
+        repeatOnStarted {
+            viewModel.dementiaLocation.collect{ response ->
+                Log.d("response", response.toString())
+                updateDementiaStatus(response)
+                val coord = LatLng(response.latitude, response.longitude)
+                trackingDementiaLocation(coord, response.bearing)
             }
         }
     }

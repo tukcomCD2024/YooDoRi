@@ -27,7 +27,7 @@ class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     override fun initView() {
         //상태바 투명 설정
         this.setStatusBarTransparent()
-        binding.layout.setPadding(0, this.statusBarHeight(), 0, 0)
+        binding.layout.setPadding(0, 0, 0, this.navigationHeight())
         initNavigator()
         getDementiaLocation()
     }

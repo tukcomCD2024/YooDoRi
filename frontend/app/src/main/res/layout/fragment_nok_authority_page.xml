@@ -140,7 +140,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="130dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="32dp"
             android:background="@drawable/rectangle_corner_10"
             android:text="네, 확인했습니다."
             app:layout_constraintBottom_toBottomOf="parent"

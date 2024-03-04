@@ -21,7 +21,7 @@ class NokHomeViewModel @Inject constructor(
     val repository: NokHomeRepositoryImpl
 ): ViewModel() {
 
-    private val _dementiaLocation = MutableSharedFlow<GetLocationInfoResponse>()
+    private val _dementiaLocation = MutableSharedFlow<GetLocationInfoResponse>(replay = 1)
     val dementiaLocation = _dementiaLocation.asSharedFlow()
     fun getDementiaLocation(dementiaKey: String){
         viewModelScope.launch {
