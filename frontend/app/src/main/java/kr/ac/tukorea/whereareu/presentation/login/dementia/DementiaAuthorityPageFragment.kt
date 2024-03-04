@@ -8,10 +8,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentDementiaAuthorityPageBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.dementia.MainDementiaActivity
+import kr.ac.tukorea.whereareu.presentation.dementia.DementiaMainActivity
 
 class DementiaAuthorityPageFragment :
     BaseFragment<FragmentDementiaAuthorityPageBinding>(R.layout.fragment_dementia_authority_page) {
@@ -30,9 +31,13 @@ class DementiaAuthorityPageFragment :
         goMainActivity()
     }
 
+    fun onClickBackBtn() {
+        findNavController().popBackStack()
+    }
+
     private fun goMainActivity() {
         binding.finishBtn.setOnClickListener {
-            val intent = Intent(requireContext(), MainDementiaActivity::class.java)
+            val intent = Intent(requireContext(), DementiaMainActivity::class.java)
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

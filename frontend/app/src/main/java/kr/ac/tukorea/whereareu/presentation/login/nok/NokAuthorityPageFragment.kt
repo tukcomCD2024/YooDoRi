@@ -8,14 +8,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokAuthorityPageBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.nok.MainNokActivity
+import kr.ac.tukorea.whereareu.presentation.nok.NokMainActivity
 
 class NokAuthorityPageFragment :
     BaseFragment<FragmentNokAuthorityPageBinding>(R.layout.fragment_nok_authority_page) {
-    private val BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE = 456
     private val LOCATION_PERMISSION_REQUEST_CODE = 123
     override fun initObserver() {
 
@@ -30,33 +30,16 @@ class NokAuthorityPageFragment :
         goMainActivity()
     }
 
+    fun onClickBackBtn() {
+        findNavController().popBackStack()
+    }
+
     private fun goMainActivity() {
         binding.finishBtn.setOnClickListener {
-            val intent = Intent(requireContext(), MainNokActivity::class.java)
+            val intent = Intent(requireContext(), NokMainActivity::class.java)
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-        }
-    }
-
-    private fun checkBackGroundLocationPermission(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            (ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED)
-        } else {
-            return true
-        }
-    }
-
-    private fun requestBackGroundLocationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-                BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE
-            )
         }
     }
 
@@ -68,16 +51,6 @@ class NokAuthorityPageFragment :
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
-            BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    //startLocationService()
-                } else {
-                    // Handle the case where the user denies the foreground service permission
-                }
-            }
-
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED &&
@@ -94,14 +67,6 @@ class NokAuthorityPageFragment :
     private fun checkAndRequestLocationPermissions() {
         if (checkLocationPermission()) {
             Log.d("checkLocationPermission", "true")
-            if (checkBackGroundLocationPermission()) {
-                //startLocationService()
-                Log.d("checkBackGroundLocationPermission", "true")
-            } else {
-                Log.d("checkBackGroundLocationPermission", "false")
-                requestBackGroundLocationPermission()
-            }
-
         } else {
             requestLocationPermission()
         }

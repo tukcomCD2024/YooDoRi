@@ -20,7 +20,7 @@ import kr.ac.tukorea.whereareu.util.extension.navigationHeight
 import kr.ac.tukorea.whereareu.util.extension.setStatusBarTransparent
 
 @AndroidEntryPoint
-class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
+class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
     private val viewModel: NokHomeViewModel by viewModels()
     override fun initView() {
         //상태바 투명 설정

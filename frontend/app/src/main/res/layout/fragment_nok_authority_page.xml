@@ -8,9 +8,6 @@
             name="view"
             type="kr.ac.tukorea.whereareu.presentation.login.nok.NokAuthorityPageFragment" />
 
-        <variable
-            name="viewModel"
-            type="kr.ac.tukorea.whereareu.presentation.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,16 +15,25 @@
         android:layout_height="match_parent"
         android:padding="24dp">
 
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> view.onClickBackBtn()}"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/guide1_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="40dp"
+            android:layout_marginTop="60dp"
             android:text="어디U는 서비스 이용 시에\n꼭 필요한 권한만 받아요."
             android:textAppearance="@style/TextAppearance.App.30sp.ExtraBold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/back_btn" />
 
         <TextView
             android:id="@+id/permisson_tv"
@@ -126,6 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center"
+            android:textSize="16sp"
             android:text="권한을 허용을 하지 않는다면\n해당 기능을 사용할 수 없어요."
             android:textAppearance="@style/TextAppearance.App.18sp.Bold"
             android:textColor="@color/gray60"

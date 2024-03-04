@@ -27,14 +27,28 @@ fun Activity.showToastOnView(context: Context, text: String, y: Int) {
     }
 }
 
-fun Activity.showToast(context: Context, text: String){
+fun Activity.showToastShort(context: Context, text: String){
     //Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     val binding = ToastLayoutBinding.inflate(layoutInflater)
     binding.run {
         tv.text = text
         val toast = Toast(context)
         toast.view = binding.root
+        toast.duration = Toast.LENGTH_SHORT
+        binding.root.setBackgroundResource(R.drawable.toast_bg)
+        //toast.setGravity(Gravity.BOTTOM, 0, screenY - y)
+        toast.show()
+    }
+}
 
+fun Activity.showToastLong(context: Context, text: String){
+    //Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    val binding = ToastLayoutBinding.inflate(layoutInflater)
+    binding.run {
+        tv.text = text
+        val toast = Toast(context)
+        toast.view = binding.root
+        toast.duration = Toast.LENGTH_LONG
         binding.root.setBackgroundResource(R.drawable.toast_bg)
         //toast.setGravity(Gravity.BOTTOM, 0, screenY - y)
         toast.show()
