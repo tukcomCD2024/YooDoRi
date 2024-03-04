@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:hint="인증번호"
                 android:text=""
-                android:inputType="text"
+                android:inputType="number"
                 android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                 android:textColorHint="@color/gray60" />
 

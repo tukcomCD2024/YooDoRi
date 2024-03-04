@@ -1,47 +1,64 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.telephony.PhoneNumberFormattingTextWatcher
-import android.util.Log
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.DementiaIdentity
+import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentPatientIdentifyBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.hideKeyboard
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.setOnEditorActionListener
-import kr.ac.tukorea.whereareu.presentation.login.EditTextUtil.showKeyboard
+import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
+import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
+import kr.ac.tukorea.whereareu.util.EditTextUtil.showKeyboard
 import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
-import okhttp3.Interceptor.Companion.invoke
 
+@AndroidEntryPoint
 class PatientIdentifyFragment :
     BaseFragment<FragmentPatientIdentifyBinding>(R.layout.fragment_patient_identify) {
     private val viewModel: LoginViewModel by activityViewModels()
-    private lateinit var navigator: NavController
+    private val navigator by lazy {
+        findNavController()
+    }
     override fun initObserver() {
         binding.viewModel = viewModel
+
         repeatOnStarted {
-            viewModel.eventFlow.collect {
-                navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+            //OtpFragment에서 뒤로가기 버튼을 눌렀는지 여부에 따른 분기
+            viewModel.isOnBackPressedAtDementiaOtp.collect{ isOnBackPressedAtDementiaOtp ->
+                if (!isOnBackPressedAtDementiaOtp){
+                    viewModel.dementiaKeyFlow.collect {dementiaKey ->
+
+                        //보호대상자 정보 저장
+                        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+                        spf.edit {
+                            putString("name", binding.nameEt.text.toString().trim())
+                            putString("phone", binding.phoneNumberEt.text.toString().trim())
+                            putString("key", dementiaKey)
+                            putBoolean("isDementia", true)
+                            commit()
+                        }
+
+                        //currentDestination 오류를 막기 위한 예외처리
+                        if (navigator.currentDestination?.id == R.id.patientIdentifyFragment) {
+                            navigator.navigate(R.id.action_patientIdentifyFragment_to_patientOtpFragment)
+                        }
+                    }
+                }
             }
         }
     }
 
     override fun initView() {
-        navigator = findNavController()
         binding.view = this
         binding.phoneNumberEt.addTextChangedListener(PhoneNumberFormattingTextWatcher())
 
@@ -70,7 +87,10 @@ class PatientIdentifyFragment :
     }
 
     fun onClickInputDone() {
-        binding.nameTextInputLayout.error = if (!validName()) "최소 2자의 한글을 입력해주세요" else null
+        if(!validName()){
+            binding.nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
+        }
+
 
 
         if (!validPhone()) {
@@ -78,20 +98,12 @@ class PatientIdentifyFragment :
             return
         }
 
-        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-        spf.edit {
-            putString("name", binding.nameEt.text.toString())
-            putString("phone", binding.phoneNumberEt.text.toString())
-            putBoolean("isDementia", true)
-            apply()
-        }
-
         viewModel.sendDementiaIdentity(
-            DementiaIdentity(
-                binding.nameEt.text.toString(),
-                binding.phoneNumberEt.text.toString()
-            )
+            DementiaIdentityRequest(binding.nameEt.text.toString().trim(), binding.phoneNumberEt.text.toString().trim())
         )
+
+        // navigate 활성화를 위한 boolean 값 업데이트
+        viewModel.onBackPressedAtDementiaOtp(false)
     }
 
     private fun validName() = !binding.nameEt.text.isNullOrBlank()
@@ -101,7 +113,7 @@ class PatientIdentifyFragment :
             && REGEX_PHONE.toRegex().matches(binding.phoneNumberEt.text!!)
 
     companion object {
-        private const val REGEX_NAME = "^[가-힣]{2,}\$"
+        private const val REGEX_NAME = "^[가-힣]{2,}\n?"
         private const val REGEX_PHONE = "^01([016789])-([0-9]{3,4})-([0-9]{4})"
     }
 }
