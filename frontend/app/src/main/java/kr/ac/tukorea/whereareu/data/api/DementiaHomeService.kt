@@ -1,5 +1,6 @@
 package kr.ac.tukorea.whereareu.data.api
 
+import kr.ac.tukorea.whereareu.data.model.ResponseBody
 import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
 import kr.ac.tukorea.whereareu.data.model.home.PostLocationInfoResponse
 import retrofit2.Response

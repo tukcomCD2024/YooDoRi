@@ -32,6 +32,8 @@ import kr.ac.tukorea.whereareu.util.sensor.AccelerometerSensor
 import kr.ac.tukorea.whereareu.util.sensor.GyroScopeSensor
 import kr.ac.tukorea.whereareu.util.sensor.LightSensor
 import kr.ac.tukorea.whereareu.util.sensor.MagneticFieldSensor
+import java.io.FileWriter
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -54,6 +56,9 @@ class LocationService: Service() {
     private var sensorValueList = mutableListOf<List<Float>>(emptyList(), emptyList(), emptyList(), emptyList())
     private val locationInfo = mutableListOf(0.0, 0.0)
     private val locationExtraInfo = mutableListOf(0f, 0f)
+    private val localBroadcastManager by lazy {
+        LocalBroadcastManager.getInstance(applicationContext)
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -98,6 +103,7 @@ class LocationService: Service() {
             while (true){
                 if (checkReadyToPost()) {
                     val currentTime = getCurrentTime()
+                    var userState = 0
                     val info = LocationInfo(dementiaKey, locationInfo[LATITUDE], locationInfo[LONGITUDE],
                         currentTime[TIME].trim(), currentTime[DATE], locationExtraInfo[SPEED],
                         accelerationsensor = sensorValueList[ACCELEROMETER_SENSOR],
@@ -107,16 +113,25 @@ class LocationService: Service() {
                         battery = getBatteryPercent()!!, bearing = locationExtraInfo[BEARING],
                         isGpsOn = locationClient.getGpsStatus(), isInternetOn = true, isRingstoneOn = getRingMode()
                     )
+                    sendLocation(info)
                     Log.d("info", info.toString())
                     repository.postLocationInfo(info).onSuccess {
-                        Log.d("success", it.toString())
+                        userState = it.result
                     }.onException {
                         Log.d("error", it.toString())
                     }
+                    // AI 정보 수집을 위한 함수
+                    saveFile(currentTime[DATE], currentTime[TIME].trim(), userState.toString())
                     delay(60000)
                 }
             }
         }
+    }
+
+    private fun saveFile(date: String, time: String, userState: String){
+        val internalFile = InternalFileStorageUtil(applicationContext)
+        internalFile.appendContentToFile("${locationInfo[LATITUDE]}, ${locationInfo[LONGITUDE]}, " +
+                "$date $time, " + "$userState")
     }
 
     private fun getDementiaKey(): String?{
@@ -182,7 +197,6 @@ class LocationService: Service() {
                 locationExtraInfo[SPEED] = location.speed
                 locationExtraInfo[BEARING] = location.bearing
                 Log.d("speed", "${location.speed}")
-                sendLocation(location.latitude, location.longitude)
                 val updatedNotification = notification.setContentText(
                     "Location: (${location.latitude}, ${location.longitude}) speed: ${location.speed}"
                 )
@@ -191,11 +205,11 @@ class LocationService: Service() {
         startForeground(1, notification.build())
     }
 
-    private fun sendLocation(lat: Double, long: Double){
+    private fun sendLocation(locationInfo: LocationInfo){
         val intent = Intent("gps")
-        intent.putExtra("location", doubleArrayOf(lat, long))
+        intent.putExtra("postInfo", locationInfo)
         //intent.putExtra("long", long)
-        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+        localBroadcastManager.sendBroadcast(intent)
     }
 
     private fun stop(){
