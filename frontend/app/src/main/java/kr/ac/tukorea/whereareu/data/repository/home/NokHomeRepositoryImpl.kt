@@ -3,8 +3,8 @@ package kr.ac.tukorea.whereareu.data.repository.home
 import kr.ac.tukorea.whereareu.data.api.NokHomeService
 import kr.ac.tukorea.whereareu.data.model.ResponseBody
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
-import kr.ac.tukorea.whereareu.util.NetworkResult
-import kr.ac.tukorea.whereareu.util.handleApi
+import kr.ac.tukorea.whereareu.util.network.NetworkResult
+import kr.ac.tukorea.whereareu.util.network.handleApi
 import javax.inject.Inject
 
 class NokHomeRepositoryImpl @Inject constructor(

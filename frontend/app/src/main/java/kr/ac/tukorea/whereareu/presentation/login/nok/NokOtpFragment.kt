@@ -1,9 +1,7 @@
 package kr.ac.tukorea.whereareu.presentation.login.nok
 
 import android.content.Context.MODE_PRIVATE
-import android.view.Gravity
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -12,12 +10,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentNokOtpBinding
-import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.login.LoginViewModel
-import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
-import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
-import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
+import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.hideKeyboard
+import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.setOnEditorActionListener
+import kr.ac.tukorea.whereareu.util.extension.repeatOnStarted
+import kr.ac.tukorea.whereareu.util.extension.showToastOnView
 
 @AndroidEntryPoint
 class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok_otp) {
@@ -58,16 +56,7 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
         // 에러 메시지 Toast로 출력
         repeatOnStarted {
             viewModel.toastEvent.collect{
-                val binding = ToastLayoutBinding.inflate(layoutInflater)
-                binding.run{
-                    tv.text = it
-                    val toast = Toast(requireContext())
-                    toast.view = binding.root
-
-                    binding.root.setBackgroundResource(R.drawable.toast_bg)
-                    toast.setGravity(Gravity.BOTTOM, 0, 400)
-                    toast.show()
-                }
+                requireActivity().showToastOnView(requireContext(), it, binding.finishBtn.bottom)
             }
         }
     }

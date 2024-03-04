@@ -1,7 +1,6 @@
-package kr.ac.tukorea.whereareu.util
+package kr.ac.tukorea.whereareu.util.sensor
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener

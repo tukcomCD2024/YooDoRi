@@ -23,7 +23,7 @@
         android:theme="@style/Theme.WhereAreU"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <service android:name=".util.LocationService" android:foregroundServiceType="location"
+        <service android:name=".util.location.LocationService" android:foregroundServiceType="location"
             tools:ignore="ForegroundServicePermission" />
 
         <meta-data

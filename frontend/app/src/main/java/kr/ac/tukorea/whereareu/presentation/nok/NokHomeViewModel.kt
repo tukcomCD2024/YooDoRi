@@ -8,12 +8,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
-import kr.ac.tukorea.whereareu.data.repository.home.NokHomeRepository
 import kr.ac.tukorea.whereareu.data.repository.home.NokHomeRepositoryImpl
-import kr.ac.tukorea.whereareu.util.onError
-import kr.ac.tukorea.whereareu.util.onException
-import kr.ac.tukorea.whereareu.util.onFail
-import kr.ac.tukorea.whereareu.util.onSuccess
+import kr.ac.tukorea.whereareu.util.network.onError
+import kr.ac.tukorea.whereareu.util.network.onException
+import kr.ac.tukorea.whereareu.util.network.onFail
+import kr.ac.tukorea.whereareu.util.network.onSuccess
 import javax.inject.Inject
 
 @HiltViewModel

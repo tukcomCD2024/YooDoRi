@@ -16,10 +16,8 @@ import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
-import kr.ac.tukorea.whereareu.util.navigationHeight
-import kr.ac.tukorea.whereareu.util.setStatusBarTransparent
-import kr.ac.tukorea.whereareu.util.statusBarHeight
-import kotlin.Int
+import kr.ac.tukorea.whereareu.util.extension.navigationHeight
+import kr.ac.tukorea.whereareu.util.extension.setStatusBarTransparent
 
 @AndroidEntryPoint
 class MainNokActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {

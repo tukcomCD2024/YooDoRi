@@ -8,8 +8,8 @@ import kr.ac.tukorea.whereareu.data.model.login.response.CheckInterConnectRespon
 import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
 import kr.ac.tukorea.whereareu.data.model.ResponseBody
 import kr.ac.tukorea.whereareu.data.model.login.response.DementiaIdentityResponse
-import kr.ac.tukorea.whereareu.util.NetworkResult
-import kr.ac.tukorea.whereareu.util.handleApi
+import kr.ac.tukorea.whereareu.util.network.NetworkResult
+import kr.ac.tukorea.whereareu.util.network.handleApi
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(

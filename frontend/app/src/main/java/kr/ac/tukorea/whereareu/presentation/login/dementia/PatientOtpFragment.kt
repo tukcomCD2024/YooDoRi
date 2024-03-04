@@ -14,7 +14,8 @@ import kr.ac.tukorea.whereareu.databinding.FragmentPatientOtpBinding
 import kr.ac.tukorea.whereareu.databinding.ToastLayoutBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.login.LoginViewModel
-import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
+import kr.ac.tukorea.whereareu.util.extension.repeatOnStarted
+import kr.ac.tukorea.whereareu.util.extension.showToastOnView
 
 @AndroidEntryPoint
 class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.fragment_patient_otp) {
@@ -50,10 +51,7 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
                     commit()
                 }
 
-                /*val intent = Intent(requireContext(), MainDementiaActivity::class.java)
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)*/
+
                 if (navigator.currentDestination?.id == R.id.patientOtpFragment) {
                     navigator.navigate(R.id.action_patientOtpFragment_to_dementiaAuthorityPageFragment)
                 }
@@ -62,16 +60,7 @@ class PatientOtpFragment : BaseFragment<FragmentPatientOtpBinding>(R.layout.frag
 
         repeatOnStarted {
             viewModel.toastEvent.collect{
-                val binding = ToastLayoutBinding.inflate(layoutInflater)
-                binding.run{
-                    tv.text = it
-                    val toast = Toast(requireContext())
-                    toast.view = binding.root
-
-                    binding.root.setBackgroundResource(R.drawable.toast_bg)
-                    toast.setGravity(Gravity.BOTTOM, 0, 400)
-                    toast.show()
-                }
+                requireActivity().showToastOnView(requireContext(), it, binding.finishBtn.bottom)
             }
         }
     }

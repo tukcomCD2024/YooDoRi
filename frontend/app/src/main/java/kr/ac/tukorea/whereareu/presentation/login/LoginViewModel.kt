@@ -16,10 +16,10 @@ import kr.ac.tukorea.whereareu.data.model.login.request.DementiaIdentityRequest
 import kr.ac.tukorea.whereareu.data.model.login.request.NokIdentityRequest
 import kr.ac.tukorea.whereareu.data.model.login.response.NokIdentityResponse
 import kr.ac.tukorea.whereareu.data.repository.login.LoginRepositoryImpl
-import kr.ac.tukorea.whereareu.util.onError
-import kr.ac.tukorea.whereareu.util.onException
-import kr.ac.tukorea.whereareu.util.onFail
-import kr.ac.tukorea.whereareu.util.onSuccess
+import kr.ac.tukorea.whereareu.util.network.onError
+import kr.ac.tukorea.whereareu.util.network.onException
+import kr.ac.tukorea.whereareu.util.network.onFail
+import kr.ac.tukorea.whereareu.util.network.onSuccess
 import javax.inject.Inject
 
 @HiltViewModel

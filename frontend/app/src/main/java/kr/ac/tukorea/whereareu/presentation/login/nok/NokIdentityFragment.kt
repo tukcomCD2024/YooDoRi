@@ -9,11 +9,9 @@ import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.FragmentNokIdentityBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.login.LoginViewModel
-import kr.ac.tukorea.whereareu.util.EditTextUtil.hideKeyboard
-import kr.ac.tukorea.whereareu.util.EditTextUtil.setOnEditorActionListener
-import kr.ac.tukorea.whereareu.util.EditTextUtil.showKeyboard
-import kr.ac.tukorea.whereareu.util.setStatusBarTransparent
-import kr.ac.tukorea.whereareu.util.statusBarHeight
+import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.hideKeyboard
+import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.setOnEditorActionListener
+import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.showKeyboard
 
 @AndroidEntryPoint
 class NokIdentityFragment :

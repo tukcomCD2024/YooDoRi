@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.util
+package kr.ac.tukorea.whereareu.util.sensor
 
 abstract class MeasurableSensor(
     protected val sensorType: Int

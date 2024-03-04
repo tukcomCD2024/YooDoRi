@@ -17,7 +17,7 @@ import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
 import kr.ac.tukorea.whereareu.databinding.FragmentHomeBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.util.LoginUtil.repeatOnStarted
+import kr.ac.tukorea.whereareu.util.extension.repeatOnStarted
 
 @AndroidEntryPoint
 class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),

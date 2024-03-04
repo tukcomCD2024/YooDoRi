@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.util
+package kr.ac.tukorea.whereareu.util.extension
 
 import android.Manifest
 import android.content.Context

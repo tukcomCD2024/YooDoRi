@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.util
+package kr.ac.tukorea.whereareu.util.location
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
@@ -26,6 +26,12 @@ import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
 import kr.ac.tukorea.whereareu.data.repository.home.DementiaHomeRepositoryImpl
+import kr.ac.tukorea.whereareu.util.network.onException
+import kr.ac.tukorea.whereareu.util.network.onSuccess
+import kr.ac.tukorea.whereareu.util.sensor.AccelerometerSensor
+import kr.ac.tukorea.whereareu.util.sensor.GyroScopeSensor
+import kr.ac.tukorea.whereareu.util.sensor.LightSensor
+import kr.ac.tukorea.whereareu.util.sensor.MagneticFieldSensor
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

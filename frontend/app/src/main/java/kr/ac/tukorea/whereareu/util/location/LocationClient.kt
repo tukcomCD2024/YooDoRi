@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.util
+package kr.ac.tukorea.whereareu.util.location
 
 import android.location.Location
 import android.location.LocationManager

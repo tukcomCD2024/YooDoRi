@@ -1,8 +1,9 @@
-package kr.ac.tukorea.whereareu.util
+package kr.ac.tukorea.whereareu.util.sensor
 
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Sensor
+import kr.ac.tukorea.whereareu.util.sensor.AndroidSensor
 
 class AccelerometerSensor(
     context: Context

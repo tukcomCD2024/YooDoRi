@@ -8,12 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
 import kr.ac.tukorea.whereareu.data.repository.home.DementiaHomeRepositoryImpl
-import kr.ac.tukorea.whereareu.util.AccelerometerSensor
-import kr.ac.tukorea.whereareu.util.GyroScopeSensor
-import kr.ac.tukorea.whereareu.util.LightSensor
-import kr.ac.tukorea.whereareu.util.MagneticFieldSensor
-import kr.ac.tukorea.whereareu.util.onError
-import kr.ac.tukorea.whereareu.util.onSuccess
+import kr.ac.tukorea.whereareu.util.sensor.AccelerometerSensor
+import kr.ac.tukorea.whereareu.util.sensor.GyroScopeSensor
+import kr.ac.tukorea.whereareu.util.sensor.LightSensor
+import kr.ac.tukorea.whereareu.util.sensor.MagneticFieldSensor
+import kr.ac.tukorea.whereareu.util.network.onError
+import kr.ac.tukorea.whereareu.util.network.onSuccess
 import javax.inject.Inject
 
 @HiltViewModel

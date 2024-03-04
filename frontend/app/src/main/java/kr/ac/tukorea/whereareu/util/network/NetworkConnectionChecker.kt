@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.util
+package kr.ac.tukorea.whereareu.util.network
 
 import android.content.Context
 import android.net.ConnectivityManager

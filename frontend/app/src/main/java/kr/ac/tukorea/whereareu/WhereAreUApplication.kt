@@ -7,11 +7,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.annotation.StringRes
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
-import kr.ac.tukorea.whereareu.util.NetworkConnectionChecker
+import kr.ac.tukorea.whereareu.util.network.NetworkConnectionChecker
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

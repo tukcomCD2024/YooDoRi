@@ -6,16 +6,16 @@ import android.location.LocationManager
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityDementiaMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
-import kr.ac.tukorea.whereareu.util.LocationService
-import kr.ac.tukorea.whereareu.util.navigationHeight
-import kr.ac.tukorea.whereareu.util.setStatusBarTransparent
+import kr.ac.tukorea.whereareu.util.location.LocationService
+import kr.ac.tukorea.whereareu.util.extension.navigationHeight
+import kr.ac.tukorea.whereareu.util.extension.setStatusBarTransparent
+import kr.ac.tukorea.whereareu.util.extension.showToast
 
 @AndroidEntryPoint
 class MainDementiaActivity: BaseActivity<ActivityDementiaMainBinding>(R.layout.activity_dementia_main) {
@@ -44,7 +44,7 @@ class MainDementiaActivity: BaseActivity<ActivityDementiaMainBinding>(R.layout.a
     }
 
     private fun requestSystemGPSEnable() {
-        Toast.makeText(this, "핸드폰 GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+        showToast(this, "핸드폰 GPS를 켜주세요")
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(intent)
     }

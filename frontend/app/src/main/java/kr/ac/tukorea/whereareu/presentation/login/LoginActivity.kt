@@ -1,14 +1,13 @@
 package kr.ac.tukorea.whereareu.presentation.login
 
-import android.view.WindowManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityLoginBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
-import kr.ac.tukorea.whereareu.util.setStatusBarTransparent
-import kr.ac.tukorea.whereareu.util.statusBarHeight
+import kr.ac.tukorea.whereareu.util.extension.setStatusBarTransparent
+import kr.ac.tukorea.whereareu.util.extension.statusBarHeight
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
