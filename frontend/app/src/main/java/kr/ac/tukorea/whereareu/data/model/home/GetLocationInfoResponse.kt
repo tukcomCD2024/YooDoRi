@@ -4,10 +4,12 @@ data class GetLocationInfoResponse(
     val battery: Int,
     val isGpsOn: Boolean,
     val isInternetOn: Boolean,
-    val isRingstoneOn: Boolean,
+    val isRingstoneOn: Int,
     val latitude: Double,
     val longitude: Double,
     val message: String,
     val status: String,
-    val userStatus: Int
+    val userStatus: Int,
+    val bearing: Float,
+    val currentSpeed: Float
 )

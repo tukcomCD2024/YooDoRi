@@ -46,7 +46,7 @@ class LocationService: Service() {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var sensorValueList = mutableListOf<List<Float>>(emptyList(), emptyList(), emptyList(), emptyList())
     private val locationInfo = mutableListOf(0.0, 0.0)
-    private var currentSpeed = 0f
+    private val locationExtraInfo = mutableListOf(0f, 0f)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -91,16 +91,13 @@ class LocationService: Service() {
             while (true){
                 if (checkReadyToPost()) {
                     val currentTime = getCurrentTime()
-                    val date = currentTime[0]
-                    val time = currentTime[1].trim()
-                    val latitude = locationInfo[0]
-                    val longitude = locationInfo[1]
-                    val info = LocationInfo(dementiaKey, latitude, longitude, time, date, currentSpeed,
+                    val info = LocationInfo(dementiaKey, locationInfo[LATITUDE], locationInfo[LONGITUDE],
+                        currentTime[TIME].trim(), currentTime[DATE], locationExtraInfo[SPEED],
                         accelerationsensor = sensorValueList[ACCELEROMETER_SENSOR],
                         gyrosensor = sensorValueList[GYRO_SENSOR],
                         directionsensor = sensorValueList[MAGNETIC_SENSOR],
                         lightsensor = sensorValueList[LIGHT_SENSOR],
-                        battery = getBatteryPercent()!!,
+                        battery = getBatteryPercent()!!, bearing = locationExtraInfo[BEARING],
                         isGpsOn = locationClient.getGpsStatus(), isInternetOn = true, isRingstoneOn = getRingMode()
                     )
                     Log.d("info", info.toString())
@@ -109,7 +106,7 @@ class LocationService: Service() {
                     }.onException {
                         Log.d("error", it.toString())
                     }
-                    delay(55000)
+                    delay(60000)
                 }
             }
         }
@@ -121,7 +118,7 @@ class LocationService: Service() {
     }
 
     private fun checkReadyToPost(): Boolean{
-        return !locationInfo[0].equals(0.0) && !locationInfo[1].equals(0.0) && sensorValueList[MAGNETIC_SENSOR].isNotEmpty()
+        return !locationInfo[LATITUDE].equals(0.0) && !locationInfo[LONGITUDE].equals(0.0) && sensorValueList[MAGNETIC_SENSOR].isNotEmpty()
                 && sensorValueList[LIGHT_SENSOR].isNotEmpty() && sensorValueList[ACCELEROMETER_SENSOR].isNotEmpty()
                 && sensorValueList[GYRO_SENSOR].isNotEmpty()
     }
@@ -144,13 +141,10 @@ class LocationService: Service() {
         }
     }
 
-    private fun getRingMode(): Boolean{
+    private fun getRingMode(): Int{
         val audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        return when(audioManager.ringerMode){
+        return audioManager.ringerMode
             // ringMode 2: 벨소리
-            2 -> true
-            else -> false
-        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -174,10 +168,10 @@ class LocationService: Service() {
             .getLocationUpdates(1000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
-                val bearing = location.bearing
-                locationInfo[0] = location.latitude
-                locationInfo[1] = location.longitude
-                currentSpeed = location.speed
+                locationInfo[LATITUDE] = location.latitude
+                locationInfo[LONGITUDE] = location.longitude
+                locationExtraInfo[SPEED] = location.speed
+                locationExtraInfo[BEARING] = location.bearing
                 Log.d("speed", "${location.speed}")
                 sendLocation(location.latitude, location.longitude)
                 val updatedNotification = notification.setContentText(
@@ -208,9 +202,19 @@ class LocationService: Service() {
     companion object{
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
+
         const val LIGHT_SENSOR = 0
         const val GYRO_SENSOR = 1
         const val ACCELEROMETER_SENSOR = 2
         const val MAGNETIC_SENSOR = 3
+
+        const val LATITUDE = 0
+        const val LONGITUDE = 1
+
+        const val SPEED = 0
+        const val BEARING = 1
+
+        const val DATE = 0
+        const val TIME = 1
     }
 }

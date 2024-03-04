@@ -17,6 +17,7 @@ data class LocationInfo(
     val battery: Int,
     val isInternetOn: Boolean,
     val isGpsOn: Boolean,
-    val isRingstoneOn: Boolean
+    val isRingstoneOn: Int,
+    val bearing: Float
 )
 
