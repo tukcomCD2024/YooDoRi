@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".WhereAreUApplication"
@@ -19,6 +23,8 @@
         android:theme="@style/Theme.WhereAreU"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service android:name=".util.location.LocationService" android:foregroundServiceType="location"
+            tools:ignore="ForegroundServicePermission" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
@@ -26,7 +32,7 @@
         <activity
             android:name=".presentation.login.SplashActivity"
             android:exported="true"
-            android:label="@string/title_activity_splash"
+            android:label="@string/app_name"
             android:theme="@style/Theme.WhereAreU">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.nok.NokMainActivity"
             android:exported="false"
             android:theme="@style/Theme.WhereAreU"/>
         <activity
@@ -43,6 +49,7 @@
             android:exported="false"
             android:theme="@style/Theme.WhereAreU">
         </activity>
+        <activity android:name="kr.ac.tukorea.whereareu.presentation.dementia.DementiaMainActivity" />
     </application>
 
 </manifest>

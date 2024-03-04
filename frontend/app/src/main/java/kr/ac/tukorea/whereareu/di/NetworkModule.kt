@@ -1,22 +1,26 @@
 package kr.ac.tukorea.whereareu.di
 
 
-import androidx.core.content.ContextCompat
-import kr.ac.tukorea.whereareu.util.HttpRequestInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.WhereAreUApplication
+import kr.ac.tukorea.whereareu.data.api.DementiaHomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
+import kr.ac.tukorea.whereareu.data.api.NokHomeService
+import okhttp3.Interceptor
+import okhttp3.Interceptor.*
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,11 +35,18 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
+        val closeInterceptor = Interceptor { chain ->
+            val request: Request =
+                chain.request().newBuilder().addHeader("Connection", "close").build()
+            chain.proceed(request)
+        }
+
         return OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(interceptor)
+            .addNetworkInterceptor(closeInterceptor)
             .retryOnConnectionFailure(false)
             .build()
     }
@@ -54,6 +65,18 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideTestApi(retrofit: Retrofit): LoginService {
+        return retrofit.buildService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDementiaHomeApi(retrofit: Retrofit): DementiaHomeService {
+        return retrofit.buildService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNokHomeApi(retrofit: Retrofit): NokHomeService {
         return retrofit.buildService()
     }
 

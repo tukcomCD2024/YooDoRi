@@ -2,11 +2,14 @@ package kr.ac.tukorea.whereareu
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import kr.ac.tukorea.whereareu.util.NetworkConnectionChecker
+import kr.ac.tukorea.whereareu.util.network.NetworkConnectionChecker
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -15,6 +18,16 @@ class WhereAreUApplication: Application(), DefaultLifecycleObserver {
         super<Application>.onCreate()
         context = applicationContext
         networkConnectionChecker = NetworkConnectionChecker(context)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channel = NotificationChannel(
+                "location",
+                "Location",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     override fun onStop(owner: LifecycleOwner) {
@@ -37,5 +50,10 @@ class WhereAreUApplication: Application(), DefaultLifecycleObserver {
 
         private lateinit var networkConnectionChecker: NetworkConnectionChecker
         fun isOnline() = networkConnectionChecker.isOnline()
+
+        private lateinit var instance: WhereAreUApplication
+        fun applicationContext() : Context {
+            return instance.applicationContext
+        }
     }
 }

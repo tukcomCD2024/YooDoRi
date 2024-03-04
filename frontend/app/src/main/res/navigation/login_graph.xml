@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/nokIdentityFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.login.NokIdentityFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.nok.NokIdentityFragment"
         android:label="NokIdentityFragment" >
         <action
             android:id="@+id/action_nokIdentityFragment_to_nokOtpFragment"
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/nokOtpFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.login.NokOtpFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.nok.NokOtpFragment"
         android:label="NokOtpFragment" >
         <argument
             android:name="name"
@@ -46,13 +46,16 @@
         <argument
             android:name="phone"
             app:argType="string" />
+        <action
+            android:id="@+id/action_nokOtpFragment_to_nokAuthorityPageFragment"
+            app:destination="@id/nokAuthorityPageFragment" />
     </fragment>
 
 
 
     <fragment
         android:id="@+id/patientIdentifyFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.login.PatientIdentifyFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.dementia.PatientIdentifyFragment"
         android:label="PatientIdentifyFragment" >
         <action
             android:id="@+id/action_patientIdentifyFragment_to_patientOtpFragment"
@@ -60,7 +63,19 @@
     </fragment>
     <fragment
         android:id="@+id/patientOtpFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.login.PatientOtpFragment"
-        android:label="PatientOtpFragment" />
+        android:name="kr.ac.tukorea.whereareu.presentation.login.dementia.PatientOtpFragment"
+        android:label="PatientOtpFragment" >
+        <action
+            android:id="@+id/action_patientOtpFragment_to_dementiaAuthorityPageFragment"
+            app:destination="@id/dementiaAuthorityPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dementiaAuthorityPageFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.dementia.DementiaAuthorityPageFragment"
+        android:label="DementiaAuthorityPageFragment" />
+    <fragment
+        android:id="@+id/nokAuthorityPageFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.nok.NokAuthorityPageFragment"
+        android:label="NokAuthorityPageFragment" />
 
 </navigation>
