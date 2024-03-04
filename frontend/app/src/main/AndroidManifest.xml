@@ -23,7 +23,7 @@
         android:theme="@style/Theme.WhereAreU"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <service android:name=".util.LocationService" android:foregroundServiceType="location"
+        <service android:name=".util.location.LocationService" android:foregroundServiceType="location"
             tools:ignore="ForegroundServicePermission" />
 
         <meta-data
@@ -32,7 +32,7 @@
         <activity
             android:name=".presentation.login.SplashActivity"
             android:exported="true"
-            android:label="@string/title_activity_splash"
+            android:label="@string/app_name"
             android:theme="@style/Theme.WhereAreU">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.nok.MainNokActivity"
+            android:name=".presentation.nok.NokMainActivity"
             android:exported="false"
             android:theme="@style/Theme.WhereAreU"/>
         <activity
@@ -49,6 +49,7 @@
             android:exported="false"
             android:theme="@style/Theme.WhereAreU">
         </activity>
+        <activity android:name="kr.ac.tukorea.whereareu.presentation.dementia.DementiaMainActivity" />
     </application>
 
 </manifest>

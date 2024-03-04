@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="view"
+            type="kr.ac.tukorea.whereareu.presentation.login.dementia.DementiaAuthorityPageFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> view.onClickBackBtn()}"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/guide1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="어디U는 서비스 이용 시에\n꼭 필요한 권한만 받아요."
+            android:textAppearance="@style/TextAppearance.App.30sp.ExtraBold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/back_btn" />
+
+        <TextView
+            android:id="@+id/permisson_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:text="접근권한"
+            android:textSize="24sp"
+            android:textAppearance="@style/TextAppearance.App.18sp.Bold"
+            app:layout_constraintTop_toBottomOf="@id/guide1_tv"
+            app:layout_constraintStart_toStartOf="@id/guide1_tv"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/gps_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/yellow"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintTop_toTopOf="@id/gps_tv"
+            app:layout_constraintStart_toStartOf="@id/permisson_tv"
+            app:layout_constraintBottom_toBottomOf="@id/gps_detail_tv">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_location_auth" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/gps_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="위치 권한"
+            android:layout_marginStart="66dp"
+            android:layout_marginTop="50dp"
+            android:textAppearance="@style/TextAppearance.App.18sp.Bold"
+            app:layout_constraintStart_toStartOf="@id/permisson_tv"
+            app:layout_constraintTop_toBottomOf="@id/permisson_tv"
+            />
+
+        <TextView
+            android:id="@+id/gps_detail_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="보호자에게 실시간 위치를\n전송하기 위한 권한"
+            android:textAppearance="@style/TextAppearance.App.18sp.Regular"
+            app:layout_constraintStart_toStartOf="@id/gps_tv"
+            app:layout_constraintTop_toBottomOf="@id/gps_tv"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/alarm_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/yellow"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintTop_toTopOf="@id/alarm_tv"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_detail_tv"
+            app:layout_constraintStart_toStartOf="@id/permisson_tv">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_alarm_auth" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/alarm_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="알람 권한"
+            android:layout_marginTop="60dp"
+            app:layout_constraintTop_toBottomOf="@id/gps_detail_tv"
+            app:layout_constraintStart_toStartOf="@id/gps_detail_tv"
+            android:textAppearance="@style/TextAppearance.App.18sp.Bold" />
+
+        <TextView
+            android:id="@+id/alarm_detail_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/alarm_tv"
+            app:layout_constraintStart_toStartOf="@id/alarm_tv"
+            android:layout_marginTop="4dp"
+            android:text="백그라운드에서 위치 정보 수집을\n허용하기 위해 필요한 권한"
+            android:textAppearance="@style/TextAppearance.App.18sp.Regular" />
+
+        <TextView
+            android:id="@+id/guide2_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/gray60"
+            android:text="원활한 보호대상자의 위치 정보 수집을 위해\n위치 권한을 항상으로 혀용해주세요."
+            android:textAppearance="@style/TextAppearance.App.18sp.Bold"
+            app:layout_constraintBottom_toTopOf="@+id/finish_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/finish_btn"
+            style="@style/Widget.App.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/rectangle_corner_10"
+            android:text="네, 확인했습니다."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

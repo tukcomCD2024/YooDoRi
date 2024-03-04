@@ -7,8 +7,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.WhereAreUApplication
-import kr.ac.tukorea.whereareu.data.api.HomeService
+import kr.ac.tukorea.whereareu.data.api.DementiaHomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
+import kr.ac.tukorea.whereareu.data.api.NokHomeService
 import okhttp3.Interceptor
 import okhttp3.Interceptor.*
 import okhttp3.OkHttpClient
@@ -69,7 +70,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHomeApi(retrofit: Retrofit): HomeService {
+    fun provideDementiaHomeApi(retrofit: Retrofit): DementiaHomeService {
+        return retrofit.buildService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNokHomeApi(retrofit: Retrofit): NokHomeService {
         return retrofit.buildService()
     }
 
