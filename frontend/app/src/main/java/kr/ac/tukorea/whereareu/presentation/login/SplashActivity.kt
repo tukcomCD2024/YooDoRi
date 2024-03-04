@@ -8,8 +8,13 @@ import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
+import kr.ac.tukorea.whereareu.presentation.dementia.DementiaMainActivity
+import kr.ac.tukorea.whereareu.presentation.nok.NokMainActivity
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -25,53 +30,20 @@ class SplashActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
-        Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, LoginActivity::class.java)
+
+        val intent = if (spf.getString("name", "").isNullOrBlank()) {
+            Intent(this, LoginActivity::class.java)
+        } else {
+            if (isDementia) {
+                Intent(this, DementiaMainActivity::class.java)
+            } else {
+                Intent(this, NokMainActivity::class.java)
+            }
+        }
+        lifecycleScope.launch {
+            delay(1000)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-        }, 1000)
-
-//        when{
-//            isDementia -> {
-//                viewModel.sendDementiaIdentity(
-//                    DementiaIdentity(
-//                        spf.getString("name", ""),
-//                        spf.getString("phone", ""),
-//                    )
-//                )
-//            }
-//            isNok -> {
-//                viewModel.sendNokIdentity(
-//                    NokIdentity(
-//                        spf.getString("key", ""),
-//                        spf.getString("name", ""),
-//                        spf.getString("phone", ""),
-//                    )
-//                )
-//            }
-//            else -> {
-//                window.setFlags(
-//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//                )
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    val intent = Intent(this, LoginActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                    startActivity(intent)
-//                }, 1000)
-//            }
-//        }
-
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_splash)
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//        )
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            val intent = Intent(this, LoginActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            startActivity(intent)
-//        }, 1000)
+        }
     }
 }
