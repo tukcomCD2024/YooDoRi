@@ -38,6 +38,6 @@ class location_info(db.Model):
     lightsensor = db.Column(db.Float)
     battery = db.Column(db.Integer)
     isInternetOn = db.Column(db.Boolean)
-    isRingstoneOn = db.Column(db.Boolean)
+    isRingstoneOn = db.Column(db.Integer)
     isGpsOn = db.Column(db.Boolean)
     current_speed = db.Column(db.Float)
