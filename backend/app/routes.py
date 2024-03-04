@@ -230,6 +230,7 @@ def receive_location_info():
                 time=data.get('time'),
                 latitude=data.get('latitude'),
                 longitude=data.get('longitude'),
+                bearing = data.get('bearing'),
                 user_status=int(prediction[0]),  # 예측 결과로 업데이트
                 accelerationsensor_x=accelerationsensor[0],
                 accelerationsensor_y=accelerationsensor[1],
@@ -244,7 +245,8 @@ def receive_location_info():
                 battery=data.get('battery'),
                 isInternetOn=data.get('isInternetOn'),
                 isGpsOn=data.get('isGpsOn'),
-                isRingstoneOn=data.get('isRingstoneOn')
+                isRingstoneOn=data.get('isRingstoneOn'),
+                current_speed = data.get('currentSpeed')
             )
 
             print(int(prediction[0]))
@@ -268,9 +270,8 @@ def receive_location_info():
 @send_location_info_routes.route('/send-live-location-info', methods=['GET'])
 def send_location_info():
     try:
-        data = request.json
         
-        dementia_key = data.get('dementiaKey')
+        dementia_key = request.args.get('dementiaKey')
         
         latest_location = location_info.query.filter_by(dementia_key=dementia_key).order_by(location_info.date.desc()).first()
         
@@ -280,27 +281,13 @@ def send_location_info():
                 'message': 'Location data sent successfully',
                 'latitude': latest_location.latitude,
                 'longitude': latest_location.longitude,
+                'bearing': latest_location.bearing,
+                'currentSpeed': latest_location.current_speed,
                 'userStatus': latest_location.user_status, # 1: 정지, 2: 도보, 3: 차량, 4: 지하철
-                #'accelerationsensor' : {
-                #    'x': latest_location.accelerationsensor_x,
-                #    'y': latest_location.accelerationsensor_y,
-                #    'z': latest_location.accelerationsensor_z
-                #},
-                #'gyrosensor': {
-                #    'x': latest_location.gyrosensor_x,
-                #    'y': latest_location.gyrosensor_y,
-                #    'z': latest_location.gyrosensor_z
-                #},
-                #'directionsensor': {
-                #    'x': latest_location.directionsensor_x,
-                #    'y': latest_location.directionsensor_y,
-                #    'z': latest_location.directionsensor_z
-                #},
-                #'lightsensor': latest_location.lightsensor,
                 'battery': latest_location.battery,
                 'isInternetOn': latest_location.isInternetOn,
                 'isGpsOn': latest_location.isGpsOn,
-                'isRingstoneOn': latest_location.isRingstoneOn
+                'isRingstoneOn': latest_location.isRingstoneOn # 0 : 무음, 1 : 진동, 2 : 벨소리
             }
             response_data = {'status': 'success', 'message': 'Location data sent successfully', 'result': result}
 
