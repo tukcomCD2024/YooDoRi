@@ -104,6 +104,7 @@ class LocationService: Service() {
                 if (checkReadyToPost()) {
                     val currentTime = getCurrentTime()
                     var userState = 0
+                    var isError = false
                     val info = LocationInfo(dementiaKey, locationInfo[LATITUDE], locationInfo[LONGITUDE],
                         currentTime[TIME].trim(), currentTime[DATE], locationExtraInfo[SPEED],
                         accelerationsensor = sensorValueList[ACCELEROMETER_SENSOR],
@@ -117,21 +118,23 @@ class LocationService: Service() {
                     Log.d("info", info.toString())
                     repository.postLocationInfo(info).onSuccess {
                         userState = it.result
+                        isError = true
                     }.onException {
+                        isError = false
                         Log.d("error", it.toString())
                     }
                     // AI 정보 수집을 위한 함수
-                    saveFile(currentTime[DATE], currentTime[TIME].trim(), userState.toString())
+                    saveFile(currentTime[DATE], currentTime[TIME].trim(), userState.toString(), isError.toString())
                     delay(60000)
                 }
             }
         }
     }
 
-    private fun saveFile(date: String, time: String, userState: String){
+    private fun saveFile(date: String, time: String, userState: String, isError: String){
         val internalFile = InternalFileStorageUtil(applicationContext)
         internalFile.appendContentToFile("${locationInfo[LATITUDE]}, ${locationInfo[LONGITUDE]}, " +
-                "$date $time, " + "$userState")
+                "$date $time, " + "$userState, $isError")
     }
 
     private fun getDementiaKey(): String?{
