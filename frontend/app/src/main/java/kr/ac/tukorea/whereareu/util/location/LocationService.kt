@@ -32,8 +32,6 @@ import kr.ac.tukorea.whereareu.util.sensor.AccelerometerSensor
 import kr.ac.tukorea.whereareu.util.sensor.GyroScopeSensor
 import kr.ac.tukorea.whereareu.util.sensor.LightSensor
 import kr.ac.tukorea.whereareu.util.sensor.MagneticFieldSensor
-import java.io.FileWriter
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -104,7 +102,7 @@ class LocationService: Service() {
                 if (checkReadyToPost()) {
                     val currentTime = getCurrentTime()
                     var userState = 0
-                    var isError = false
+                    var isSuccess = false
                     val info = LocationInfo(dementiaKey, locationInfo[LATITUDE], locationInfo[LONGITUDE],
                         currentTime[TIME].trim(), currentTime[DATE], locationExtraInfo[SPEED],
                         accelerationsensor = sensorValueList[ACCELEROMETER_SENSOR],
@@ -118,13 +116,13 @@ class LocationService: Service() {
                     Log.d("info", info.toString())
                     repository.postLocationInfo(info).onSuccess {
                         userState = it.result
-                        isError = true
+                        isSuccess = true
                     }.onException {
-                        isError = false
+                        isSuccess = false
                         Log.d("error", it.toString())
                     }
                     // AI 정보 수집을 위한 함수
-                    saveFile(currentTime[DATE], currentTime[TIME].trim(), userState.toString(), isError.toString())
+                    saveFile(currentTime[DATE], currentTime[TIME].trim(), userState.toString(), isSuccess.toString())
                     delay(60000)
                 }
             }
