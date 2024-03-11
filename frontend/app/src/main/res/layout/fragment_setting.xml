@@ -227,11 +227,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:fontFamily="@font/jalnan2"
-            android:text=""
+            android:text="업데이트 주기 설정"
             android:textSize="20dp"
             app:layout_constraintStart_toEndOf="@+id/update_iv"
-            app:layout_constraintTop_toTopOf="@+id/update_iv"
-            tools:text="업데이트 주기 설정" />
+            app:layout_constraintTop_toTopOf="@+id/update_iv" />
 
         <TextView
             android:id="@+id/update_tv"

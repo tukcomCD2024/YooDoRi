@@ -1,23 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.login.PatientSettingFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <NumberPicker
+        android:id="@+id/time_picker"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:id="@+id/finish_tn"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/picker"
-
-
-            />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</layout>
+        android:layout_height="wrap_content"
+        android:text="확인"/>
+</LinearLayout>
