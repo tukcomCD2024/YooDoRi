@@ -262,7 +262,8 @@
             android:text="수정"
             android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/update_iv" />
+            app:layout_constraintTop_toTopOf="@+id/update_iv"
+            android:onClick="onUpdateEditBtnClick"/>
 
         <View
             android:layout_width="match_parent"

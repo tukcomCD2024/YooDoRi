@@ -35,6 +35,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             mMessageReceiver, IntentFilter("gps")
         )
     }
+
     override fun initView() {
         val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
         val otherSpf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
