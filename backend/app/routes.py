@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from .models import db, dementia_info, nok_info, location_info
 from .random_generator import RandomNumberGenerator
 from .update_user_status import UpdateUserStatus
+from .LocationAnalyzer import LocationAnalyzer
+from datetime import datetime
 from sqlalchemy import and_
 import json
 
@@ -22,6 +24,7 @@ send_meaningful_location_info_routes = Blueprint('send_meaningful_location_info'
 SUCCESS = 200
 KEYNOTFOUND = 600
 LOCDATANOTFOUND = 650
+LOCDATANOTENOUGH = 660
 LOGINSUCCESS = 700
 LOGINFAILED = 750
 UNDEFERR = 500
@@ -443,8 +446,44 @@ def send_meaningful_location_info():
     try:
         data = request.args.get('dementiaKey')
 
-        
+        today = datetime.now().date()
 
+        # 해당일에 저장된 위치 정보를 모두 가져옴
+        #location_list = location_info.query.filter(and_(location_info.dementia_key == data, location_info.date == today)).order_by(location_info.date.desc(), location_info.time.desc()).all()
+        location_list = location_info.query.filter_by(dementia_key = data).order_by(location_info.date.desc(), location_info.time.desc()).all()
+
+        if location_list:
+            
+            filename = f'location_data_for_dementia_key_{data}.txt'
+            with open(filename, 'w') as file:
+                for location in location_list:
+                    file.write(f'{location.latitude}, {location.longitude}, {location.date}, {location.time}\n')
+
+            
+            LA = LocationAnalyzer(filename)
+
+            predict_meaningful_location_data = LA.gmeansFunc()
+
+            response_data = {'status': 'success', 'message': 'Meaningful location data sent successfully', 'result': predict_meaningful_location_data}
+            json_response = jsonify(response_data)
+            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
+
+
+            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+
+        elif len(location_list) <= 10:
+
+            response_data = {'status': 'error', 'message': 'Location data not enough'}
+
+            json_response = jsonify(response_data)
+            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
+
+            return json_response, LOCDATANOTENOUGH, {'Content-Type': 'application/json; charset = utf-8' }
+        
+        else:
+            # 예외 처리 코드
+            print("location_list가 비어 있습니다.")
+        
     except Exception as e:
 
         response_data = {'status': 'error', 'message': str(e)}
