@@ -1,5 +1,7 @@
 package kr.ac.tukorea.whereareu.presentation
 
+import android.app.AlertDialog
+import android.app.ProgressDialog.show
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -7,12 +9,22 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.NumberPicker
+import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.hilt.android.AndroidEntryPoint
 //import kotlinx.coroutines.flow.EmptyFlow.collect
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
 import kr.ac.tukorea.whereareu.databinding.FragmentSettingBinding
+import kr.ac.tukorea.whereareu.databinding.FragmentSettingUpdateTimeBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.util.location.InternalFileStorageUtil
 import kr.ac.tukorea.whereareu.util.location.LocationService
@@ -30,6 +42,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             binding.postInfoTv.text = "서버에 보낸 정보: " + info.toString()
         }
     }
+
     override fun initObserver() {
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             mMessageReceiver, IntentFilter("gps")
@@ -63,6 +76,38 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                 action = LocationService.ACTION_STOP
                 requireActivity().startService(this)
             }
+        }
+
+        binding.updateEditBtn.setOnClickListener {
+            Log.d("SettingFragment", "onUpdateEditBtnClick")
+            val dialogBinding =
+                FragmentSettingUpdateTimeBinding.inflate(LayoutInflater.from(requireContext()))
+            val numberPicker = dialogBinding.numberPicker
+
+            numberPicker.minValue = 0
+            numberPicker.maxValue = 8
+
+            numberPicker.displayedValues =
+                arrayOf("1", "3", "5", "10", "15", "20", "30", "45", "60")
+
+            // AlertDialog.Builder를 사용하여 다이얼로그 생성
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setView(dialogBinding.root) // 바인딩된 레이아웃을 다이얼로그에 설정
+
+            // 다이얼로그 생성
+            val dialog = builder.create()
+            dialog.create()
+            // 다이얼로그 안의 버튼 클릭 리스너 설정
+            dialogBinding.finishBtn.setOnClickListener {
+                dialog.dismiss() // 다이얼로그 닫기
+
+                val selectedValueIndex = numberPicker.value
+                val selectedValue = numberPicker.displayedValues[selectedValueIndex]
+                Log.d("SettingFragment", "UpdateTIme: $selectedValue")
+            }
+
+            // 다이얼로그 표시
+            dialog.show()
         }
     }
 }

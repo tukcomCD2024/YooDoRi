@@ -8,6 +8,9 @@
         <variable
             name="viewModel"
             type="kr.ac.tukorea.whereareu.presentation.login.LoginViewModel" />
+        <variable
+            name="view"
+            type="kr.ac.tukorea.whereareu.presentation.SettingFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -252,18 +255,17 @@
             app:layout_constraintStart_toEndOf="@+id/update_tv"
             app:layout_constraintBottom_toBottomOf="@+id/update_iv" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/update_edit_btn"
             style="@style/Widget.App.Button"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/rectangle_corner_10"
             android:text="수정"
             android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/update_iv"
-            android:onClick="onUpdateEditBtnClick"/>
+            />
 
         <View
             android:layout_width="match_parent"
