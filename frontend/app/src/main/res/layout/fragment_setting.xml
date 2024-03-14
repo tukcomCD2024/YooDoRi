@@ -246,41 +246,115 @@
             />
 
         <Button
-            android:id="@+id/stop_status_btn"
-            android:layout_width="match_parent"
+            android:id="@+id/collect_stop_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.Button"
-            android:text="정지 센서 정보 수집"
+            android:text="정지 센서 수집 시작"
+            android:backgroundTint="@color/yellow"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintTop_toBottomOf="@id/post_info_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/stop_stop_btn"
+
             />
         <Button
-            android:id="@+id/walk_btn"
-            android:layout_width="match_parent"
+            android:id="@+id/stop_stop_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.Button"
-            android:text="도보 센서 정보 수집"
+            android:text="정지 센서 수집 중단"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/stop_status_btn"
+            android:backgroundTint="@color/red"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/post_info_tv"
+            app:layout_constraintStart_toEndOf="@id/collect_stop_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <Button
+            android:id="@+id/collect_walk_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="도보 센서 수집 시작"
+            android:backgroundTint="@color/yellow"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/collect_stop_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/stop_stop_btn"
+
             />
         <Button
-            android:id="@+id/car_btn"
-            android:layout_width="match_parent"
+            android:id="@+id/stop_walk_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.Button"
-            android:text="차량 센서 정보 수집"
+            android:text="도보 센서 수집 중단"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/walk_btn"
+            android:backgroundTint="@color/red"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/collect_stop_btn"
+            app:layout_constraintStart_toStartOf="@id/stop_stop_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             />
         <Button
-            android:id="@+id/subway_btn"
-            android:layout_width="match_parent"
+            android:id="@+id/collect_car_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.Button"
-            android:text="지하철 센서 정보 수집"
+            android:text="차량 센서 수집 시작"
+            android:backgroundTint="@color/yellow"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/car_btn"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/collect_walk_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/stop_stop_btn"
+
             />
+        <Button
+            android:id="@+id/stop_car_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="차량 센서 수집 중단"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/red"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/collect_walk_btn"
+            app:layout_constraintStart_toStartOf="@id/stop_stop_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <Button
+            android:id="@+id/collect_subway_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지하철 센서 수집 시작"
+            android:backgroundTint="@color/yellow"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/collect_car_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/stop_stop_btn"
+
+            />
+        <Button
+            android:id="@+id/stop_subway_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지하철 센서 수집 중단"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/red"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/collect_car_btn"
+            app:layout_constraintStart_toStartOf="@id/stop_stop_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
