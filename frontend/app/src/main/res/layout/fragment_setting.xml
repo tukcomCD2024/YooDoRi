@@ -10,6 +10,11 @@
             type="kr.ac.tukorea.whereareu.presentation.login.LoginViewModel" />
     </data>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -240,6 +245,44 @@
             app:layout_constraintTop_toBottomOf="@id/stop_btn"
             />
 
+        <Button
+            android:id="@+id/stop_status_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.App.Button"
+            android:text="정지 센서 정보 수집"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/post_info_tv"
+            />
+        <Button
+            android:id="@+id/walk_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.App.Button"
+            android:text="도보 센서 정보 수집"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/stop_status_btn"
+            />
+        <Button
+            android:id="@+id/car_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.App.Button"
+            android:text="차량 센서 정보 수집"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/walk_btn"
+            />
+        <Button
+            android:id="@+id/subway_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.App.Button"
+            android:text="지하철 센서 정보 수집"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/car_btn"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>

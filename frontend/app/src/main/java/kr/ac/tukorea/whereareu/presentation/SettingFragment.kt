@@ -64,4 +64,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             }
         }
     }
+
+    private fun collectStopSensorValue(){}
+    private fun collectWalkSensorValue(){}
+    private fun collectCarSensorValue(){}
+    private fun collectStopSensorValue(){}
 }
