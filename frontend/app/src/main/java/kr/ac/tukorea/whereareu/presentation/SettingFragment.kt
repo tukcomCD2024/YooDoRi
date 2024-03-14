@@ -52,6 +52,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     override fun initView() {
         val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
         val otherSpf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
+
         binding.userNameTv.text = spf.getString("name", "")
 
         val isDementia = spf.getBoolean("isDementia", true)
@@ -90,6 +91,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             numberPicker.displayedValues =
                 arrayOf("1", "3", "5", "10", "15", "20", "30", "45", "60")
 
+            val upTime = requireActivity().getSharedPreferences("UpdateTime", MODE_PRIVATE)
+            val lastSelectedValueIndex = upTime.getInt("selectedValueIndex", 0)
+
+            // 다이얼로그가 열릴 때 SharedPreferences에서 가져온 마지막으로 선택한 값을 설정합니다.
+            numberPicker.value = lastSelectedValueIndex
             // AlertDialog.Builder를 사용하여 다이얼로그 생성
             val builder = AlertDialog.Builder(requireContext())
             builder.setView(dialogBinding.root) // 바인딩된 레이아웃을 다이얼로그에 설정
@@ -103,6 +109,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
                 val selectedValueIndex = numberPicker.value
                 val selectedValue = numberPicker.displayedValues[selectedValueIndex]
+
+                upTime.edit().putInt("selectedValueIndex", selectedValueIndex).apply()
                 Log.d("SettingFragment", "UpdateTIme: $selectedValue")
             }
 
