@@ -94,18 +94,16 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             val upTime = requireActivity().getSharedPreferences("UpdateTime", MODE_PRIVATE)
             val lastSelectedValueIndex = upTime.getInt("selectedValueIndex", 0)
 
-            // 다이얼로그가 열릴 때 SharedPreferences에서 가져온 마지막으로 선택한 값을 설정합니다.
+            // 마지막으로 설정한 값 가져옴
             numberPicker.value = lastSelectedValueIndex
-            // AlertDialog.Builder를 사용하여 다이얼로그 생성
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setView(dialogBinding.root) // 바인딩된 레이아웃을 다이얼로그에 설정
 
-            // 다이얼로그 생성
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setView(dialogBinding.root)
+
             val dialog = builder.create()
             dialog.create()
-            // 다이얼로그 안의 버튼 클릭 리스너 설정
             dialogBinding.finishBtn.setOnClickListener {
-                dialog.dismiss() // 다이얼로그 닫기
+                dialog.dismiss()
 
                 val selectedValueIndex = numberPicker.value
                 val selectedValue = numberPicker.displayedValues[selectedValueIndex]
@@ -113,8 +111,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                 upTime.edit().putInt("selectedValueIndex", selectedValueIndex).apply()
                 Log.d("SettingFragment", "UpdateTIme: $selectedValue")
             }
-
-            // 다이얼로그 표시
             dialog.show()
         }
     }
