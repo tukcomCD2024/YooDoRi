@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.repository.home
+package kr.ac.tukorea.whereareu.data.repository.nok.home
 
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
 import kr.ac.tukorea.whereareu.util.network.NetworkResult

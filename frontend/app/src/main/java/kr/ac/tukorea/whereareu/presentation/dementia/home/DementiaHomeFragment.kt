@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.presentation.dementia
+package kr.ac.tukorea.whereareu.presentation.dementia.home
 
 import android.content.pm.PackageManager
 import android.os.Build

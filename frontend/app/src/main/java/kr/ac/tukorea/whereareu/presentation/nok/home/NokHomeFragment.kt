@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.presentation.nok
+package kr.ac.tukorea.whereareu.presentation.nok.home
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE

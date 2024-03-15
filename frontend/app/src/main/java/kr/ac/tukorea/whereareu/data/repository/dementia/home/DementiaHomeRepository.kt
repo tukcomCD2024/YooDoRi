@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.repository.home
+package kr.ac.tukorea.whereareu.data.repository.dementia.home
 
 import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
 import kr.ac.tukorea.whereareu.data.model.home.PostLocationInfoResponse

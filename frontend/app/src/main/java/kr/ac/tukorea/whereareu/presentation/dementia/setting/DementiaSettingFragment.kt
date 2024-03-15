@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.presentation
+package kr.ac.tukorea.whereareu.presentation.dementia.setting
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,13 +12,12 @@ import dagger.hilt.android.AndroidEntryPoint
 //import kotlinx.coroutines.flow.EmptyFlow.collect
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
-import kr.ac.tukorea.whereareu.databinding.FragmentSettingBinding
+import kr.ac.tukorea.whereareu.databinding.FragmentDementiaSettingBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.util.location.InternalFileStorageUtil
 import kr.ac.tukorea.whereareu.util.location.LocationService
 
 @AndroidEntryPoint
-class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
+class DementiaSettingFragment : BaseFragment<FragmentDementiaSettingBinding>(R.layout.fragment_dementia_setting) {
     private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val info = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

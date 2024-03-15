@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.presentation.nok
+package kr.ac.tukorea.whereareu.presentation.nok.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -10,12 +10,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
-import kr.ac.tukorea.whereareu.data.repository.home.NokHomeRepositoryImpl
+import kr.ac.tukorea.whereareu.data.repository.nok.home.NokHomeRepositoryImpl
 import kr.ac.tukorea.whereareu.util.network.onError
 import kr.ac.tukorea.whereareu.util.network.onException
 import kr.ac.tukorea.whereareu.util.network.onFail
 import kr.ac.tukorea.whereareu.util.network.onSuccess
-import java.time.Duration
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +31,7 @@ class NokHomeViewModel @Inject constructor(
     fun setUpdateDuration(duration: Long){
         viewModelScope.launch {
             //Log.d("duration", duration.toString())
-            _updateDuration.emit(duration)
+            _updateDuration.emit(duration*60*1000)
         }
     }
     fun getDementiaLocation(dementiaKey: String){

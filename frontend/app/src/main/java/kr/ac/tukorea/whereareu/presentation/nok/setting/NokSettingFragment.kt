@@ -1,20 +1,16 @@
-package kr.ac.tukorea.whereareu.presentation.nok
+package kr.ac.tukorea.whereareu.presentation.nok.setting
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.Build
+import android.content.Context.MODE_PRIVATE
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.home.LocationInfo
+import kr.ac.tukorea.whereareu.databinding.DialogSettingUpdateTimeBinding
 import kr.ac.tukorea.whereareu.databinding.FragmentNokSettingBinding
-import kr.ac.tukorea.whereareu.databinding.FragmentSettingBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
-import kr.ac.tukorea.whereareu.util.location.LocationService
+import kr.ac.tukorea.whereareu.presentation.nok.home.NokHomeViewModel
 
 class NokSettingFragment: BaseFragment<FragmentNokSettingBinding>(R.layout.fragment_nok_setting) {
     private val viewModel: NokHomeViewModel by activityViewModels()
@@ -23,6 +19,7 @@ class NokSettingFragment: BaseFragment<FragmentNokSettingBinding>(R.layout.fragm
     override fun initView() {
         val spf = requireActivity().getSharedPreferences("User", Context.MODE_PRIVATE)
         val otherSpf = requireActivity().getSharedPreferences("OtherUser", Context.MODE_PRIVATE)
+        val upTime = requireActivity().getSharedPreferences("UpdateTime", MODE_PRIVATE)
         binding.userNameTv.text = spf.getString("name", "")
 
         val isDementia = spf.getBoolean("isDementia", true)
@@ -35,9 +32,16 @@ class NokSettingFragment: BaseFragment<FragmentNokSettingBinding>(R.layout.fragm
         binding.otherNameEditTv.setText(otherSpf.getString("name", ""))
         binding.otherPhoneNumberTv.setText((otherSpf.getString("phone", "")))
 
-        binding.testBtn.setOnClickListener {
+        /*binding.testBtn.setOnClickListener {
             val duration = binding.durationEt.text.toString().toLong()
             viewModel.setUpdateDuration(duration * 10000)
+        }*/
+        binding.updateEditBtn.setOnClickListener {
+            val dialog = SetUpdateTimeDialogFragment{time ->
+                viewModel.setUpdateDuration(time.toLong())
+                binding.updateTimeTv.text = time
+            }
+            dialog.show(childFragmentManager, dialog.tag)
         }
     }
 }

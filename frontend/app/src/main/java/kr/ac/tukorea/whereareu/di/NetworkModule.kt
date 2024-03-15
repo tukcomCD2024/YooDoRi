@@ -7,9 +7,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.WhereAreUApplication
-import kr.ac.tukorea.whereareu.data.api.DementiaHomeService
+import kr.ac.tukorea.whereareu.data.api.dementia.DementiaHomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
-import kr.ac.tukorea.whereareu.data.api.NokHomeService
+import kr.ac.tukorea.whereareu.data.api.nok.NokHomeService
 import kr.ac.tukorea.whereareu.util.location.LocationService
 import okhttp3.Interceptor
 import okhttp3.Interceptor.*

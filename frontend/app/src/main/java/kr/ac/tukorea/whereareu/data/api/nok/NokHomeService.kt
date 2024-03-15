@@ -1,4 +1,4 @@
-package kr.ac.tukorea.whereareu.data.api
+package kr.ac.tukorea.whereareu.data.api.nok
 
 import kr.ac.tukorea.whereareu.data.model.ResponseBody
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse

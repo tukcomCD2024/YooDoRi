@@ -214,18 +214,72 @@
             android:background="@color/gray60"
             app:layout_constraintTop_toBottomOf="@+id/other_phone_iv" />
 
-        <EditText
-            android:id="@+id/duration_et"
+        <View
             android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/gray60"
+            app:layout_constraintTop_toBottomOf="@+id/other_phone_iv" />
+
+        <ImageView
+            android:id="@+id/update_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/other_phone_iv" />
+
+        <TextView
+            android:id="@+id/update_setting_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/test_btn"
-            android:inputType="number"/>
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/jalnan2"
+            android:text="업데이트 주기 설정"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@+id/update_iv"
+            app:layout_constraintTop_toTopOf="@+id/update_iv" />
+
+        <TextView
+            android:id="@+id/update_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.16sp.Regular"
+            app:layout_constraintStart_toEndOf="@+id/update_iv"
+            app:layout_constraintTop_toBottomOf="@id/update_setting_tv"
+            tools:text="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="분"
+            android:textAppearance="@style/TextAppearance.App.16sp.Regular"
+            app:layout_constraintStart_toEndOf="@+id/update_time_tv"
+            app:layout_constraintBaseline_toBaselineOf="@+id/update_time_tv" />
+
         <Button
-            android:id="@+id/test_btn"
-            android:layout_width="match_parent"
+            android:id="@+id/update_edit_btn"
+            style="@style/Widget.App.Button"
+            android:layout_width="55dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/line3"
+            android:layout_marginEnd="20dp"
+            android:text="수정"
+            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/update_iv"
+            android:background="@drawable/rectangle_corner_10"
             />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/gray60"
+            app:layout_constraintTop_toBottomOf="@+id/update_iv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
