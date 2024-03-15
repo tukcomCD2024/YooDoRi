@@ -111,6 +111,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
                 upTime.edit().putInt("selectedValueIndex", selectedValueIndex).apply()
                 Log.d("SettingFragment", "UpdateTIme: $selectedValue")
+                upTime.edit().putString("selectedTime", selectedValue)
                 binding.updateTimeTv.text = selectedValue
             }
             dialog.show()
