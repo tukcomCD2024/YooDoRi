@@ -104,6 +104,13 @@
         <item name="android:padding">12dp</item>
     </style>
 
+    <style name="Widget.App.DialogButton" parent="Widget.AppCompat.Button">
+        <item name="background">@drawable/rectangle_corner_10</item>
+        <item name="backgroundTint">@color/yellow</item>
+        <item name="android:textAppearance">@style/TextAppearance.App.20sp.Bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Widget.App.TextInputLayout.corner10" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxCornerRadiusBottomEnd">10dp</item>
         <item name="boxCornerRadiusBottomStart">10dp</item>
