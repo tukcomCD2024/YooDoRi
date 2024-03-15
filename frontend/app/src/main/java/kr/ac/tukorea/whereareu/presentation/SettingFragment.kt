@@ -151,7 +151,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                         "stop",
                         writeToFile()
                     )
-                    delay(60 * 1000)
+                    delay(1000)
                 }
             }
         }
@@ -173,7 +173,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                         "walk",
                         writeToFile()
                     )
-                    delay(60 * 1000)
+                    delay(1000)
                 }
             }
         }
@@ -195,7 +195,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                         "car",
                         writeToFile()
                     )
-                    delay(60 * 1000)
+                    delay(1000)
                 }
             }
         }
@@ -217,7 +217,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                         "subway",
                         writeToFile()
                     )
-                    delay(60 * 1000)
+                    delay(1000)
                 }
             }
         }
