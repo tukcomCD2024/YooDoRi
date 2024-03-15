@@ -52,6 +52,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     override fun initView() {
         val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
         val otherSpf = requireActivity().getSharedPreferences("OtherUser", MODE_PRIVATE)
+        val upTime = requireActivity().getSharedPreferences("UpdateTime", MODE_PRIVATE)
 
         binding.userNameTv.text = spf.getString("name", "")
 
@@ -91,11 +92,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             numberPicker.displayedValues =
                 arrayOf("1", "3", "5", "10", "15", "20", "30", "45", "60")
 
-            val upTime = requireActivity().getSharedPreferences("UpdateTime", MODE_PRIVATE)
             val lastSelectedValueIndex = upTime.getInt("selectedValueIndex", 0)
 
             // 마지막으로 설정한 값 가져옴
             numberPicker.value = lastSelectedValueIndex
+
 
             val builder = AlertDialog.Builder(requireContext())
             builder.setView(dialogBinding.root)
@@ -110,6 +111,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
                 upTime.edit().putInt("selectedValueIndex", selectedValueIndex).apply()
                 Log.d("SettingFragment", "UpdateTIme: $selectedValue")
+                binding.updateTimeTv.text = selectedValue
             }
             dialog.show()
         }

@@ -236,7 +236,7 @@
             app:layout_constraintTop_toTopOf="@+id/update_iv" />
 
         <TextView
-            android:id="@+id/update_tv"
+            android:id="@+id/update_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -252,7 +252,7 @@
             android:layout_marginStart="10dp"
             android:text="분"
             android:textAppearance="@style/TextAppearance.App.16sp.Regular"
-            app:layout_constraintStart_toEndOf="@+id/update_tv"
+            app:layout_constraintStart_toEndOf="@+id/update_time_tv"
             app:layout_constraintBottom_toBottomOf="@+id/update_iv" />
 
         <Button
@@ -265,6 +265,7 @@
             android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/update_iv"
+            android:background="@drawable/rectangle_corner_10"
             />
 
         <View

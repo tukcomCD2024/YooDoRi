@@ -13,7 +13,9 @@
 
     <Button
         android:id="@+id/finish_btn"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
+        style="@style/Widget.App.Button"
+        android:background="@drawable/rectangle_corner_10"
         android:text="확인"/>
 </LinearLayout>
