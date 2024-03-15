@@ -22,7 +22,7 @@
         android:title="안심구역" />
 
     <item
-        android:id="@+id/settingFragment"
+        android:id="@+id/nokSettingFragment"
         android:icon="@drawable/ic_setting"
         android:title="설정" />
 

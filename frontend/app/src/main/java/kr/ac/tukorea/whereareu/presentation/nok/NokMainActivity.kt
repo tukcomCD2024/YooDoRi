@@ -11,17 +11,21 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseActivity
 import kr.ac.tukorea.whereareu.util.extension.navigationHeight
+import kr.ac.tukorea.whereareu.util.extension.repeatOnStarted
 import kr.ac.tukorea.whereareu.util.extension.setStatusBarTransparent
 
 @AndroidEntryPoint
 class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_nok_main) {
     private val viewModel: NokHomeViewModel by viewModels()
+    private var updateLocationJob: Job? = null
     override fun initView() {
         //상태바 투명 설정
         this.setStatusBarTransparent()
@@ -42,10 +46,27 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         val spf = getSharedPreferences("OtherUser", MODE_PRIVATE)
         val dementiaKey = spf.getString("key", "")
         if (!dementiaKey.isNullOrEmpty()) {
-            lifecycleScope.launch {
-                while (true) {
-                    viewModel.getDementiaLocation(dementiaKey)
-                    delay(60000)
+            repeatOnStarted {
+                viewModel.updateDuration.collect{ duration ->
+                    Log.d("duration", duration.toString())
+                    if(updateLocationJob == null) {
+                        updateLocationJob = lifecycleScope.launch {
+                            while (true) {
+                                viewModel.getDementiaLocation(dementiaKey)
+                                Log.d("duration null test", duration.toString())
+                                delay(duration)
+                            }
+                        }
+                    } else{
+                        updateLocationJob?.cancelAndJoin()
+                        updateLocationJob = lifecycleScope.launch {
+                            while (true){
+                                viewModel.getDementiaLocation(dementiaKey)
+                                Log.d("duration not null test", duration.toString())
+                                delay(duration)
+                            }
+                        }
+                    }
                 }
             }
         }

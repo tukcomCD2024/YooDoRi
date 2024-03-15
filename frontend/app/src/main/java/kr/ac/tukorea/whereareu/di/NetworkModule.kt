@@ -10,6 +10,7 @@ import kr.ac.tukorea.whereareu.WhereAreUApplication
 import kr.ac.tukorea.whereareu.data.api.DementiaHomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
 import kr.ac.tukorea.whereareu.data.api.NokHomeService
+import kr.ac.tukorea.whereareu.util.location.LocationService
 import okhttp3.Interceptor
 import okhttp3.Interceptor.*
 import okhttp3.OkHttpClient
@@ -78,6 +79,12 @@ object NetworkModule {
     @Singleton
     fun provideNokHomeApi(retrofit: Retrofit): NokHomeService {
         return retrofit.buildService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationService(): LocationService{
+        return LocationService()
     }
 
     private inline fun <reified T> Retrofit.buildService(): T {
