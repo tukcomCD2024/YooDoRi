@@ -1,0 +1,94 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_corner_10_white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="20dp">
+
+        <TextView
+            android:id="@+id/guide_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="변경할 전화번호를 입력해주세요"
+            android:textAppearance="@style/TextAppearance.App.14sp.ExtraBold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/current_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="현재 전화번호 : "
+            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guide_tv" />
+
+        <TextView
+            android:id="@+id/current_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/current_phone"
+            app:layout_constraintStart_toEndOf="@+id/current_phone"
+            tools:text="010-0000-0000" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/current_phone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_phone_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="변경할 전화번호"
+                android:inputType="phone"
+                android:maxLength="13"
+                android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
+                android:textColorHint="@color/gray60" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/finish_btn"
+            style="@style/Widget.App.Button"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rectangle_corner_10_white"
+            android:text="완료"
+            android:textAppearance="@style/TextAppearance.App.14sp.Regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout"
+            />
+
+        <Button
+            android:id="@+id/cancle_btn"
+            style="@style/Widget.App.Button"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/rectangle_corner_10_white"
+            android:text="취소"
+            android:textAppearance="@style/TextAppearance.App.14sp.Regular"
+            app:layout_constraintEnd_toStartOf="@+id/finish_btn"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

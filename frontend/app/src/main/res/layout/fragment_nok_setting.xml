@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/phone_number_tv"
             tools:text="010-0000-0000" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/phone_edit_btn"
             style="@style/Widget.App.Button"
             android:layout_width="55dp"
@@ -141,7 +141,7 @@
             app:layout_constraintTop_toBottomOf="@+id/other_name_tv"
             tools:text="박승호" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/other_name_edit_btn"
             style="@style/Widget.App.Button"
             android:layout_width="55dp"
@@ -194,7 +194,7 @@
             app:layout_constraintTop_toBottomOf="@+id/other_phone_tv"
             tools:text="010-0000-0000" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/other_phone_edit_btn"
             style="@style/Widget.App.Button"
             android:layout_width="55dp"
