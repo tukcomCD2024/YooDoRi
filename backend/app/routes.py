@@ -8,6 +8,7 @@ from datetime import datetime
 from flask import Blueprint
 import json
 
+index = 1 # for debugging
 
 
 # 블루프린트 생성
@@ -19,10 +20,12 @@ send_location_info_routes = Blueprint('send_live_location_info_routes', __name__
 user_login_routes = Blueprint('user_login_routes', __name__)
 user_info_modification_routes = Blueprint('user_info_modification_routes', __name__)
 caculate_dementia_avarage_walking_speed_routes = Blueprint('caculate_dementia_avarage_walking_speed', __name__)
-analye_schedule = Blueprint('analye_schedule', __name__)
+get_user_info_routes = Blueprint('get_user_info', __name__)
+analyze_schedule = Blueprint('analyze_schedule', __name__)
 
 # 상태코드 정의
 SUCCESS = 200
+WRONG_REQUEST = 400
 KEYNOTFOUND = 600
 LOCDATANOTFOUND = 650
 LOCDATANOTENOUGH = 660
@@ -252,16 +255,14 @@ def receive_location_info():
             # UpdateUserStatus 클래스의 인스턴스 생성
             user_status_updater = UpdateUserStatus()
 
-            unique_matching_key = rng.generate_unique_random_numbers(100000, 999999)
+            unique_matching_key = rng.generate_unique_random_number(100000, 999999)
 
-            accelerationsensor = data.get('accelerationsensor')
-            gyrosensor = data.get('gyrosensor')
-            directionsensor = data.get('directionsensor')
             lightsensor = data.get('lightsensor')
 
             # 예측 수행
             prediction = user_status_updater.predict(json_data)
 
+            # 위치 정보 저장
             new_location = location_info(
                 dementia_key=data.get('dementiaKey'),
                 date=data.get('date'),
@@ -270,6 +271,15 @@ def receive_location_info():
                 longitude=data.get('longitude'),
                 bearing = data.get('bearing'),
                 user_status=int(prediction[0]),  # 예측 결과로 업데이트
+                accelerationsensor_x = data.get('accelerationsensor')[0],
+                accelerationsensor_y = data.get('accelerationsensor')[1],
+                accelerationsensor_z = data.get('accelerationsensor')[2],
+                directionsensor_x = data.get('directionsensor')[0],
+                directionsensor_y = data.get('directionsensor')[1],
+                directionsensor_z = data.get('directionsensor')[2],
+                gyrosensor_x = data.get('gyrosensor')[0],
+                gyrosensor_y = data.get('gyrosensor')[1],
+                gyrosensor_z = data.get('gyrosensor')[2],
                 lightsensor=lightsensor[0],
                 battery=data.get('battery'),
                 isInternetOn=data.get('isInternetOn'),
@@ -282,27 +292,33 @@ def receive_location_info():
             db.session.add(new_location)
             db.session.commit()
 
+            # 센서 정보 저장
+            """accel = data.get('accelerationsensor')
+            gyro = data.get('gyrosensor')
+            direc = data.get('directionsensor')
+
             new_sensors = []
             for i in range(60):
                 new_sensor = sensor_info(
-                    accel_x=accelerationsensor.x[i],
-                    accel_y = accelerationsensor.y[i],
-                    accel_z = accelerationsensor.z[i],
-                    gyro_x = gyrosensor.x[i],
-                    gyro_y = gyrosensor.y[i],
-                    gyro_z = gyrosensor.z[i],
-                    direc_x = directionsensor.x[i],
-                    direc_y = directionsensor.y[i],
-                    direc_z = directionsensor.z[i],
+                    accel_x = accel_x[i],
+                    accel_y = accel_y[i],
+                    accel_z = accel_z[i],
+                    gyro_x = gyro_x[i],
+                    gyro_y = gyro_y[i],
+                    gyro_z = gyro_z[i],
+                    direc_x = direc_x[i],
+                    direc_y = direc_y[i],
+                    direc_z = direc_z[i],
                     matching_key = str(unique_matching_key)
                 )
                 new_sensors.append(new_sensor)
 
             db.session.bulk_save_objects(new_sensors)
-            db.session.commit()
+            db.session.commit()"""
 
-            print(int(prediction[0]))
-            response_data = {'status': 'success', 'message': 'Location data received successfully', 'result' : int(prediction[0])} # 임의로 예측 결과를 전송
+            print("[system] {} {}".format(data.get("dementiaKey"), int(prediction[0])))
+
+            response_data = {'status': 'success', 'message': 'Location data received successfully'}
 
             json_response = jsonify(response_data)
             json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
@@ -370,17 +386,23 @@ def modify_user_info():
         data = request.json
 
         is_dementia = data.get('isDementia')
-        is_name_changed = data.get('isNameChanged')
+        changeOption = data.get('changeOption') # 0: 전화번호 변경, 1: 이름 변경, 2: 업데이트 주기 변경
+        update_rate = data.get('updateRate')
 
         if is_dementia == 0: # 보호자
             existing_nok = nok_info.query.filter_by(nok_key=data.get('key')).first()
             if existing_nok:
-                if is_name_changed == 1: # 이름 변경
-                    existing_nok.nok_name = data.get('name')
-                elif is_name_changed == 0: # 전화번호 변경
+                if changeOption == 0: # 전화번호 변경
                     existing_nok.nok_phonenumber = data.get('phoneNumber')
+                elif changeOption == 1: # 이름 변경
+                    existing_nok.nok_name = data.get('name')
+                elif changeOption == 2:
+                    existing_nok.update_rate = update_rate
+
                 db.session.commit()
+
                 print('[system] NOK info modified successfully')
+
                 response_data = {'status': 'success', 'message': 'User info modified successfully'}
 
                 json_response = jsonify(response_data)
@@ -400,10 +422,13 @@ def modify_user_info():
         elif is_dementia == 1: # 보호 대상자
             existing_dementia = dementia_info.query.filter_by(dementia_key=data.get('key')).first()
             if existing_dementia:
-                if is_name_changed == 1: # 이름 변경
-                    existing_dementia.dementia_name = data.get('name')
-                if is_name_changed == 0: # 전화번호 변경
-                    existing_dementia.dementia_phonenumber = data.get('phoneNumber')
+                if changeOption == 0: # 전화번호 변경
+                    existing_dementia.nok_phonenumber = data.get('phoneNumber')
+                elif changeOption == 1: # 이름 변경
+                    existing_dementia.nok_name = data.get('name')
+                elif changeOption == 2:
+                    existing_dementia.update_rate = update_rate
+                
 
                 db.session.commit()
                 print('[system] Dementia info modified successfully')
@@ -436,7 +461,7 @@ def caculate_dementia_average_walking_speed():
         if _dementia_key is None:
             return jsonify({'status': 'error', 'message': 'Certification number not found'}), KEYNOTFOUND
 
-        # dementia_key에 해당하는 환자의 최근 10개의 위치 정보를 가져옴
+        # dementia_key에 해당하고 이동상태가 도보(2)인 환자의 최근 10개의 위치 정보를 가져옴
         location_info_list = location_info.query.filter(and_(location_info.dementia_key == _dementia_key, location_info.user_status == 2)).order_by(location_info.date.desc()).limit(10).all()
         if location_info_list:
             # 최근 10개의 위치 정보를 이용하여 평균 속도 계산
@@ -458,7 +483,47 @@ def caculate_dementia_average_walking_speed():
         response_data = {'status': 'error', 'message': str(e)}
         return jsonify(response_data), UNDEFERR
     
-@analye_schedule.route('/analyze_meaningful_location')
+@get_user_info_routes.route('/get-user-info', methods=['GET']) 
+def get_user_info():
+    try:
+        dementia_key = request.args.get('dementiaKey')
+
+        dementia_info_record = dementia_info.query.filter_by(dementia_key=dementia_key).first()
+        nok_info_record = nok_info.query.filter_by(dementia_info_key=dementia_key).order_by(nok_info.num.desc()).first()
+        
+        if dementia_info_record is None or nok_info_record is None:
+            response_data = {'status': 'error', 'message': 'User info not found'}
+            return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+        else:
+
+            result = {
+                'dementiaInfoRecord': {
+                    'dementiaKey': dementia_info_record.dementia_key,
+                    'dementiaName': dementia_info_record.dementia_name,
+                    'dementiaPhoneNumber': dementia_info_record.dementia_phonenumber,
+                    'updateRate' : dementia_info_record.update_rate
+                },
+                'nokInfoRecord': {
+                    'nokKey': nok_info_record.nok_key,
+                    'nokName': nok_info_record.nok_name,
+                    'nokPhoneNumber': nok_info_record.nok_phonenumber,
+                    'updateRate' : nok_info_record.update_rate
+                }
+            }
+
+            response_data = {'status': 'success', 'message': 'User info sent successfully', 'result': result}
+            json_response = jsonify(response_data)
+            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
+
+            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+
+    
+    except Exception as e:
+        response_data = {'status': 'error', 'message': str(e)}
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
+
+    
+@analyze_schedule.route('/analyze_meaningful_location') # 미완성
 def analyze_meaningful_location():
     try:
         today = datetime.now().date()
@@ -469,8 +534,9 @@ def analyze_meaningful_location():
         # 해당일에 저장된 위치 정보를 모두 가져옴
         location_list = location_info.query.filter(location_info.date == today).order_by(location_info.dementia_key.desc(), location_info.time.desc()).first
 
-        print('[system] {}'.format(index))
-        index += 1
+        print('[system] {}'.format(index)) # for debugging
+        index += 1 # for debugging
+        
         errfile = f'error_{today}.txt'
         if location_list:
             # dementia_key 별로 위치 정보를 분류하여 파일 작성 및 분석 수행
