@@ -13,7 +13,7 @@ class SetUpdateTimeDialogFragment(val setUpdateTime: (String) -> Unit): BaseDial
     }
 
     override fun initView() {
-        val upTime = requireActivity().getSharedPreferences("UpdateTime", Context.MODE_PRIVATE)
+//        val nokUpdatePhone = requireActivity().getSharedPreferences("UpdateTime", Context.MODE_PRIVATE)
         with(binding) {
             numberPicker.minValue = 0
             numberPicker.maxValue = 8
@@ -27,11 +27,8 @@ class SetUpdateTimeDialogFragment(val setUpdateTime: (String) -> Unit): BaseDial
             with(binding) {
                 val selectedValueIndex = numberPicker.value
                 val selectedValue = numberPicker.displayedValues[selectedValueIndex]
-                upTime.edit().putInt("selectedValueIndex", selectedValueIndex).apply()
-                Log.d("SettingFragment", "UpdateTIme: $selectedValue")
-                upTime.edit().putString("selectedTime", selectedValue)
                 setUpdateTime(selectedValue)
-                //setUpdateTimeListener.setUpdateTime(selectedValue)
+
             }
             dismiss()
         }
