@@ -1,5 +1,6 @@
 package kr.ac.tukorea.whereareu.presentation.nok.home
 
+import android.provider.ContactsContract
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,10 +29,17 @@ class NokHomeViewModel @Inject constructor(
     private val _updateDuration = MutableStateFlow<Long>(60*1000)
     val updateDuration = _updateDuration.asStateFlow()
 
+    private val _userPhoneNumber = MutableStateFlow<ContactsContract.CommonDataKinds.Phone>()
+
     fun setUpdateDuration(duration: Long){
         viewModelScope.launch {
             //Log.d("duration", duration.toString())
             _updateDuration.emit(duration*60*1000)
+        }
+    }
+    fun setUserPhoneNumber(number: Number){
+        viewModelScope.launch {
+
         }
     }
     fun getDementiaLocation(dementiaKey: String){

@@ -43,9 +43,5 @@ class NokSettingFragment: BaseFragment<FragmentNokSettingBinding>(R.layout.fragm
             }
             dialog.show(childFragmentManager, dialog.tag)
         }
-
-        binding.phoneEditBtn.setOnClickListener {
-            val dialog = SetNokPhoneEditDialogFragment{}
-        }
     }
 }

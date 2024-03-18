@@ -86,18 +86,18 @@
             app:layout_constraintTop_toBottomOf="@+id/phone_number_tv"
             tools:text="010-0000-0000" />
 
-        <Button
-            android:id="@+id/phone_edit_btn"
-            style="@style/Widget.App.Button"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/rectangle_corner_10"
-            android:text="수정"
-            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_type_tv"
-            app:layout_constraintTop_toTopOf="@+id/phone_iv" />
+<!--        <Button-->
+<!--            android:id="@+id/phone_edit_btn"-->
+<!--            style="@style/Widget.App.Button"-->
+<!--            android:layout_width="55dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:background="@drawable/rectangle_corner_10"-->
+<!--            android:text="수정"-->
+<!--            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/user_type_tv"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/phone_iv" />-->
 
         <View
             android:id="@+id/line1"
@@ -141,17 +141,17 @@
             app:layout_constraintTop_toBottomOf="@+id/other_name_tv"
             tools:text="박승호" />
 
-        <Button
-            android:id="@+id/other_name_edit_btn"
-            style="@style/Widget.App.Button"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/rectangle_corner_10"
-            android:text="수정"
-            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/name_iv" />
+<!--        <Button-->
+<!--            android:id="@+id/other_name_edit_btn"-->
+<!--            style="@style/Widget.App.Button"-->
+<!--            android:layout_width="55dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:background="@drawable/rectangle_corner_10"-->
+<!--            android:text="수정"-->
+<!--            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/name_iv" />-->
 
         <View
             android:id="@+id/line2"
@@ -194,17 +194,17 @@
             app:layout_constraintTop_toBottomOf="@+id/other_phone_tv"
             tools:text="010-0000-0000" />
 
-        <Button
-            android:id="@+id/other_phone_edit_btn"
-            style="@style/Widget.App.Button"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/rectangle_corner_10"
-            android:text="수정"
-            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/other_phone_iv" />
+<!--        <Button-->
+<!--            android:id="@+id/other_phone_edit_btn"-->
+<!--            style="@style/Widget.App.Button"-->
+<!--            android:layout_width="55dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:background="@drawable/rectangle_corner_10"-->
+<!--            android:text="수정"-->
+<!--            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/other_phone_iv" />-->
 
         <View
             android:id="@+id/line3"
@@ -267,7 +267,7 @@
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:text="수정"
+            android:text="변경"
             android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/update_iv"
@@ -280,6 +280,18 @@
             android:layout_marginTop="15dp"
             android:background="@color/gray60"
             app:layout_constraintTop_toBottomOf="@+id/update_iv" />
+
+        <Button
+            android:id="@+id/modify_user_info_btn"
+            style="@style/Widget.App.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_corner_10"
+            android:text="개인 정보 변경"
+            android:textAppearance="@style/TextAppearance.App.14sp.SemiBold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/update_iv"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
