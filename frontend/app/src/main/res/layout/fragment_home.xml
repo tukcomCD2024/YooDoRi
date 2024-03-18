@@ -192,8 +192,8 @@
 
         <TextView
             android:id="@+id/predict_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:fontFamily="@font/suite_extrabold"
             android:text="위치\n예측"
             android:textSize="16sp"
@@ -207,8 +207,8 @@
 
         <TextView
             android:id="@+id/emergency_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:fontFamily="@font/suite_extrabold"
             android:text="긴급\n도움"
             android:textSize="16sp"

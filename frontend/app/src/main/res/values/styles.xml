@@ -96,6 +96,18 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="TextAppearance.App.12sp.jalnan2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/jalnan2</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.App.8sp.jalnan2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">8sp</item>
+        <item name="android:fontFamily">@font/jalnan2</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Widget.App.Button" parent="Widget.AppCompat.Button">
         <item name="background">@drawable/rectangle_corner_10</item>
         <item name="backgroundTint">@color/yellow</item>
