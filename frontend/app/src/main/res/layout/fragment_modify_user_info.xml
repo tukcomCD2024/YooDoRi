@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.ModifyUserInfoFragment">
+
+    <data>
+
+        <variable
+            name="view"
+            type="kr.ac.tukorea.whereareu.presentation.ModifyUserInfoFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> view.onClickBackBtn()}"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인 정보 변경"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/user_name_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_tv"
+            tools:text="보호자" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="이름"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/user_name_type_tv"
+            app:layout_constraintStart_toEndOf="@+id/user_name_type_tv" />
+
+        <EditText
+            android:id="@+id/user_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint=""
+            android:textAppearance="@style/TextAppearance.App.20sp.Bold"
+            app:layout_constraintTop_toBottomOf="@+id/user_name_type_tv"
+            tools:text="현재이름" />
+
+
+        <TextView
+            android:id="@+id/user_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_name_et"
+            tools:text="보호자" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="전화번호"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/user_phone_tv"
+            app:layout_constraintStart_toEndOf="@+id/user_phone_tv" />
+
+        <EditText
+            android:id="@+id/user_phone_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint=""
+            android:textAppearance="@style/TextAppearance.App.20sp.Bold"
+            app:layout_constraintTop_toBottomOf="@+id/user_phone_tv"
+            tools:text="현재 전화번호" />
+
+
+        <TextView
+            android:id="@+id/other_user_name_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_phone_et"
+            tools:text="보호 대상자" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="이름"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/other_user_name_type_tv"
+            app:layout_constraintStart_toEndOf="@+id/other_user_name_type_tv" />
+
+        <EditText
+            android:id="@+id/other_user_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint=""
+            android:textAppearance="@style/TextAppearance.App.20sp.Bold"
+            app:layout_constraintTop_toBottomOf="@+id/other_user_name_type_tv"
+            tools:text="현재 이름" />
+
+
+        <TextView
+            android:id="@+id/other_user_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/other_user_name_et"
+            tools:text="보호 대상자" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="전화번호"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/other_user_phone_tv"
+            app:layout_constraintStart_toEndOf="@+id/other_user_phone_tv" />
+
+        <EditText
+            android:id="@+id/other_user_phone_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint=""
+            android:textAppearance="@style/TextAppearance.App.20sp.Bold"
+            app:layout_constraintTop_toBottomOf="@+id/other_user_phone_tv"
+            tools:text="현재이름" />
+
+        <Button
+            android:id="@+id/finish_btn"
+            style="@style/Widget.App.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/rectangle_corner_10"
+            android:text="변경 완료"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

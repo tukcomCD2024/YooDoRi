@@ -29,7 +29,7 @@ class NokHomeViewModel @Inject constructor(
     private val _updateDuration = MutableStateFlow<Long>(60*1000)
     val updateDuration = _updateDuration.asStateFlow()
 
-    private val _userPhoneNumber = MutableStateFlow<ContactsContract.CommonDataKinds.Phone>()
+//    private val _userPhoneNumber = MutableStateFlow<ContactsContract.CommonDataKinds.Phone>()
 
     fun setUpdateDuration(duration: Long){
         viewModelScope.launch {
