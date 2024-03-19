@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.MapFragment
@@ -15,6 +16,7 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
 import kr.ac.tukorea.whereareu.databinding.IconLocationOverlayLayoutBinding
@@ -90,14 +92,16 @@ class NokHomeFragment : BaseFragment<kr.ac.tukorea.whereareu.databinding.Fragmen
         naverMap?.let {
             val locationOverlay = it.locationOverlay
             locationOverlay.isVisible = true
-            val icon = IconLocationOverlayLayoutBinding.inflate(layoutInflater)
-            icon.nameTv.text = name
-            icon.speedTv.text = speed.roundToInt().toString()
-            val speedTv = icon.layout
+            val iconBinding = IconLocationOverlayLayoutBinding.inflate(layoutInflater)
+            iconBinding.nameTv.text = name
+
+            // m/s to km/h
+            iconBinding.speedTv.text = (speed * 3.6).roundToInt().toString()
+            val speedTv = iconBinding.layout
             locationOverlay.icon = OverlayImage.fromView(speedTv)
             locationOverlay.circleRadius = 0
             locationOverlay.position = coord
-            locationOverlay.bearing = bearing
+            //locationOverlay.bearing = bearing
             locationOverlay.anchor = PointF(0.5f, 1f)
 
             it.moveCamera(CameraUpdate.scrollTo(coord))

@@ -123,7 +123,7 @@ class LocationService: Service() {
                     }
                     // AI 정보 수집을 위한 함수
                     saveFile(currentTime[DATE], currentTime[TIME].trim(), userState.toString(), isSuccess.toString())
-                    delay(60000)
+                    delay(10000)
                 }
             }
         }
