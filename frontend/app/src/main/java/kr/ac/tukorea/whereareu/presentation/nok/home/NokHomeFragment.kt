@@ -2,14 +2,20 @@ package kr.ac.tukorea.whereareu.presentation.nok.home
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PointF
 import android.util.Log
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.MapFragment
@@ -21,6 +27,7 @@ import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.home.GetLocationInfoResponse
 import kr.ac.tukorea.whereareu.databinding.IconLocationOverlayLayoutBinding
+import kr.ac.tukorea.whereareu.domain.home.MeaningfulPlace
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.util.extension.repeatOnStarted
 import kotlin.math.roundToInt
@@ -35,6 +42,10 @@ class NokHomeFragment : BaseFragment<kr.ac.tukorea.whereareu.databinding.Fragmen
     private val navigator by lazy {
         findNavController()
     }
+    private val meaningfulListRVA by lazy {
+        MeaningfulListRVA()
+    }
+    private lateinit var behavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun initObserver() {
     }
@@ -121,8 +132,61 @@ class NokHomeFragment : BaseFragment<kr.ac.tukorea.whereareu.databinding.Fragmen
 
     private fun goToPredictLocationFragment(){
         binding.predictTv.setOnClickListener {
-            navigator.navigate(R.id.action_nokHomeFragment_to_predictLocationFragment)
+            viewModel.setIsPredicted(true)
+            binding.homeGroup.visibility = View.GONE
+            binding.bottomSheet.visibility = View.VISIBLE
+            initBottomSheet()
+            initMeaningfulListRVA()
+            //navigator.navigate(R.id.action_nokHomeFragment_to_predictLocationFragment)
         }
+    }
+
+    private fun initMeaningfulListRVA(){
+        binding.rv.adapter = meaningfulListRVA
+        binding.rv.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
+        val list = listOf<MeaningfulPlace>(
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+        )
+        meaningfulListRVA.submitList(list)
+    }
+
+    private fun initBottomSheet(){
+        behavior = BottomSheetBehavior.from(binding.bottomSheet)
+        behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        behavior.peekHeight = 300
+        behavior.isHideable = false
+        behavior.halfExpandedRatio = 0.4f
+
+        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                /*when(newState){
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                    }
+                }*/
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset > 0.4) {
+                    behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+
+                } else {
+
+                }
+            }
+
+        })
     }
 
     private fun updateDementiaName(){

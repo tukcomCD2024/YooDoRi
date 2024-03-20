@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.ac.tukorea.whereareu.databinding.ItemMeaningfulListBinding
 import kr.ac.tukorea.whereareu.domain.home.MeaningfulPlace
 
-class MeaningfulListAdapter: ListAdapter<MeaningfulPlace, MeaningfulListAdapter.MeaningfulListViewHolder>
+class MeaningfulListRVA: ListAdapter<MeaningfulPlace, MeaningfulListRVA.MeaningfulListViewHolder>
     (object : DiffUtil.ItemCallback<MeaningfulPlace>(){
     override fun areItemsTheSame(oldItem: MeaningfulPlace, newItem: MeaningfulPlace): Boolean {
         return oldItem == newItem

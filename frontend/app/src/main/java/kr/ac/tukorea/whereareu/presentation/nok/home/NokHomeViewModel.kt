@@ -20,20 +20,31 @@ import javax.inject.Inject
 @HiltViewModel
 class NokHomeViewModel @Inject constructor(
     val repository: NokHomeRepositoryImpl
-): ViewModel() {
+) : ViewModel() {
 
     private val _dementiaLocation = MutableSharedFlow<GetLocationInfoResponse>(replay = 1)
     val dementiaLocation = _dementiaLocation.asSharedFlow()
 
-    private val _updateDuration = MutableStateFlow<Long>(300*1000)
+    private val _updateDuration = MutableStateFlow<Long>(300000 * 1000)
     val updateDuration = _updateDuration.asStateFlow()
-    fun setUpdateDuration(duration: Long){
+
+    private val _isPredicted = MutableStateFlow(false)
+    val isPredicted = _isPredicted.asStateFlow()
+
+    fun setIsPredicted(boolean: Boolean) {
         viewModelScope.launch {
-            //Log.d("duration", duration.toString())
-            _updateDuration.emit(duration*60*1000)
+            _isPredicted.emit(boolean)
         }
     }
-    fun getDementiaLocation(dementiaKey: String){
+
+    fun setUpdateDuration(duration: Long) {
+        viewModelScope.launch {
+            //Log.d("duration", duration.toString())
+            _updateDuration.emit(duration * 60 * 1000)
+        }
+    }
+
+    fun getDementiaLocation(dementiaKey: String) {
         viewModelScope.launch {
             repository.getDementiaLocationInfo(dementiaKey).onSuccess {
                 _dementiaLocation.emit(it)
