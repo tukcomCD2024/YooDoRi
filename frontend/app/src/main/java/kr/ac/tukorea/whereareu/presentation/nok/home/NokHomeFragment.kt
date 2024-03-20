@@ -116,6 +116,13 @@ class NokHomeFragment : BaseFragment<kr.ac.tukorea.whereareu.databinding.Fragmen
         checkLocationPermission()
         updateDementiaName()
         initMap()
+        goToPredictLocationFragment()
+    }
+
+    private fun goToPredictLocationFragment(){
+        binding.predictTv.setOnClickListener {
+            navigator.navigate(R.id.action_nokHomeFragment_to_predictLocationFragment)
+        }
     }
 
     private fun updateDementiaName(){

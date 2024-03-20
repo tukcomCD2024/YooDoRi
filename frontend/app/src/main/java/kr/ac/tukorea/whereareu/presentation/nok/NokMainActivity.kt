@@ -4,10 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +36,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         this.setStatusBarTransparent()
         binding.layout.setPadding(0, 0, 0, this.navigationHeight())
         initNavigator()
-        getDementiaLocation()
+        //getDementiaLocation()
     }
 
     private fun initNavigator(){
@@ -41,6 +45,16 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         val navController = navHostFragment.navController
 
         binding.bottomNav.setupWithNavController(navController)
+
+        // 위치 예측 화면 이동 시 bottom nav 가리기
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.predictLocationFragment){
+                binding.bottomNav.visibility = View.GONE
+            }
+            else {
+                binding.bottomNav.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun getDementiaLocation(){
