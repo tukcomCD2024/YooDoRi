@@ -190,7 +190,7 @@ class LocationService: Service() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         locationClient
-            .getLocationUpdates(1000L)
+            .getLocationUpdates(5*1000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
                 locationInfo[LATITUDE] = location.latitude

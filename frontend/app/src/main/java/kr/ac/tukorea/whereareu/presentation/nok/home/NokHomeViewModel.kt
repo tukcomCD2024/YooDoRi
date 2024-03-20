@@ -25,7 +25,7 @@ class NokHomeViewModel @Inject constructor(
     private val _dementiaLocation = MutableSharedFlow<GetLocationInfoResponse>(replay = 1)
     val dementiaLocation = _dementiaLocation.asSharedFlow()
 
-    private val _updateDuration = MutableStateFlow<Long>(10*1000)
+    private val _updateDuration = MutableStateFlow<Long>(300*1000)
     val updateDuration = _updateDuration.asStateFlow()
     fun setUpdateDuration(duration: Long){
         viewModelScope.launch {
