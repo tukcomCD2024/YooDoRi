@@ -23,7 +23,7 @@ class LocationAnalyzer:
 
         # 데이터에 불필요한 부분 제거
         # 추후 데이터 형식에 따라 수정 필요 *
-        data = data.split('\n')[6:-1]
+        data = data.split('\n')[:-1]
         for i in range(len(data)):
             line = data[i].split(',')
             latitude.append(line[0])    # 위도
@@ -80,7 +80,7 @@ class LocationAnalyzer:
 if __name__ == '__main__':
     # 파일 경로 가져오기
     # 지금은 데이터가 저장된 파일의 경로를 실행할 때 입력
-    filePath = sys.argv[1]
+    filePath = r"C:\Users\sk002\OneDrive\바탕 화면\학교\Yoodori\testdata.txt"
     la = LocationAnalyzer(filePath)
 
     data = la.gmeansFunc()

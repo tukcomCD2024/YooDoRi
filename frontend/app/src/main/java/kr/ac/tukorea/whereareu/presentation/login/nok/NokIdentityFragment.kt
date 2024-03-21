@@ -51,10 +51,7 @@ class NokIdentityFragment :
     }
 
     fun onClickInputDone() {
-        if(!validName()){
-            binding.nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
-            return
-        }
+        binding.nameTextInputLayout.error = if(!validName()) "최소 2자의 한글을 입력해주세요" else null
 
         if (!validPhone()){
             binding.phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n예시) 010-1234-5678"

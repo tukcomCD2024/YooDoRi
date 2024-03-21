@@ -111,7 +111,7 @@ dependencies {
     //naver map
     implementation("com.naver.maps:map-sdk:3.17.0")
 
-    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 }
 kapt {
     correctErrorTypes = true

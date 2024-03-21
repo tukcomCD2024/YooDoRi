@@ -82,10 +82,7 @@ class PatientIdentifyFragment :
     }
 
     fun onClickInputDone() {
-        if(!validName()){
-            binding.nameTextInputLayout.error = "최소 2자의 한글을 입력해주세요"
-        }
-
+        binding.nameTextInputLayout.error = if (!validName()) "최소 2자의 한글을 입력해주세요" else null
 
 
         if (!validPhone()) {
