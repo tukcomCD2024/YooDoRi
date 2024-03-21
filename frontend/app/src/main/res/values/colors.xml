@@ -3,10 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFFFC952</color>
+    <color name="deep_yellow">#FF9800</color>
     <color name="orange">#FFFE5E00</color>
     <color name="green">#FF30DF61</color>
     <color name="gray">#FFD9D9D9</color>
     <color name="gray60">#FFAEAEAE</color>
     <color name="red">#FC5252</color>
     <color name="gray20">#FEFEFE</color>
+    <color name="gray40">#CACACA</color>
 </resources>

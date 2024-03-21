@@ -7,9 +7,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.WhereAreUApplication
-import kr.ac.tukorea.whereareu.data.api.DementiaHomeService
+import kr.ac.tukorea.whereareu.data.api.dementia.DementiaHomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
-import kr.ac.tukorea.whereareu.data.api.NokHomeService
+import kr.ac.tukorea.whereareu.data.api.nok.NokHomeService
+import kr.ac.tukorea.whereareu.util.location.LocationService
 import okhttp3.Interceptor
 import okhttp3.Interceptor.*
 import okhttp3.OkHttpClient
@@ -42,8 +43,8 @@ object NetworkModule {
         }
 
         return OkHttpClient.Builder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(interceptor)
             .addNetworkInterceptor(closeInterceptor)
@@ -78,6 +79,12 @@ object NetworkModule {
     @Singleton
     fun provideNokHomeApi(retrofit: Retrofit): NokHomeService {
         return retrofit.buildService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationService(): LocationService{
+        return LocationService()
     }
 
     private inline fun <reified T> Retrofit.buildService(): T {
