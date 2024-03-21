@@ -157,6 +157,16 @@ class NokHomeFragment : BaseFragment<kr.ac.tukorea.whereareu.databinding.Fragmen
             MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
             MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
             MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
         )
         meaningfulListRVA.submitList(list)
     }
@@ -164,25 +174,29 @@ class NokHomeFragment : BaseFragment<kr.ac.tukorea.whereareu.databinding.Fragmen
     private fun initBottomSheet(){
         behavior = BottomSheetBehavior.from(binding.bottomSheet)
         behavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        behavior.peekHeight = 300
-        behavior.isHideable = false
+        behavior.peekHeight = 20
+        behavior.isFitToContents = false
         behavior.halfExpandedRatio = 0.4f
+        behavior.expandedOffset = 100
 
+
+        // half expanded state일 때 접기 제어
         behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            var isHalfExpanded = false
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                /*when(newState){
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                when(newState){
+                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        isHalfExpanded = true
                     }
-                }*/
+                    BottomSheetBehavior.STATE_COLLAPSED and BottomSheetBehavior.STATE_HALF_EXPANDED-> {
+                        isHalfExpanded = false
+                    }
+                }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                if (slideOffset > 0.4) {
-                    behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-
-                } else {
-
+                if(isHalfExpanded && slideOffset < 0.351f){
+                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 }
             }
 
