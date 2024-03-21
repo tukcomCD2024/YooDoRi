@@ -12,7 +12,7 @@
         android:title="의미장소" />
 
     <item
-        android:id="@+id/nokHomeFragment"
+        android:id="@+id/homeTab"
         android:icon="@drawable/ic_home"
         android:title="홈"/>
 
@@ -22,7 +22,7 @@
         android:title="안심구역" />
 
     <item
-        android:id="@+id/settingFragment"
+        android:id="@+id/nokSettingFragment"
         android:icon="@drawable/ic_setting"
         android:title="설정" />
 

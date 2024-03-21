@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_graph"
-    app:startDestination="@id/nokHomeFragment">
+    app:startDestination="@id/homeTab">
 
     <fragment
         android:id="@+id/meaningfulPlaceFragment"
@@ -13,15 +13,26 @@
         android:name="kr.ac.tukorea.whereareu.presentation.SafeAreaFragment"
         android:label="SafeAreaFragment" />
     <fragment
-        android:id="@+id/settingFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.SettingFragment"
-        android:label="SettingFragment" />
-    <fragment
         android:id="@+id/locationHistoryFragment"
         android:name="kr.ac.tukorea.whereareu.presentation.LocationHistoryFragment"
         android:label="LocationHistoryFragment" />
     <fragment
-        android:id="@+id/nokHomeFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.nok.NokHomeFragment"
-        android:label="NokHomeFragment" />
+        android:id="@+id/nokSettingFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.nok.setting.NokSettingFragment"
+        android:label="NokSettingFragment" />
+    <navigation android:id="@+id/homeTab"
+        app:startDestination="@id/nokHomeFragment">
+        <fragment
+            android:id="@+id/nokHomeFragment"
+            android:name="kr.ac.tukorea.whereareu.presentation.nok.home.NokHomeFragment"
+            android:label="NokHomeFragment" >
+            <action
+                android:id="@+id/action_nokHomeFragment_to_predictLocationFragment"
+                app:destination="@id/predictLocationFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/predictLocationFragment"
+            android:name="kr.ac.tukorea.whereareu.presentation.nok.home.PredictLocationFragment"
+            android:label="PredictLocationFragment" />
+    </navigation>
 </navigation>
