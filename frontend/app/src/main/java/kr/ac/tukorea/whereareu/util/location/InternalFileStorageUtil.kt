@@ -22,6 +22,8 @@ class InternalFileStorageUtil(private val context: Context) {
         try {
             // 파일이 존재하는지 확인
             val file = File(context.filesDir, filename)
+            Log.d("ab path", file.absolutePath)
+            Log.d("path", file.path)
 
             if (!file.exists()) {
                 storeFileUsingStream(filename, content)
