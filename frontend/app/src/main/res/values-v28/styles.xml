@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="textStroke">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:outlineProvider">background</item>
-        <item name="android:outlineSpotShadowColor">#4C000000</item>
-    </style>
-</resources>

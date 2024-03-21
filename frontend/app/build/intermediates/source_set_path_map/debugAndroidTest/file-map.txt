@@ -1,6 +1,0 @@
-kr.ac.tukorea.whereareu.test.app-core-1.5.0-0 C:\Users\KKJ\.gradle\caches\transforms-3\a503841c0e1bdd29e369074346116da4\transformed\core-1.5.0\res
-kr.ac.tukorea.whereareu.test.app-annotation-experimental-1.3.0-1 C:\Users\KKJ\.gradle\caches\transforms-3\c4fe32f32597b8c0fe4f0f01fd372464\transformed\annotation-experimental-1.3.0\res
-kr.ac.tukorea.whereareu.test.app-androidTest-2 D:\Univ\GitClone\WhereAreU\YooDoRi\frontend\app\build\generated\res\resValues\androidTest\debug
-kr.ac.tukorea.whereareu.test.app-mergeDebugAndroidTestResources-3 D:\Univ\GitClone\WhereAreU\YooDoRi\frontend\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
-kr.ac.tukorea.whereareu.test.app-mergeDebugAndroidTestResources-4 D:\Univ\GitClone\WhereAreU\YooDoRi\frontend\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
-kr.ac.tukorea.whereareu.test.app-merged_res-5 D:\Univ\GitClone\WhereAreU\YooDoRi\frontend\app\build\intermediates\merged_res\debugAndroidTest
