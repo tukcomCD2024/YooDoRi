@@ -167,6 +167,7 @@ class NokHomeFragment : BaseFragment<kr.ac.tukorea.whereareu.databinding.Fragmen
             MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
             MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
             MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
+            MeaningfulPlace("한국공학대학교", "시흥시 뭐시기"),
         )
         meaningfulListRVA.submitList(list)
     }
