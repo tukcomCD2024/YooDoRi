@@ -1,14 +1,10 @@
 from flask import Blueprint, request, jsonify
-from .models import db, dementia_info, nok_info, location_info, meaningful_location_info, sensor_info
+from .models import db, dementia_info, nok_info, location_info
 from .random_generator import RandomNumberGenerator
 from .update_user_status import UpdateUserStatus
 from sqlalchemy import and_
-from .LocationAnalyzer import LocationAnalyzer
-from datetime import datetime
-from flask import Blueprint
 import json
 
-index = 1 # for debugging
 
 
 # 블루프린트 생성
@@ -20,15 +16,10 @@ send_location_info_routes = Blueprint('send_live_location_info_routes', __name__
 user_login_routes = Blueprint('user_login_routes', __name__)
 user_info_modification_routes = Blueprint('user_info_modification_routes', __name__)
 caculate_dementia_avarage_walking_speed_routes = Blueprint('caculate_dementia_avarage_walking_speed', __name__)
-get_user_info_routes = Blueprint('get_user_info', __name__)
-analyze_schedule = Blueprint('analyze_schedule', __name__)
 
 # 상태코드 정의
 SUCCESS = 200
-WRONG_REQUEST = 400
 KEYNOTFOUND = 600
-LOCDATANOTFOUND = 650
-LOCDATANOTENOUGH = 660
 LOGINSUCCESS = 700
 LOGINFAILED = 750
 UNDEFERR = 500
@@ -82,23 +73,17 @@ def receive_nok_info():
             
             print('[system] {:s} nok info successfully uploaded'.format(nok_data.get('name')))
 
-            response_data = {'status': 'success', 'message': 'Next of kin data received successfully', 'result': result}\
-            
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
+            response_data = {'status': 'success', 'message': 'Next of kin data received successfully', 'result': result}
 
-            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
         
         else:
             # 인증번호가 등록되지 않은 경우, 오류 전송
             print('[system] dementia key not found')
 
             response_data = {'status': 'error', 'message': 'Certification number not found'}
-
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
             
-            return json_response, KEYNOTFOUND , {'Content-Type': 'application/json; charset = utf-8' }
+            return jsonify(response_data), KEYNOTFOUND , {'Content-Type': 'application/json; charset = utf-8' }
 
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -144,10 +129,7 @@ def receive_dementia_info():
             response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'result': result}
 
             
-        json_response = jsonify(response_data)
-        json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-        
-        return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+        return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -171,18 +153,12 @@ def is_connected():
             }
             response_data = {'status': 'success', 'message': 'Connected successfully', 'result' : result}
 
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
 
         else:
             response_data = {'status': 'error', 'message': 'Connection failed'}
 
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-            return json_response, KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+        return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -202,18 +178,12 @@ def receive_user_login():
             if existing_nok:
                 response_data = {'status': 'success', 'message': 'Login success'}
 
-                json_response = jsonify(response_data)
-                json_response = json_response.headers.add('Content-Length', str(len(json_response.response)))
-
-                return json_response, LOGINSUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), LOGINSUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
 
             else:
                 response_data = {'status': 'error', 'message': 'Login failed'}
 
-                json_response = jsonify(response_data)
-                json_response = json_response.headers.add('Content-Length', str(len(json_response.response)))
-
-                return json_response, LOGINFAILED, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), LOGINFAILED, {'Content-Type': 'application/json; charset = utf-8' }
 
             
         elif _isdementia == 1: # dementia일 경우
@@ -221,18 +191,12 @@ def receive_user_login():
             if existing_dementia:
                 response_data = {'status': 'success', 'message': 'Login success'}
 
-                json_response = jsonify(response_data)
-                json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-                return json_response, LOGINSUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), LOGINSUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
 
             else:
                 response_data = {'status': 'error', 'message': 'Login failed'}
 
-                json_response = jsonify(response_data)
-                json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-                return json_response, LOGINFAILED, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), LOGINFAILED, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -243,26 +207,23 @@ def receive_location_info():
     try:
         data = request.json
         json_data = json.dumps(data)
-
-        rng = RandomNumberGenerator()
         
         _dementia_key = data.get('dementiaKey')
         
         existing_dementia = dementia_info.query.filter_by(dementia_key=_dementia_key).first()
 
-
         if existing_dementia:
             # UpdateUserStatus 클래스의 인스턴스 생성
             user_status_updater = UpdateUserStatus()
 
-            unique_matching_key = rng.generate_unique_random_number(100000, 999999)
-
+            accelerationsensor = data.get('accelerationsensor')
+            gyrosensor = data.get('gyrosensor')
+            directionsensor = data.get('directionsensor')
             lightsensor = data.get('lightsensor')
 
             # 예측 수행
             prediction = user_status_updater.predict(json_data)
 
-            # 위치 정보 저장
             new_location = location_info(
                 dementia_key=data.get('dementiaKey'),
                 date=data.get('date'),
@@ -271,67 +232,35 @@ def receive_location_info():
                 longitude=data.get('longitude'),
                 bearing = data.get('bearing'),
                 user_status=int(prediction[0]),  # 예측 결과로 업데이트
-                accelerationsensor_x = data.get('accelerationsensor')[0],
-                accelerationsensor_y = data.get('accelerationsensor')[1],
-                accelerationsensor_z = data.get('accelerationsensor')[2],
-                directionsensor_x = data.get('directionsensor')[0],
-                directionsensor_y = data.get('directionsensor')[1],
-                directionsensor_z = data.get('directionsensor')[2],
-                gyrosensor_x = data.get('gyrosensor')[0],
-                gyrosensor_y = data.get('gyrosensor')[1],
-                gyrosensor_z = data.get('gyrosensor')[2],
+                accelerationsensor_x=accelerationsensor[0],
+                accelerationsensor_y=accelerationsensor[1],
+                accelerationsensor_z=accelerationsensor[2],
+                gyrosensor_x=gyrosensor[0],
+                gyrosensor_y=gyrosensor[1],
+                gyrosensor_z=gyrosensor[2],
+                directionsensor_x=directionsensor[0],
+                directionsensor_y=directionsensor[1],
+                directionsensor_z=directionsensor[2],
                 lightsensor=lightsensor[0],
                 battery=data.get('battery'),
                 isInternetOn=data.get('isInternetOn'),
                 isGpsOn=data.get('isGpsOn'),
                 isRingstoneOn=data.get('isRingstoneOn'),
-                current_speed = data.get('currentSpeed'),
-                matching_key = str(unique_matching_key)
+                current_speed = data.get('currentSpeed')
             )
+
+            print(int(prediction[0]))
 
             db.session.add(new_location)
             db.session.commit()
-
-            # 센서 정보 저장
-            """accel = data.get('accelerationsensor')
-            gyro = data.get('gyrosensor')
-            direc = data.get('directionsensor')
-
-            new_sensors = []
-            for i in range(60):
-                new_sensor = sensor_info(
-                    accel_x = accel_x[i],
-                    accel_y = accel_y[i],
-                    accel_z = accel_z[i],
-                    gyro_x = gyro_x[i],
-                    gyro_y = gyro_y[i],
-                    gyro_z = gyro_z[i],
-                    direc_x = direc_x[i],
-                    direc_y = direc_y[i],
-                    direc_z = direc_z[i],
-                    matching_key = str(unique_matching_key)
-                )
-                new_sensors.append(new_sensor)
-
-            db.session.bulk_save_objects(new_sensors)
-            db.session.commit()"""
-
-            print("[system] {} {}".format(data.get("dementiaKey"), int(prediction[0])))
-
             response_data = {'status': 'success', 'message': 'Location data received successfully'}
 
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
         
         else:
-            response_data = {'status': 'error', 'message': 'Certification number not found'}
+            response_data = {'status': 'error', 'message': 'Dementia info not found'}
 
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-            return json_response, KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+            return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         print(e)
@@ -344,8 +273,7 @@ def send_location_info():
         
         dementia_key = request.args.get('dementiaKey')
         
-        latest_location = location_info.query.filter_by(dementia_key=dementia_key).order_by(location_info.date.desc(), location_info.time.desc()).first()
-
+        latest_location = location_info.query.filter_by(dementia_key=dementia_key).order_by(location_info.date.desc()).first()
         
         if latest_location:
             result = {
@@ -363,17 +291,11 @@ def send_location_info():
             }
             response_data = {'status': 'success', 'message': 'Location data sent successfully', 'result': result}
 
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
         else:
-            response_data = {'status': 'error', 'message': 'Certification number not found'}
+            response_data = {'status': 'error', 'message': 'Location data not found'}
 
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-            return json_response, KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+            return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -386,67 +308,46 @@ def modify_user_info():
         data = request.json
 
         is_dementia = data.get('isDementia')
-        changeOption = data.get('changeOption') # 0: 전화번호 변경, 1: 이름 변경, 2: 업데이트 주기 변경
-        update_rate = data.get('updateRate')
+        is_name_changed = data.get('isNameChanged')
 
         if is_dementia == 0: # 보호자
             existing_nok = nok_info.query.filter_by(nok_key=data.get('key')).first()
             if existing_nok:
-                if changeOption == 0: # 전화번호 변경
-                    existing_nok.nok_phonenumber = data.get('phoneNumber')
-                elif changeOption == 1: # 이름 변경
+                if is_name_changed == 1: # 이름 변경
                     existing_nok.nok_name = data.get('name')
-                elif changeOption == 2:
-                    existing_nok.update_rate = update_rate
-
+                elif is_name_changed == 0: # 전화번호 변경
+                    existing_nok.nok_phonenumber = data.get('phoneNumber')
                 db.session.commit()
-
                 print('[system] NOK info modified successfully')
-
                 response_data = {'status': 'success', 'message': 'User info modified successfully'}
 
-                json_response = jsonify(response_data)
-                json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-                return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
             
             else:
                 print('[system] NOK info not found')
                 response_data = {'status': 'error', 'message': 'User info not found'}
 
-                json_response = jsonify(response_data)
-                json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-                return json_response, KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
             
         elif is_dementia == 1: # 보호 대상자
             existing_dementia = dementia_info.query.filter_by(dementia_key=data.get('key')).first()
             if existing_dementia:
-                if changeOption == 0: # 전화번호 변경
-                    existing_dementia.nok_phonenumber = data.get('phoneNumber')
-                elif changeOption == 1: # 이름 변경
-                    existing_dementia.nok_name = data.get('name')
-                elif changeOption == 2:
-                    existing_dementia.update_rate = update_rate
-                
+                if is_name_changed == 1: # 이름 변경
+                    existing_dementia.dementia_name = data.get('name')
+                if is_name_changed == 0: # 전화번호 변경
+                    existing_dementia.dementia_phonenumber = data.get('phoneNumber')
 
                 db.session.commit()
                 print('[system] Dementia info modified successfully')
                 response_data = {'status': 'success', 'message': 'User info modified successfully'}
 
-                json_response = jsonify(response_data)
-                json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-                return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
             
             else:
                 print('[system] Dementia info not found')
                 response_data = {'status': 'error', 'message': 'User info not found'}
 
-                json_response = jsonify(response_data)
-                json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-                return json_response, KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+                return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
@@ -459,9 +360,9 @@ def caculate_dementia_average_walking_speed():
         _dementia_key = data.get('dementiaKey')
 
         if _dementia_key is None:
-            return jsonify({'status': 'error', 'message': 'Certification number not found'}), KEYNOTFOUND
+            return jsonify({'status': 'error', 'message': 'Dementia key is missing'}), DUPERR
 
-        # dementia_key에 해당하고 이동상태가 도보(2)인 환자의 최근 10개의 위치 정보를 가져옴
+        # dementia_key에 해당하는 환자의 최근 10개의 위치 정보를 가져옴
         location_info_list = location_info.query.filter(and_(location_info.dementia_key == _dementia_key, location_info.user_status == 2)).order_by(location_info.date.desc()).limit(10).all()
         if location_info_list:
             # 최근 10개의 위치 정보를 이용하여 평균 속도 계산
@@ -471,107 +372,12 @@ def caculate_dementia_average_walking_speed():
             average_speed = round(total_speed / len(location_info_list),2)
             print('[system] {} dementia average walking speed : {}'.format(_dementia_key, average_speed))
             response_data = {'status': 'success', 'message': 'Average walking speed calculated successfully', 'averageSpeed': average_speed}
-
-            return jsonify(response_data), SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
         else:
             print('[system] {} dementia info not found'.format(_dementia_key))
             response_data = {'status': 'error', 'message': 'Location data not found'}
 
-            return jsonify(response_data), LOCDATANOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+        return jsonify(response_data)
     
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
         return jsonify(response_data), UNDEFERR
-    
-@get_user_info_routes.route('/get-user-info', methods=['GET']) 
-def get_user_info():
-    try:
-        dementia_key = request.args.get('dementiaKey')
-
-        dementia_info_record = dementia_info.query.filter_by(dementia_key=dementia_key).first()
-        nok_info_record = nok_info.query.filter_by(dementia_info_key=dementia_key).order_by(nok_info.num.desc()).first()
-        
-        if dementia_info_record is None or nok_info_record is None:
-            response_data = {'status': 'error', 'message': 'User info not found'}
-            return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
-        else:
-
-            result = {
-                'dementiaInfoRecord': {
-                    'dementiaKey': dementia_info_record.dementia_key,
-                    'dementiaName': dementia_info_record.dementia_name,
-                    'dementiaPhoneNumber': dementia_info_record.dementia_phonenumber,
-                    'updateRate' : dementia_info_record.update_rate
-                },
-                'nokInfoRecord': {
-                    'nokKey': nok_info_record.nok_key,
-                    'nokName': nok_info_record.nok_name,
-                    'nokPhoneNumber': nok_info_record.nok_phonenumber,
-                    'updateRate' : nok_info_record.update_rate
-                }
-            }
-
-            response_data = {'status': 'success', 'message': 'User info sent successfully', 'result': result}
-            json_response = jsonify(response_data)
-            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
-
-            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
-
-    
-    except Exception as e:
-        response_data = {'status': 'error', 'message': str(e)}
-        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
-
-    
-@analyze_schedule.route('/analyze_meaningful_location') # 미완성
-def analyze_meaningful_location():
-    try:
-        today = datetime.now().date()
-        #날짜를 문자열로 변환
-        today = today.strftime('%Y-%m-%d')
-        print('[system] {} dementia meaningful location data analysis started'.format(today))
-
-        # 해당일에 저장된 위치 정보를 모두 가져옴
-        location_list = location_info.query.filter(location_info.date == today).order_by(location_info.dementia_key.desc(), location_info.time.desc()).first
-
-        print('[system] {}'.format(index)) # for debugging
-        index += 1 # for debugging
-        
-        errfile = f'error_{today}.txt'
-        if location_list:
-            # dementia_key 별로 위치 정보를 분류하여 파일 작성 및 분석 수행
-            dementia_keys = set([location.dementia_key for location in location_list])
-            for key in dementia_keys:
-                key_location_list = [location for location in location_list if location.dementia_key == key]
-
-                # 만약 key_location_list의 길이가 100보다 작다면 넘어감
-                if len(key_location_list) <= 100:
-                    with open(errfile, 'a') as file:
-                        file.write(f'{key} dementia location data not enough\n')
-                    continue
-
-                # 파일 작성
-                filename = f'location_data_for_dementia_key_{key}_{today}.txt'
-                with open(filename, 'w') as file:
-                    for location in key_location_list:
-                        file.write(f'{location.latitude},{location.longitude},{location.date},{location.time}\n')
-                # 분석 수행
-                LA = LocationAnalyzer(filename)
-                predict_meaningful_location_data = LA.gmeansFunc()
-                # 의미 있는 위치 정보 저장
-                new_meaningful_location = meaningful_location_info(
-                    dementia_key=key,
-                    latitude=predict_meaningful_location_data[0],
-                    longitude=predict_meaningful_location_data[1]
-                )
-                db.session.add(new_meaningful_location)
-                db.session.commit()
-                print(f'[system] {key} dementia meaningful location data saved successfully')
-        else:
-            # 예외 처리 코드                
-            print("location_list가 비어 있습니다.")
-            
-        print('[system] {} dementia meaningful location data analysis finished'.format(today))
-        
-    except Exception as e:
-        return e

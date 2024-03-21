@@ -1,11 +1,13 @@
+from sklearn.tree import DecisionTreeClassifier
 import json
 import pandas as pd
+from io import StringIO
 import pickle
 
 class UpdateUserStatus:
     def __init__(self):
 
-        model_filename = 'app/random_forest_model_mk2.pkl'
+        model_filename = 'app/random_forest_model.pkl'
         with open(model_filename, 'rb') as model_file:
             self.model = pickle.load(model_file)
 

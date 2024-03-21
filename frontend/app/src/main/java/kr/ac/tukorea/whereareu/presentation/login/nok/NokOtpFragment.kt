@@ -32,7 +32,6 @@ class NokOtpFragment : BaseFragment<FragmentNokOtpBinding>(R.layout.fragment_nok
                 // 보호자 정보 저장
                 val nokSpf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
                 nokSpf.edit {
-                    putBoolean("isDementia", false)
                     putString("key", it.nokKey)
                     putString("name", args.name)
                     putString("phone", args.phone)

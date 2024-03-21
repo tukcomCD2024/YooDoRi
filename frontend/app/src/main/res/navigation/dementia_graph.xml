@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/settingFragment2"
-        android:name="kr.ac.tukorea.whereareu.presentation.dementia.setting.DementiaSettingFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.SettingFragment"
         android:label="SettingFragment" />
     <fragment
         android:id="@+id/locationHistoryFragment2"
@@ -22,6 +22,6 @@
         android:label="MeaningfulPlaceFragment" />
     <fragment
         android:id="@+id/dementiaHomeFragment"
-        android:name="kr.ac.tukorea.whereareu.presentation.dementia.home.DementiaHomeFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.dementia.DementiaHomeFragment"
         android:label="DementiaHomeFragment" />
 </navigation>

@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
-import android.location.LocationRequest
-import android.os.Build
 import android.os.Looper
-import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -35,11 +32,8 @@ class DefaultLocationClient(
                 throw LocationClient.LocationException("GPS is disabled")
             }
 
-            val request = com.google.android.gms.location.LocationRequest.Builder(interval).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    setPriority(LocationRequest.QUALITY_BALANCED_POWER_ACCURACY)
-                }
-            }.build()
+            val request = com.google.android.gms.location.LocationRequest.Builder(interval)
+                .build()
 
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
@@ -62,8 +56,6 @@ class DefaultLocationClient(
         }
     }
     override fun getGpsStatus(): Boolean {
-        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        Log.d("network", locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER).toString())
-        Log.d("gps", locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER).toString())
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 }
