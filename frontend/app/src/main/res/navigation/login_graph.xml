@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_nokIdentityFragment"
+            app:destination="@id/nokIdentityFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_loginFragment_to_patientFragment"
+            app:destination="@id/patientIdentifyFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nokIdentityFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.nok.NokIdentityFragment"
+        android:label="NokIdentityFragment" >
+        <action
+            android:id="@+id/action_nokIdentityFragment_to_nokOtpFragment"
+            app:destination="@id/nokOtpFragment" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/nokOtpFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.nok.NokOtpFragment"
+        android:label="NokOtpFragment" >
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="phone"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nokOtpFragment_to_nokAuthorityPageFragment"
+            app:destination="@id/nokAuthorityPageFragment" />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/patientIdentifyFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.dementia.PatientIdentifyFragment"
+        android:label="PatientIdentifyFragment" >
+        <action
+            android:id="@+id/action_patientIdentifyFragment_to_patientOtpFragment"
+            app:destination="@id/patientOtpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/patientOtpFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.dementia.PatientOtpFragment"
+        android:label="PatientOtpFragment" >
+        <action
+            android:id="@+id/action_patientOtpFragment_to_dementiaAuthorityPageFragment"
+            app:destination="@id/dementiaAuthorityPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dementiaAuthorityPageFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.dementia.DementiaAuthorityPageFragment"
+        android:label="DementiaAuthorityPageFragment" />
+    <fragment
+        android:id="@+id/nokAuthorityPageFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.login.nok.NokAuthorityPageFragment"
+        android:label="NokAuthorityPageFragment" />
+
+</navigation>
