@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dementia_graph"
+    app:startDestination="@id/settingFragment2">
+
+    <fragment
+        android:id="@+id/settingFragment2"
+        android:name="kr.ac.tukorea.whereareu.presentation.dementia.setting.DementiaSettingFragment"
+        android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/locationHistoryFragment2"
+        android:name="kr.ac.tukorea.whereareu.presentation.LocationHistoryFragment"
+        android:label="LocationHistoryFragment" />
+    <fragment
+        android:id="@+id/safeAreaFragment2"
+        android:name="kr.ac.tukorea.whereareu.presentation.SafeAreaFragment"
+        android:label="SafeAreaFragment" />
+    <fragment
+        android:id="@+id/meaningfulPlaceFragment2"
+        android:name="kr.ac.tukorea.whereareu.presentation.MeaningfulPlaceFragment"
+        android:label="MeaningfulPlaceFragment" />
+    <fragment
+        android:id="@+id/dementiaHomeFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.dementia.home.DementiaHomeFragment"
+        android:label="DementiaHomeFragment" />
+</navigation>

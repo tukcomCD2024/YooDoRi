@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/locationHistoryFragment"
+        android:icon="@drawable/ic_location_history"
+        android:title="위치기록" />
+
+    <item
+        android:id="@+id/meaningfulPlaceFragment"
+        android:icon="@drawable/ic_meaning_place"
+        android:title="의미장소" />
+
+    <item
+        android:id="@+id/homeTab"
+        android:icon="@drawable/ic_home"
+        android:title="홈"/>
+
+    <item
+        android:id="@+id/safeAreaFragment"
+        android:icon="@drawable/ic_safe_zone"
+        android:title="안심구역" />
+
+    <item
+        android:id="@+id/nokSettingFragment"
+        android:icon="@drawable/ic_setting"
+        android:title="설정" />
+
+</menu>

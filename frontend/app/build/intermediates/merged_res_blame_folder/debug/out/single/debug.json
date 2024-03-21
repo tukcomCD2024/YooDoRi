@@ -1,0 +1,398 @@
+[
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_rectangle_corner_15_strok_1_bottom_nav.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\rectangle_corner_15_strok_1_bottom_nav.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_patient.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_patient.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_toast_layout.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\toast_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_home.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_gps_off.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_gps_off.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_nok_setting.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_nok_setting.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_setting.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_setting.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_location_overlay.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_location_overlay.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_predict_location.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_predict_location.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_suite_semibold.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\suite_semibold.ttf"
+    },
+    {
+        "merged": "kr.ac.tukorea.whereareu.app-merged_res-60:/layout_fragment_home.xml.flat",
+        "source": "kr.ac.tukorea.whereareu.app-main-62:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_arrow_back_24.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_arrow_back_24.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_suite_regular.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\suite_regular.ttf"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_suite_medium.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\suite_medium.ttf"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_guardian.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_guardian.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_dementia_authority_page.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_dementia_authority_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_time.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_time.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_suite_heavy.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\suite_heavy.ttf"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_area_group.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_area_group.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_login.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_rectangle_corner_50.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\rectangle_corner_50.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_dementia_setting.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_dementia_setting.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_gps_on.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_gps_on.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\navigation_dementia_graph.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\navigation\\dementia_graph.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_dialog_setting_update_time.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\dialog_setting_update_time.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_rectangle_top_corner_20.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\rectangle_top_corner_20.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_search.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_suite_light.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\suite_light.ttf"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_patient_otp.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_patient_otp.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_wifi_off.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_wifi_off.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_splash.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_splash.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\navigation_nok_graph.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\navigation\\nok_graph.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_location_history.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_location_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_bg_button.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\bg_button.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_jalnan2.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\jalnan2.ttf"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\menu_dementia_main_menu.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\menu\\dementia_main_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_gps_on_24.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_gps_on_24.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_location_auth.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_location_auth.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_splash_resize.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\splash_resize.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_activity_dementia_main.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\activity_dementia_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_alert.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_alert.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_meaningful_list.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_meaningful_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_nok_authority_page.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_nok_authority_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_pin.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_pin.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_bottom_color_selector.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\bottom_color_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_rectangle_corner_20_gray.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\rectangle_corner_20_gray.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_rectangle_corner_10_white.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\rectangle_corner_10_white.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_alarm_auth.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_alarm_auth.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_toast_bg.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\toast_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_wifi_on.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_wifi_on.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_meaningful_place.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_meaningful_place.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_nok_otp.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_nok_otp.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_bell_off_24.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_bell_off_24.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_call.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_call.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_profile.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_profile.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\navigation_login_graph.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\navigation\\login_graph.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_item_meaningful_list.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\item_meaningful_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_nok.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_nok.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_home.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_icon_location_overlay_layout.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\icon_location_overlay_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_bell_24.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_bell_24.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_suite_bold.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\suite_bold.ttf"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_protect.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_protect.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_gps_off_24.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_gps_off_24.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_battery.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_battery.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_nok_identity.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_nok_identity.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_patient_identify.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_patient_identify.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_date.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_date.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_activity_nok_main.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\activity_nok_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_alert_inner.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_alert_inner.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_activity_splash.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\font_suite_extrabold.ttf.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\font\\suite_extrabold.ttf"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\layout_fragment_safe_area.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\layout\\fragment_safe_area.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_location_history.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_location_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_safe_zone.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_safe_zone.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_meaning_place.png.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_meaning_place.png"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_vibrate_24.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_vibrate_24.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_oval.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\oval.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\menu_nok_main_menu.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\menu\\nok_main_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_ic_siren.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\ic_siren.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_bg_bottom_navigation.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\bg_bottom_navigation.xml"
+    },
+    {
+        "merged": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-merged_res-60:\\drawable_rectangle_corner_10.xml.flat",
+        "source": "C:\\Users\\KKJ\\.gradle\\daemon\\8.2\\kr.ac.tukorea.whereareu.app-main-62:\\drawable\\rectangle_corner_10.xml"
+    }
+]

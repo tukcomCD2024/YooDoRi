@@ -1,0 +1,3 @@
+kr.ac.tukorea.whereareu.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme

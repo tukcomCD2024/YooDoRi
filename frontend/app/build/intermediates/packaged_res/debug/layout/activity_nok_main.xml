@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+                                                       
+                                                   
+
+    
+
+           
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout"
+        tools:context=".presentation.nok.NokMainActivity" android:tag="layout/activity_nok_main_0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/bottomNav"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/nok_graph" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            style="@style/Widget.MyApp.BottomNavigationView.Material2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipToOutline="true"
+            android:background="@drawable/bg_bottom_navigation"
+            android:backgroundTint="@android:color/transparent"
+            app:itemIconTint="@drawable/bottom_color_selector"
+            app:itemRippleColor="@null"
+            app:labelVisibilityMode="labeled"
+            app:itemIconSize="32dp"
+            android:paddingVertical="16dp"
+            app:itemPaddingTop="2dp"
+            app:itemPaddingBottom="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:itemTextColor="@drawable/bottom_color_selector"
+            app:itemTextAppearanceInactive="@style/TextAppearance.App.14sp.SemiBold"
+            app:itemTextAppearanceActive="@style/TextAppearance.App.14sp.SemiBold"
+            app:menu="@menu/nok_main_menu" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+         
