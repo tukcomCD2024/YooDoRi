@@ -1,0 +1,2 @@
+kr.ac.tukorea.whereareu.test:style/WhiteBackgroundTheme = 0x7f010001
+kr.ac.tukorea.whereareu.test:style/WhiteBackgroundDialogTheme = 0x7f010000

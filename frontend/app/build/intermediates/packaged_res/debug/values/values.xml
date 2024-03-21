@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="deep_yellow">#FF9800</color>
+    <color name="gray">#FFD9D9D9</color>
+    <color name="gray20">#FEFEFE</color>
+    <color name="gray40">#CACACA</color>
+    <color name="gray60">#FFAEAEAE</color>
+    <color name="green">#FF30DF61</color>
+    <color name="orange">#FFFE5E00</color>
+    <color name="red">#FC5252</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFFFC952</color>
+    <dimen name="fab_margin">16dp</dimen>
+    <string name="app_name">어디U</string>
+    <string name="base_url">http://52.87.217.65:5000/</string>
+    <string name="login_describe_text">앱을 사용하기 위해서는\n보호자와 보호대상자 연결이 필요해요.</string>
+    <string name="login_title_text">어디U의 용도에 맞게\n선택해주세요.</string>
+    <string name="naver_client_id">http://52.87.217.65:5000/</string>
+    <string name="nok_btn_text">보호자로 사용하기</string>
+    <string name="nok_input_name_text">보호자의 이름을 알려주세요.</string>
+    <string name="nok_input_phone_number_text">보호자의 전화번호를 알려주세요.</string>
+    <string name="nok_text">보호자</string>
+    <string name="patient_btn_text">보호대상자로 사용하기</string>
+    <string name="patient_text">보호대상자</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <style name="Base.Theme.WhereAreU" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        
+        
+    </style>
+    <style name="TextAppearance.App.12sp.jalnan2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/jalnan2</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.14sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.14sp.Regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/suite_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.14sp.SemiBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/suite_semibold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.16sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.16sp.Medium" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_medium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.16sp.Regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.16sp.SemiBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/suite_semibold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.18sp.Bold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.18sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.18sp.Regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.18sp.SemiBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/suite_semibold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.20sp.Bold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/suite_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.20sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.24sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.30sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">30sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.32sp.ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/suite_extrabold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextAppearance.App.8sp.jalnan2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">8sp</item>
+        <item name="android:fontFamily">@font/jalnan2</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="Theme.WhereAreU" parent="Base.Theme.WhereAreU"/>
+    <style name="Widget.App.Button" parent="Widget.AppCompat.Button">
+        <item name="background">@drawable/rectangle_corner_10</item>
+        <item name="backgroundTint">@color/yellow</item>
+        <item name="android:textAppearance">@style/TextAppearance.App.20sp.Bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:padding">12dp</item>
+    </style>
+    <style name="Widget.App.DialogButton" parent="Widget.AppCompat.Button">
+        <item name="background">@drawable/rectangle_corner_10</item>
+        <item name="backgroundTint">@color/yellow</item>
+        <item name="android:textAppearance">@style/TextAppearance.App.20sp.Bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="Widget.App.TextInputLayout.corner10" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="errorEnabled">true</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="errorTextAppearance">@style/TextAppearance.App.16sp.SemiBold</item>
+        <item name="errorTextColor">@color/orange</item>
+    </style>
+    <style name="Widget.MyApp.BottomNavigationView.Material2" parent="Widget.MaterialComponents.BottomNavigationView"/>
+    <style name="Widget.MyApp.FloatingActionButton.Material2" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:elevation">0dp</item>
+    </style>
+    <style name="textStroke">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">#B28D39</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
