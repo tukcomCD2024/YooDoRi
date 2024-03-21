@@ -526,7 +526,7 @@ def get_user_info():
 @analyze_schedule.route('/analyze_meaningful_location') # 미완성
 def analyze_meaningful_location():
     try:
-        today = datetime.now().date()
+        today= datetime.now().date() - 2
         #날짜를 문자열로 변환
         today = today.strftime('%Y-%m-%d')
         print('[system] {} dementia meaningful location data analysis started'.format(today))
@@ -575,3 +575,4 @@ def analyze_meaningful_location():
         
     except Exception as e:
         return e
+    
