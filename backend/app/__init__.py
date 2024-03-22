@@ -14,6 +14,7 @@ scheduler = BackgroundScheduler(timezone="Asia/Seoul")
 def create_app():
     app.config.from_object(Config)
     CORS(app)
+
     '''if not app.debug:
         import logging
         from logging.handlers import RotatingFileHandler
@@ -26,7 +27,7 @@ def create_app():
 
     from .routes import nok_info_routes, dementia_info_routes, is_connected_routes, location_info_routes, send_location_info_routes, user_login_routes, user_info_modification_routes, caculate_dementia_avarage_walking_speed_routes, get_user_info_routes, analyze_schedule
     #from . import error_handler
-    from .analyzer_scheduler import AnalyzerScheduler
+    #from .analyzer_scheduler import AnalyzerScheduler
 
     app.register_blueprint(nok_info_routes)
     app.register_blueprint(dementia_info_routes)
@@ -49,10 +50,9 @@ def create_app():
 
     app.register_blueprint(analyze_schedule)
 
-    AS = AnalyzerScheduler()
-    scheduler.add_job(AS.analyze_meaningful_location, 'cron', hour = '18', minute = '38')
-    
-    scheduler.start()
+    #AS = AnalyzerScheduler()
+    #scheduler.add_job(analyze_meaningful_location, 'cron', hour = '14', minute = '34')
+    #scheduler.start()
     
 
     
