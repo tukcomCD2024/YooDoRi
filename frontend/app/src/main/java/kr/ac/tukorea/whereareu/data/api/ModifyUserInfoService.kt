@@ -1,11 +1,13 @@
 package kr.ac.tukorea.whereareu.data.api
 
 import kr.ac.tukorea.whereareu.data.model.ResponseBody
-import kr.ac.tukorea.whereareu.data.model.setting.ModifyUserInfo
+import kr.ac.tukorea.whereareu.data.model.setting.ModifyUserInfoRequest
+import kr.ac.tukorea.whereareu.data.model.setting.ModifyUserInfoResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ModifyUserInfoService {
     @POST("modify-user-info")
-    suspend fun postModifyUserInfo(@Body request : ModifyUserInfo)
+    suspend fun postModifyUserInfo(@Body request : ModifyUserInfoRequest): Response<ResponseBody<ModifyUserInfoResponse>>
 }

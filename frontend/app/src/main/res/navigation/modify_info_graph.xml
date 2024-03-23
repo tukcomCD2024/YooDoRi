@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/modify_info_graph">
+
+    <fragment
+        android:id="@+id/nokSettingFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.nok.setting.NokSettingFragment"
+        android:label="NokSettingFragment">
+        <action
+            android:id="@+id/action_nokSettingFragment_to_modifyUserInfoFragment"
+            app:destination="@+id/modifyUserInfoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/modifyUserInfoFragment"
+        android:name="kr.ac.tukorea.whereareu.presentation.ModifyUserInfoFragment"
+        android:label="ModifyUserInfoFragment"/>
+
+</navigation>
