@@ -28,18 +28,35 @@ class ModifyUserInfoFragment : BaseFragment<FragmentModifyUserInfoBinding>(R.lay
 
         with(binding) {
             userNameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
-                if (validName()) {
+                if (validUserName()) {
                     userNameEt.error = null
+                    userNameEt.hideKeyboard()
                 } else {
                     userNameEt.error = "최소 2자의 한글을 입력해주세요"
                 }
             }
-            phoneNumberEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
-                if (validPhone()) {
-                    phoneNumberTextInputLayout.error = null
-                    phoneNumberEt.hideKeyboard()
+            userPhoneEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
+                if (validUserPhone()) {
+                    userPhoneEt.error = null
+                    userPhoneEt.hideKeyboard()
                 } else {
-                    phoneNumberTextInputLayout.error = "전화번호 형식이 다릅니다.\n입력 예시) 010-1234-5678"
+                    userPhoneEt.error = "전화번호 형식이 다릅니다.\n입력 예시) 010-1234-5678"
+                }
+            }
+            otherUserNameEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
+                if (validOtherUserName()) {
+                    otherUserNameEt.error = null
+                    otherUserNameEt.hideKeyboard()
+                } else {
+                    otherUserNameEt.error = "최소 2자의 한글을 입력해주세요"
+                }
+            }
+            otherUserPhoneEt.setOnEditorActionListener(EditorInfo.IME_ACTION_NEXT) {
+                if (validOtherUserPhone()) {
+                    otherUserPhoneEt.error = null
+                    otherUserPhoneEt.hideKeyboard()
+                } else {
+                    otherUserPhoneEt.error = "전화번호 형식이 다릅니다.\n입력 예시) 010-1234-5678"
                 }
             }
         }
@@ -49,12 +66,19 @@ class ModifyUserInfoFragment : BaseFragment<FragmentModifyUserInfoBinding>(R.lay
         navigator.popBackStack()
     }
 
-    private fun validName() = !binding.nameEt.text.isNullOrBlank()
-            && REGEX_NAME.toRegex().matches(binding.nameEt.text!!)
+    private fun validUserName() = !binding.userNameEt.text.isNullOrBlank()
+            && REGEX_NAME.toRegex().matches(binding.userNameEt.text!!)
 
 
-    private fun validPhone() = !binding.phoneNumberEt.text.isNullOrBlank()
-            && REGEX_PHONE.toRegex().matches(binding.phoneNumberEt.text!!)
+    private fun validUserPhone() = !binding.userPhoneEt.text.isNullOrBlank()
+            && REGEX_PHONE.toRegex().matches(binding.userPhoneEt.text!!)
+
+    private fun validOtherUserName() = !binding.otherUserNameEt.text.isNullOrBlank()
+            && REGEX_NAME.toRegex().matches(binding.otherUserNameEt.text!!)
+
+
+    private fun validOtherUserPhone() = !binding.otherUserPhoneEt.text.isNullOrBlank()
+            && REGEX_PHONE.toRegex().matches(binding.otherUserPhoneEt.text!!)
 
     companion object {
         private const val REGEX_NAME = "^[가-힣]{2,}\n?"
