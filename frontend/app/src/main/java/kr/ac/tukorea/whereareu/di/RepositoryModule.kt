@@ -7,10 +7,13 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import kr.ac.tukorea.whereareu.data.api.dementia.DementiaHomeService
 import kr.ac.tukorea.whereareu.data.api.LoginService
+import kr.ac.tukorea.whereareu.data.api.ModifyUserInfoService
 import kr.ac.tukorea.whereareu.data.repository.dementia.home.DementiaHomeRepository
 import kr.ac.tukorea.whereareu.data.repository.dementia.home.DementiaHomeRepositoryImpl
 import kr.ac.tukorea.whereareu.data.repository.login.LoginRepository
 import kr.ac.tukorea.whereareu.data.repository.login.LoginRepositoryImpl
+import kr.ac.tukorea.whereareu.data.repository.setting.SettingRepository
+import kr.ac.tukorea.whereareu.data.repository.setting.SettingRepositoryImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -27,4 +30,10 @@ object RepositoryModule {
     fun providesHomeRepository(
         dementiaHomeService: DementiaHomeService
     ): DementiaHomeRepository = DementiaHomeRepositoryImpl(dementiaHomeService)
+
+    @ViewModelScoped
+    @Provides
+    fun providesSettingRepository(
+        modifyUserInfoService: ModifyUserInfoService
+    ): SettingRepository = SettingRepositoryImpl(modifyUserInfoService)
 }

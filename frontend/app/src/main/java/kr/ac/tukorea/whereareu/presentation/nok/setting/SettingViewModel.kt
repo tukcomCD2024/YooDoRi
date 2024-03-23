@@ -20,19 +20,15 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     val repository: SettingRepositoryImpl
 ) : ViewModel() {
-
-//    private val _updateUserName = MutableStateFlow<String>
-//    val updateUserName = _updateUserName.asStateFlow()
-    private val _updateUserName = MutableSharedFlow<Int>()
+    
+    private val _updateUserName = MutableSharedFlow<ModifyUserInfoResponse>()
     val updateUserName = _updateUserName.asSharedFlow()
-
-
 
     fun setUpdateUserName(request: ModifyUserInfoRequest){
         viewModelScope.launch(Dispatchers.IO){
             repository.sendModifyUserInfo(request).onSuccess {
                 Log.d("UpdateUserName","UserNameChanged")
-                _updateUserName.emit(it.result)
+                _updateUserName.emit(ModifyUserInfoResponse(it.result))
             }
         }
     }
