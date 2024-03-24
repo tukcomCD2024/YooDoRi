@@ -14,6 +14,8 @@ import kr.ac.tukorea.whereareu.data.repository.login.LoginRepository
 import kr.ac.tukorea.whereareu.data.repository.login.LoginRepositoryImpl
 import kr.ac.tukorea.whereareu.data.repository.setting.SettingRepository
 import kr.ac.tukorea.whereareu.data.repository.setting.SettingRepositoryImpl
+import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)

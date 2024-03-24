@@ -89,6 +89,12 @@ object NetworkModule {
         return LocationService()
     }
 
+    @Provides
+    @Singleton
+    fun provideModifyUserInfoApi(retrofit: Retrofit): ModifyUserInfoService{
+        return retrofit.buildService()
+    }
+
     private inline fun <reified T> Retrofit.buildService(): T {
         return this.create(T::class.java)
     }

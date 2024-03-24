@@ -7,6 +7,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.data.model.setting.ModifyUserInfoRequest
 import kr.ac.tukorea.whereareu.databinding.FragmentModifyUserInfoBinding
@@ -16,6 +17,7 @@ import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.showKeyboard
 
+@AndroidEntryPoint
 class ModifyUserInfoFragment : BaseFragment<FragmentModifyUserInfoBinding>(R.layout.fragment_modify_user_info) {
     private val viewModel : SettingViewModel by activityViewModels()
     private val navigator by lazy {
