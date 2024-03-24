@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kr.ac.tukorea.whereareu.R
 import kr.ac.tukorea.whereareu.databinding.DialogSettingUpdateTimeBinding
 import kr.ac.tukorea.whereareu.databinding.FragmentNokSettingBinding
@@ -16,6 +17,7 @@ import kr.ac.tukorea.whereareu.presentation.ModifyUserInfoFragment
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.nok.home.NokHomeViewModel
 
+@AndroidEntryPoint
 class NokSettingFragment: BaseFragment<FragmentNokSettingBinding>(R.layout.fragment_nok_setting) {
     private val viewModel: NokHomeViewModel by activityViewModels()
     override fun initObserver() {
@@ -48,9 +50,6 @@ class NokSettingFragment: BaseFragment<FragmentNokSettingBinding>(R.layout.fragm
             dialog.show(childFragmentManager, dialog.tag)
         }
 
-//        binding.modifyUserInfoBtn.setOnClickListener {
-//            findNavController().navigate(R.id.action_nokSettingFragment_to_modifyUserInfoFragment)
-//        }
         binding.modifyUserInfoBtn.setOnClickListener {
             val modifyUserInfoFragment = ModifyUserInfoFragment()
 

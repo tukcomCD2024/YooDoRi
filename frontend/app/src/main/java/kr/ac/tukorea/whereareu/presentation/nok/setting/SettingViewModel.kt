@@ -3,6 +3,7 @@ package kr.ac.tukorea.whereareu.presentation.nok.setting
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,7 +21,6 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     val repository: SettingRepositoryImpl
 ) : ViewModel() {
-    
     private val _updateUserName = MutableSharedFlow<ModifyUserInfoResponse>()
     val updateUserName = _updateUserName.asSharedFlow()
 
