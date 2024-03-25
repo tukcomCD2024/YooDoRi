@@ -114,7 +114,7 @@ def receive_dementia_info():
         _dementia_name = dementia_data.get('name')
         _dementia_phonenumber = dementia_data.get('phoneNumber')
 
-        duplicate_dementia = dementia_info.query.filter(and_(dementia_info.dementia_name == _dementia_name, dementia_info.dementia_phonenumber == _dementia_phonenumber)).first()
+        duplicate_dementia = dementia_info.query.filter_by(dementia_phonenumber = _dementia_phonenumber).first() # 전화번호는 고유값이므로 전화번호로 중복 확인
         if duplicate_dementia:
 
             _dementia_key = duplicate_dementia.dementia_key
@@ -125,7 +125,6 @@ def receive_dementia_info():
             response_data = {'status': 'success', 'message': 'Dementia paitient data received successfully', 'result': result}
 
             print('[system] dementia info {} already exists'.format(_dementia_name))
-        
         else:
             # 인증번호 생성
             for _ in range(10):
@@ -522,14 +521,13 @@ def get_user_info():
         response_data = {'status': 'error', 'message': str(e)}
         return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
 
-#@analyze_schedule.route('/analyze-meaningful-location', methods=['GET'])
-@scheduler.task('cron', id='analyze_meaningful_location', hour=0, minute=0, second=0, timezone='Asia/Seoul')
+'''
+@scheduler.task('cron', id='analyze_meaningful_location', hour=0, minute=0, second=0, timezone='Asia/Seoul', misfire_grace_time=120)
 def analyze_meaningful_location():
     try:
         with scheduler.app.app_context():
             today = datetime.datetime.now()
-            #test = today - datetime.timedelta(days=4)
-            #test = test.strftime('%Y-%m-%d')
+            today = today.strftime('%Y-%m-%d')
 
             print('[system] {} dementia meaningful location data analysis started'.format(today))
             
@@ -578,3 +576,4 @@ def analyze_meaningful_location():
     except Exception as e:
         print(e)
         return str(e)
+'''
