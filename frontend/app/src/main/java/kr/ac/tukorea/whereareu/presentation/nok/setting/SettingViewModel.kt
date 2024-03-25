@@ -24,6 +24,15 @@ class SettingViewModel @Inject constructor(
     private val _updateUserName = MutableSharedFlow<ModifyUserInfoResponse>()
     val updateUserName = _updateUserName.asSharedFlow()
 
+    private val _updateUserPhone = MutableSharedFlow<ModifyUserInfoResponse>()
+    val updateUserPhone = _updateUserPhone.asSharedFlow()
+
+    private val _updateOtherUserName = MutableSharedFlow<ModifyUserInfoResponse>()
+    val updateOtherUserName = _updateOtherUserName.asSharedFlow()
+
+    private val _updateOtherUserPhone = MutableSharedFlow<ModifyUserInfoResponse>()
+    val updateOtherUserPhone = _updateOtherUserPhone.asSharedFlow()
+
     fun setUpdateUserName(request: ModifyUserInfoRequest){
         viewModelScope.launch(Dispatchers.IO){
             repository.sendModifyUserInfo(request).onSuccess {
@@ -32,4 +41,5 @@ class SettingViewModel @Inject constructor(
             }
         }
     }
+    fun
 }

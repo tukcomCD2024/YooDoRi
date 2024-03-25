@@ -89,6 +89,7 @@ class ModifyUserInfoFragment :
                     }
                 }
             }
+
             binding.finishBtn.setOnClickListener {
                 if(userNameEt.text.isBlank() && userPhoneEt.text.isBlank() && otherUserNameEt.text.isBlank() && otherUserPhoneEt.text.isBlank()){
                     showMessage("변경 사항이 없습니다")
@@ -101,20 +102,23 @@ class ModifyUserInfoFragment :
                     if (!validUserPhone()) "전화번호 형식이 다릅니다.\n예시) 010-1234-5678" else null
                 binding.otherUserPhoneEt.error =
                     if (!validOtherUserPhone()) "전화번호 형식이 다릅니다.\n예시) 010-1234-5678" else null
+
+                val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+                val key = spf.getString("key", "")
+
+                viewModel.setUpdateUserName(ModifyUserInfoRequest(0,0, key, binding.userNameEt.text.toString().trim(),""))
             }
         }
     }
-
+//    fun onCLickFinishBtn() {
+//        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+//        viewModel.setUpdateUserName(
+//            ModifyUserInfoRequest(0, 0, spf.getString("key", ""), binding.userNameEt.text.toString().trim(), "")
+//        )
+//    }
     private fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
-    fun onCLickFinishBtn() {
-        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-        viewModel.setUpdateUserName(
-            ModifyUserInfoRequest(0, 0, spf.getString("key", ""), binding.userNameEt.text.toString().trim(), "")
-        )
-    }
-
     fun onClickBackBtn() {
 //        navigator.popBackStack()
         requireActivity().supportFragmentManager.popBackStack()
