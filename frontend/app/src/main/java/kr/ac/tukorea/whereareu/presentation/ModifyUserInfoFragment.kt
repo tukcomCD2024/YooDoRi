@@ -70,14 +70,6 @@ class ModifyUserInfoFragment : BaseFragment<FragmentModifyUserInfoBinding>(R.lay
             binding.finishBtn.setOnClickListener {
                 binding.userNameEt.error = if(!validUserName()) "최소 2자의 한글을 입력해주세요" else null
                 binding.otherUserNameEt.error = if(!validOtherUserName()) "최소 2자의 한글을 입력해주세요" else null
-//                if (!validUserPhone()){
-//                    binding.userPhoneEt.error = "전화번호 형식이 다릅니다.\n예시) 010-1234-5678"
-//                    return
-//                }
-//                if (!validOtherUserPhone()){
-//                    binding.otherUserPhoneEt.error = "전화번호 형식이 다릅니다.\n예시) 010-1234-5678"
-//                    return
-//                }
                 binding.userPhoneEt.error = if(!validUserPhone()) "전화번호 형식이 다릅니다.\n예시) 010-1234-5678" else null
                 binding.otherUserPhoneEt.error = if(!validOtherUserPhone()) "전화번호 형식이 다릅니다.\n예시) 010-1234-5678" else null
 
@@ -89,13 +81,14 @@ class ModifyUserInfoFragment : BaseFragment<FragmentModifyUserInfoBinding>(R.lay
         }
     }
     fun onCLickFinishBtn(){
-        val spf = requireActivity().getSharedPreferences("Usewr", MODE_PRIVATE)
+        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
         viewModel.setUpdateUserName(
             ModifyUserInfoRequest(0,0, spf.getString("key", ""), binding.userNameEt.text.toString().trim(), "")
         )
     }
     fun onClickBackBtn() {
-        navigator.popBackStack()
+//        navigator.popBackStack()
+        requireActivity().supportFragmentManager.popBackStack()
     }
 
     private fun validUserName() = !binding.userNameEt.text.isNullOrBlank()
