@@ -21,7 +21,7 @@ user_login_routes = Blueprint('user_login_routes', __name__)
 user_info_modification_routes = Blueprint('user_info_modification_routes', __name__)
 caculate_dementia_avarage_walking_speed_routes = Blueprint('caculate_dementia_avarage_walking_speed', __name__)
 get_user_info_routes = Blueprint('get_user_info', __name__)
-analyze_schedule = Blueprint('analyze_schedule', __name__)
+update_rate_routes = Blueprint('update_rate', __name__)
 
 # 상태코드 정의
 SUCCESS = 200
@@ -385,18 +385,19 @@ def modify_user_info():
         data = request.json
 
         is_dementia = data.get('isDementia')
-        changeOption = data.get('changeOption') # 0: 전화번호 변경, 1: 이름 변경, 2: 업데이트 주기 변경
-        update_rate = data.get('updateRate')
+        before_name = data.get('name')
+        before_phonenumber = data.get('phoneNumber')
 
         if is_dementia == 0: # 보호자
             existing_nok = nok_info.query.filter_by(nok_key=data.get('key')).first()
             if existing_nok:
-                if changeOption == 0: # 전화번호 변경
-                    existing_nok.nok_phonenumber = data.get('phoneNumber')
-                elif changeOption == 1: # 이름 변경
-                    existing_nok.nok_name = data.get('name')
-                elif changeOption == 2:
-                    existing_nok.update_rate = update_rate
+
+                # 수정된 정보를 제외한 나머지 정보들은 기존의 값을 그대로 수신
+                if not existing_nok.nok_name == before_name:
+                    existing_nok.nok_name = before_name
+                
+                if not existing_nok.nok_phonenumber == before_phonenumber:
+                    existing_nok.nok_phonenumber = before_phonenumber
 
                 db.session.commit()
 
@@ -421,12 +422,11 @@ def modify_user_info():
         elif is_dementia == 1: # 보호 대상자
             existing_dementia = dementia_info.query.filter_by(dementia_key=data.get('key')).first()
             if existing_dementia:
-                if changeOption == 0: # 전화번호 변경
-                    existing_dementia.nok_phonenumber = data.get('phoneNumber')
-                elif changeOption == 1: # 이름 변경
-                    existing_dementia.nok_name = data.get('name')
-                elif changeOption == 2:
-                    existing_dementia.update_rate = update_rate
+                if not existing_dementia.dementia_name == before_name:
+                    existing_dementia.dementia_name = before_name
+                
+                if not existing_dementia.dementia_phonenumber == before_phonenumber:
+                    existing_dementia.dementia_phonenumber = before_phonenumber
                 
 
                 db.session.commit()
@@ -451,6 +451,7 @@ def modify_user_info():
         response_data = {'status': 'error', 'message': str(e)}
         return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
 
+    
 @caculate_dementia_avarage_walking_speed_routes.route('/caculate-dementia-avarage-walking-speed', methods=['POST'])
 def caculate_dementia_average_walking_speed():
     try:
