@@ -1,8 +1,7 @@
+from pyclustering.cluster.gmeans import gmeans
+from collections import Counter
 import numpy as np
 import pandas as pd
-import os
-import sys
-from pyclustering.cluster.gmeans import gmeans
 
 class LocationAnalyzer:
     def __init__(self, filename):
@@ -28,8 +27,8 @@ class LocationAnalyzer:
             line = data[i].split(',')
             latitude.append(line[0])    # 위도
             longitude.append(line[1])   # 경도
-            date.append(line[5])        # 날짜
-            time.append(line[6])        # 시간
+            date.append(line[2])        # 날짜
+            time.append(line[3])        # 시간
 
         df = pd.DataFrame({"latitude":latitude, "longitude":longitude, "date":date, "time":time})
 
@@ -38,6 +37,11 @@ class LocationAnalyzer:
         df['longitude'] = df['longitude'].astype(float)
         df['datetime'] = pd.to_datetime(df['date'] + ' ' + df['time'], format='%Y-%m-%d %H:%M:%S')
         df['datetime'] = df['datetime'].dt.floor('T')
+        # 시간대와 요일 추가
+        # 시간대 형식 : f00t04 f20t24
+        # 4시간 단위로 분리
+        df['hour_block'] = 'f' + ((df['datetime'].dt.hour) // 4 * 4).astype(str).str.zfill(2) + 't' + ((df['datetime'].dt.hour + 4) // 4 * 4).astype(str).str.zfill(2)
+        df['day_of_week'] = df['datetime'].dt.day_name()
         df = df.drop(['date', 'time'], axis=1)
         df = df.drop_duplicates(['datetime'], ignore_index=True)
 
@@ -63,27 +67,49 @@ class LocationAnalyzer:
 
         clusters, centers = self.gmeansFit(self.df)
 
-        dataDf = pd.DataFrame({"clusters":clusters, "centers":centers})
+        data_df = pd.DataFrame({"clusters":clusters, "centers":centers})
+        
+        for k in range(len(data_df.clusters)):
+            if (len(data_df.clusters[k]) < 10):
+                data_df.drop(index=k, inplace=True)
+        data_df = data_df.sort_index(axis=1)
+        data_df = data_df.reset_index(drop=True)
     
-        # 클러스터의 수가 10개 이하면 의미 장소의 중요도가 낮다고 판단해 제거
-        for k in range(len(dataDf.clusters)):
-            if (len(dataDf.clusters[k]) < 10):
-                dataDf.drop(index=k, inplace=True)
-        dataDf = dataDf.sort_index(axis=1)
-        dataDf = dataDf.reset_index(drop=True)
-    
-        # 이중 리스트 형태로 변환
-        result = dataDf.centers.values.tolist()
+        self.df['clusterNo'] = -1
+        for i in range(len(data_df)):
+            for j in range(len(data_df['clusters'].iloc[i])):
+                k = data_df['clusters'].iloc[i][j]
+                self.df['clusterNo'].iloc[k] = i
 
-        return result
+        self.df = self.df[self.df['clusterNo'] != -1]
+
+
+        data_df['hour_block'] = 0
+        data_df['day_of_week'] = 0
+        for i in range(max(self.df['clusterNo'])+1):
+        
+            counter = Counter(self.df[self.df['clusterNo'] == i]['hour_block'])
+            most_hour_value = counter.most_common(1)[0][0]
+
+            counter = Counter(self.df[self.df['clusterNo'] == i]['day_of_week'])
+            most_day_value = counter.most_common(1)[0][0]
+
+            data_df['hour_block'].iloc[i] = most_hour_value
+            data_df['day_of_week'].iloc[i] = most_day_value
+
+
+        return data_df
+    
+
 
 if __name__ == '__main__':
     # 파일 경로 가져오기
-    # 지금은 데이터가 저장된 파일의 경로를 실행할 때 입력
-    filePath = r"C:\Users\sk002\OneDrive\바탕 화면\학교\Yoodori\testdata.txt"
+    filePath = r"C:\Users\sk002\OneDrive\문서\카카오톡 받은 파일\location_data_for_dementia_key_253050_2024-03-19.txt"
     la = LocationAnalyzer(filePath)
 
     data = la.gmeansFunc()
     
     print(data)
+
+    
     
