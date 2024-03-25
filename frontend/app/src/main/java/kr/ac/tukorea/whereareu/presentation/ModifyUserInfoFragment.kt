@@ -73,6 +73,12 @@ class ModifyUserInfoFragment :
 //        )
 //    }
 
+    fun onClickUpdateUserInfoBtn() {
+
+    }
+    fun onClickUpdateTimeBtn(){
+
+    }
     fun onClickBackBtn() {
 //        navigator.popBackStack()
         requireActivity().supportFragmentManager.popBackStack()

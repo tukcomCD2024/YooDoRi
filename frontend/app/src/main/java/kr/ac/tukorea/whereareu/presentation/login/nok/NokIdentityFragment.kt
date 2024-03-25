@@ -13,7 +13,6 @@ import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.showKeyboard
 
-@AndroidEntryPoint
 class NokIdentityFragment :
     BaseFragment<FragmentNokIdentityBinding>(R.layout.fragment_nok_identity) {
         private val viewModel: LoginViewModel by activityViewModels()

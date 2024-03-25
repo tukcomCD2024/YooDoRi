@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.login.PatientSettingFragment">
+
+    <data>
+
+        <variable
+            name="view"
+            type="kr.ac.tukorea.whereareu.presentation.ModifyUserInfoFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <ImageView
+            android:id="@+id/profile_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/user_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="보호자"
+            android:textAppearance="@style/TextAppearance.App.16sp.ExtraBold"
+            app:layout_constraintStart_toEndOf="@+id/profile_iv"
+            app:layout_constraintTop_toTopOf="@+id/profile_iv" />
+
+        <TextView
+            android:id="@+id/user_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.16sp.ExtraBold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/user_type_tv"
+            app:layout_constraintStart_toEndOf="@+id/user_type_tv"
+            tools:text="황순권" />
+
+        <TextView
+            android:id="@+id/user_phone_number_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.16sp.Regular"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_iv"
+            app:layout_constraintStart_toEndOf="@+id/profile_iv"
+            tools:text="010-0000-0000" />
+
+        <View
+            android:id="@+id/profile_v"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="#D9D9D9"
+            app:layout_constraintTop_toBottomOf="@+id/profile_iv" />
+
+        <TextView
+            android:id="@+id/other_user_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="보호대상자"
+            android:textAppearance="@style/TextAppearance.App.16sp.ExtraBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_v" />
+
+        <TextView
+            android:id="@+id/other_user_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.16sp.ExtraBold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/other_user_type_tv"
+            app:layout_constraintStart_toEndOf="@+id/other_user_type_tv"
+            tools:text="박승호" />
+
+        <TextView
+            android:id="@+id/other_user_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.16sp.Regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/other_user_type_tv"
+            tools:text="010-0000-0000" />
+
+        <View
+            android:id="@+id/other_user_profile_v"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#D9D9D9"
+            app:layout_constraintTop_toBottomOf="@+id/other_user_phone_tv" />
+
+        <TextView
+            android:id="@+id/update_user_info_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="사용자 정보 수정"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/other_user_profile_v" />
+
+        <ImageView
+            android:id="@+id/user_info_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:scaleX="-1"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="@+id/update_user_info_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/update_user_info_tv" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/update_user_info_tv" />
+
+        <TextView
+            android:id="@+id/setting_update_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20.5dp"
+            android:onClick="@{() -> view.onClickUpdateUserInfoBtn()}"
+            android:text="업데이트 주기"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/update_user_info_tv" />
+
+        <ImageView
+            android:id="@+id/update_time_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:onClick="@{() -> view.onClickUpdateTimeBtn()}"
+            android:scaleX="-1"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="@+id/setting_update_time_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/setting_update_time_tv" />
+
+        <TextView
+            android:id="@+id/update_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            android:textColor="#47B8E0"
+            app:layout_constraintBaseline_toBaselineOf="@+id/setting_update_time_tv"
+            app:layout_constraintEnd_toStartOf="@+id/update_time_min_tv"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/update_time_min_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="분"
+            android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
+            android:textColor="#47B8E0"
+            app:layout_constraintBaseline_toBaselineOf="@+id/setting_update_time_tv"
+            app:layout_constraintEnd_toStartOf="@+id/update_time_btn" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/setting_update_time_tv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
