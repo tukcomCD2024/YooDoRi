@@ -450,7 +450,55 @@ def modify_user_info():
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
         return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
+    
+@update_rate_routes.route('/update-rate', methods=['POST'])
+def modify_updating_rate():
+    try:
+        data = request.json
 
+        is_dementia = data.get('isDementia')
+        _key = data.get('key')
+        _update_rate = data.get('updateRate')
+
+        # 보호자와 보호대상자 테이블 모두 업데이트
+
+        if is_dementia == 0: # 보호자
+            existing_nok = nok_info.query.filter_by(nok_key=_key).first()
+            if existing_nok:
+
+                connected_dementia = dementia_info.query.filter_by(dementia_key = existing_nok.dementia_info_key).first()
+                existing_nok.update_rate = _update_rate
+                connected_dementia.update_rate = _update_rate
+                
+            else:
+                response_data = {'status': 'error', 'message': 'User info not found'}
+                return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+            
+        elif is_dementia == 1: # 보호 대상자
+            existing_dementia = dementia_info.query.filter_by(dementia_key=_key).first()
+            if existing_dementia:   
+                
+                connected_nok = nok_info.query.filter_by(dementia_info_key = existing_dementia.dementia_key).all()
+                existing_dementia.update_rate = _update_rate
+                for nok in connected_nok:
+                    nok.update_rate = _update_rate
+        
+            else:
+                response_data = {'status': 'error', 'message': 'User info not found'}
+                return jsonify(response_data), KEYNOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+            
+        db.session.commit()
+
+        response_data = {'status': 'success', 'message': 'Update rate successfully'}
+        
+        json_response = jsonify(response_data)
+        json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
+
+        return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+    
+    except Exception as e:
+        response_data = {'status': 'error', 'message': str(e)}
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
     
 @caculate_dementia_avarage_walking_speed_routes.route('/caculate-dementia-avarage-walking-speed', methods=['POST'])
 def caculate_dementia_average_walking_speed():
