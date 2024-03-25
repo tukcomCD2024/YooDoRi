@@ -41,5 +41,12 @@ class SettingViewModel @Inject constructor(
             }
         }
     }
-    fun
+    fun setUpdateUserPhone(request: ModifyUserInfoRequest){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.sendModifyUserInfo(request).onSuccess {
+                Log.d("UpdateUserPhone","UserPhoneChanged")
+                _updateUserPhone.emit(ModifyUserInfoResponse(it.result))
+            }
+        }
+    
 }
