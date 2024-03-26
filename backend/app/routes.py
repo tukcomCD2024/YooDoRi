@@ -1,12 +1,10 @@
 from flask import Blueprint, request, jsonify
-from .models import db, dementia_info, nok_info, location_info, meaningful_location_info, sensor_info
+from .models import db, dementia_info, nok_info, location_info, meaningful_location_info
 from .random_generator import RandomNumberGenerator
 from .update_user_status import UpdateUserStatus
 from sqlalchemy import and_
-from .LocationAnalyzer import LocationAnalyzer
 from .extentions import scheduler
 
-import datetime
 import json
 
 
@@ -22,6 +20,7 @@ user_info_modification_routes = Blueprint('user_info_modification_routes', __nam
 caculate_dementia_avarage_walking_speed_routes = Blueprint('caculate_dementia_avarage_walking_speed', __name__)
 get_user_info_routes = Blueprint('get_user_info', __name__)
 update_rate_routes = Blueprint('update_rate', __name__)
+send_meaningful_location_info_routes = Blueprint('send-meaningful-location-info', __name__)
 
 # 상태코드 정의
 SUCCESS = 200
@@ -566,6 +565,42 @@ def get_user_info():
             return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
 
     
+    except Exception as e:
+        response_data = {'status': 'error', 'message': str(e)}
+        return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
+    
+@send_meaningful_location_info_routes.route('/send-meaningful-location-info', methods=['GET'])
+def send_meaningful_location_info():
+    try:
+        
+
+        _key = request.args.get('dementiaKey')
+
+        meaningful_location_list = meaningful_location_info.query.filter_by(dementia_key=_key).all()
+
+        if meaningful_location_list:
+            result = []
+            for location in meaningful_location_list:
+                result.append({
+                    'latitude': location.latitude,
+                    'longitude': location.longitude,
+                    'date' : location.day_of_the_week,
+                    "time" : location.time
+                })
+            response_data = {'status': 'success', 'message': 'Meaningful location data sent successfully', 'result': result}
+
+            json_response = jsonify(response_data)
+            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
+
+            return json_response, SUCCESS, {'Content-Type': 'application/json; charset = utf-8' }
+        else:
+            response_data = {'status': 'error', 'message': 'Meaningful location data not found'}
+
+            json_response = jsonify(response_data)
+            json_response.headers['Content-Length'] = len(json_response.get_data(as_text=True))
+
+            return json_response, LOCDATANOTFOUND, {'Content-Type': 'application/json; charset = utf-8' }
+        
     except Exception as e:
         response_data = {'status': 'error', 'message': str(e)}
         return jsonify(response_data), UNDEFERR, {'Content-Type': 'application/json; charset = utf-8' }
