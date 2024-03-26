@@ -119,11 +119,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/other_user_profile_v" />
 
-        <ImageView
+        <!--        <ImageView-->
+        <!--            android:id="@+id/user_info_btn"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginEnd="10dp"-->
+        <!--            android:scaleX="-1"-->
+        <!--            android:src="@drawable/ic_arrow_back_24"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@+id/update_user_info_tv"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/update_user_info_tv" />-->
+        <ImageButton
             android:id="@+id/user_info_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:background="@color/white"
             android:scaleX="-1"
             android:src="@drawable/ic_arrow_back_24"
             app:layout_constraintBottom_toBottomOf="@+id/update_user_info_tv"
@@ -148,12 +159,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/update_user_info_tv" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/update_time_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:onClick="@{() -> view.onClickUpdateTimeBtn()}"
+            android:background="@color/white"
             android:scaleX="-1"
             android:src="@drawable/ic_arrow_back_24"
             app:layout_constraintBottom_toBottomOf="@+id/setting_update_time_tv"
