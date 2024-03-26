@@ -29,9 +29,15 @@ class SettingViewModel @Inject constructor(
 
     fun setUpdateUserInfo(request: ModifyUserInfoRequest){
         viewModelScope.launch(Dispatchers.IO){
-            repository.sendModifyUserInfo(request).onSuccess {
-                Log.d("UpdateUserInfo","UserInfoChanged")
-                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
+            repository.sendModifyUserInfo(request).onSuccess {response ->
+//                Log.d("UpdateUserInfo","UserInfoChanged")
+//                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
+                Log.d("UpdateUserInfo", "UserInfoChanged")
+                response?.let {
+                    _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
+                } ?: run {
+                    Log.e("UpdateUserInfo", "ModifyUserInfoResponse is null")
+                }
             }
         }
     }
