@@ -21,47 +21,25 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     val repository: SettingRepositoryImpl
 ) : ViewModel() {
-    private val _updateUserName = MutableSharedFlow<ModifyUserInfoResponse>()
-    val updateUserName = _updateUserName.asSharedFlow()
+    private val _updateUserInfo = MutableSharedFlow<ModifyUserInfoResponse>()
+    val updateUserInfo = _updateUserInfo.asSharedFlow()
 
-    private val _updateUserPhone = MutableSharedFlow<ModifyUserInfoResponse>()
-    val updateUserPhone = _updateUserPhone.asSharedFlow()
+    private val _updateOtherUserInfo = MutableSharedFlow<ModifyUserInfoResponse>()
+    val updateOtherUserInfo = _updateOtherUserInfo.asSharedFlow()
 
-    private val _updateOtherUserName = MutableSharedFlow<ModifyUserInfoResponse>()
-    val updateOtherUserName = _updateOtherUserName.asSharedFlow()
-
-    private val _updateOtherUserPhone = MutableSharedFlow<ModifyUserInfoResponse>()
-    val updateOtherUserPhone = _updateOtherUserPhone.asSharedFlow()
-
-    fun setUpdateUserName(request: ModifyUserInfoRequest){
+    fun setUpdateUserInfo(request: ModifyUserInfoRequest){
         viewModelScope.launch(Dispatchers.IO){
             repository.sendModifyUserInfo(request).onSuccess {
-                Log.d("UpdateUserName","UserNameChanged")
-                _updateUserName.emit(ModifyUserInfoResponse(it.result))
+                Log.d("UpdateUserInfo","UserInfoChanged")
+                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
             }
         }
     }
-    fun setUpdateUserPhone(request: ModifyUserInfoRequest) {
+    fun setUpdateOtherUserInfo(request: ModifyUserInfoRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendModifyUserInfo(request).onSuccess {
-                Log.d("UpdateUserPhone", "UserPhoneChanged")
-                _updateUserPhone.emit(ModifyUserInfoResponse(it.result))
-            }
-        }
-    }
-    fun setUpdateOtherUserName(request: ModifyUserInfoRequest){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.sendModifyUserInfo(request).onSuccess {
-                Log.d("UpdateOtherUserName","OtherUserNameChanged")
-                _updateOtherUserName.emit(ModifyUserInfoResponse(it.result))
-            }
-        }
-    }
-    fun setUpdateOtherUserPhone(request: ModifyUserInfoRequest) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.sendModifyUserInfo(request).onSuccess {
-                Log.d("UpdateOtherUserPhone", "OtherUserPhoneChanged")
-                _updateOtherUserPhone.emit(ModifyUserInfoResponse(it.result))
+                Log.d("UpdateOtherUserInfo", "OtherUserInfoChanged")
+                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
             }
         }
     }

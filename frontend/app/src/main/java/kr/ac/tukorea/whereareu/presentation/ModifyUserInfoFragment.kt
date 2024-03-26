@@ -60,24 +60,9 @@ class ModifyUserInfoFragment :
                 val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
                 val key = spf.getString("key", "")
 
-                viewModel.setUpdateUserName(ModifyUserInfoRequest(0, 0, key, binding.userNameEt.text.toString().trim(), ""))
-                viewModel.setUpdateUserPhone(ModifyUserInfoRequest(0, 1, key, "", binding.userPhoneEt.text.toString().trim()))
+                viewModel.setUpdateUserInfo(ModifyUserInfoRequest(0, key, binding.userNameEt.text.toString().trim(), binding.userPhoneEt.text.toString().trim()))
             }
         }
-    }
-
-    //    fun onCLickFinishBtn() {
-//        val spf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
-//        viewModel.setUpdateUserName(
-//            ModifyUserInfoRequest(0, 0, spf.getString("key", ""), binding.userNameEt.text.toString().trim(), "")
-//        )
-//    }
-
-    fun onClickUpdateUserInfoBtn() {
-
-    }
-    fun onClickUpdateTimeBtn(){
-
     }
     fun onClickBackBtn() {
 //        navigator.popBackStack()

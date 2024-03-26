@@ -153,7 +153,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20.5dp"
-            android:onClick="@{() -> view.onClickUpdateUserInfoBtn()}"
             android:text="업데이트 주기"
             android:textAppearance="@style/TextAppearance.App.20sp.ExtraBold"
             app:layout_constraintStart_toStartOf="parent"
