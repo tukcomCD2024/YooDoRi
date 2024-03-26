@@ -28,42 +28,43 @@ class NokSettingFragment: BaseFragment<FragmentNokSettingBinding>(R.layout.fragm
 //        val upTime = requireActivity().getSharedPreferences("UpdateTime", MODE_PRIVATE)
         binding.userNameTv.text = spf.getString("name", "")
 
-        val isDementia = spf.getBoolean("isDementia", true)
-        binding.userTypeTv.text = if (isDementia) "보호대상자" else "보호자"
-        binding.otherNameTv.text = if (isDementia) "보호자 이름" else "보호대상자 이름"
-        binding.otherPhoneTv.text = if (isDementia) "보호자 전화번호" else "보호대상자 전화번호"
+//        val isDementia = spf.getBoolean("isDementia", true)
+//        binding.userTypeTv.text = if (isDementia) "보호대상자" else "보호자"
+//        binding.otherNameTv.text = if (isDementia) "보호자 이름" else "보호대상자 이름"
+//        binding.otherPhoneTv.text = if (isDementia) "보호자 전화번호" else "보호대상자 전화번호"
         binding.userNameTv.text = spf.getString("name", "")
         binding.userPhoneNumberTv.text = spf.getString("phone", "")
 
-        binding.otherNameEditTv.setText(otherSpf.getString("name", ""))
-        binding.otherPhoneNumberTv.setText((otherSpf.getString("phone", "")))
+        binding.otherNameTv.setText(otherSpf.getString("name", ""))
+        binding.otherPhoneTv.setText((otherSpf.getString("phone", "")))
 
         /*binding.testBtn.setOnClickListener {
             val duration = binding.durationEt.text.toString().toLong()
             viewModel.setUpdateDuration(duration * 10000)
         }*/
-        binding.updateEditBtn.setOnClickListener {
-            val dialog = SetUpdateTimeDialogFragment{time ->
-                viewModel.setUpdateDuration(time.toLong())
-                binding.updateTimeTv.text = time
-            }
-            dialog.show(childFragmentManager, dialog.tag)
-        }
 
-        binding.modifyUserInfoBtn.setOnClickListener {
-            val modifyUserInfoFragment = ModifyUserInfoFragment()
-
-            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-            // Replace 명령을 사용하여 현재 프래그먼트를 ModifyUserInfoFragment로 교체
-            fragmentTransaction.replace(R.id.fragmentContainer, modifyUserInfoFragment)
-
-            // 백스택에 이전 프래그먼트를 추가하여 뒤로 가기를 지원합니다.
-            fragmentTransaction.addToBackStack(null)
-
-            // 트랜잭션을 커밋합니다.
-            fragmentTransaction.commit()
-        }
+//        binding.updateEditBtn.setOnClickListener {
+//            val dialog = SetUpdateTimeDialogFragment{time ->
+//                viewModel.setUpdateDuration(time.toLong())
+//                binding.updateTimeTv.text = time
+//            }
+//            dialog.show(childFragmentManager, dialog.tag)
+//        }
+//
+//        binding.modifyUserInfoBtn.setOnClickListener {
+//            val modifyUserInfoFragment = ModifyUserInfoFragment()
+//
+//            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+//            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+//
+//            // Replace 명령을 사용하여 현재 프래그먼트를 ModifyUserInfoFragment로 교체
+//            fragmentTransaction.replace(R.id.fragmentContainer, modifyUserInfoFragment)
+//
+//            // 백스택에 이전 프래그먼트를 추가하여 뒤로 가기를 지원합니다.
+//            fragmentTransaction.addToBackStack(null)
+//
+//            // 트랜잭션을 커밋합니다.
+//            fragmentTransaction.commit()
+//        }
     }
 }
