@@ -5,6 +5,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.edit
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,6 +19,7 @@ import kr.ac.tukorea.whereareu.presentation.nok.setting.SettingViewModel
 import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.hideKeyboard
 import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.setOnEditorActionListener
 import kr.ac.tukorea.whereareu.util.extension.EditTextUtil.showKeyboard
+import kr.ac.tukorea.whereareu.util.extension.repeatOnStarted
 
 @AndroidEntryPoint
 class ModifyUserInfoFragment :
@@ -28,7 +30,39 @@ class ModifyUserInfoFragment :
     }
 
     override fun initObserver() {
-
+        binding.viewModel = viewModel
+//        repeatOnStarted {
+//            viewModel.updateUserInfo.collect{userInfo ->
+//                userInfo?.let {
+//                    // 수정한 정보 저장
+//                    val nokSpf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+//                    nokSpf.edit {
+//                        putString("name", binding.userNameEt.text.toString())
+//                        putString("phone", binding.userPhoneEt.text.toString())
+//                        commit()
+//                    }
+//                }
+//            }
+//        }
+        viewModel?.let { // viewModel이 null이 아닌 경우에만 실행
+            repeatOnStarted {
+                it.updateUserInfo?.collect { userInfo ->
+                    userInfo?.let { // userInfo가 null이 아닌 경우에만 실행
+                        // 수정한 정보 저장
+                        val nokSpf = requireActivity().getSharedPreferences("User", MODE_PRIVATE)
+                        nokSpf.edit {
+                            putString("name", binding.userNameEt.text.toString())
+                            putString("phone", binding.userPhoneEt.text.toString())
+                            commit()
+                        }
+                    }
+                }
+            }
+        } ?: run {
+            // viewModel이 null인 경우 처리할 로직 작성
+            // 예를 들어, Toast 메시지를 표시하거나 로그를 출력할 수 있습니다.
+            Toast.makeText(requireContext(), "ViewModel이 null입니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun initView() {

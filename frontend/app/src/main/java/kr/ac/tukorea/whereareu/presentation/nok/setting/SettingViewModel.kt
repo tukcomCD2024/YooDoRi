@@ -27,25 +27,25 @@ class SettingViewModel @Inject constructor(
     private val _updateOtherUserInfo = MutableSharedFlow<ModifyUserInfoResponse>()
     val updateOtherUserInfo = _updateOtherUserInfo.asSharedFlow()
 
-    fun setUpdateUserInfo(request: ModifyUserInfoRequest){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.sendModifyUserInfo(request).onSuccess {response ->
-//                Log.d("UpdateUserInfo","UserInfoChanged")
-//                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
+    fun setUpdateUserInfo(request: ModifyUserInfoRequest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.sendModifyUserInfo(request).onSuccess {
                 Log.d("UpdateUserInfo", "UserInfoChanged")
-                response?.let {
-                    _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
-                } ?: run {
-                    Log.e("UpdateUserInfo", "ModifyUserInfoResponse is null")
-                }
+                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.message, it.status))
+//                Log.d("UpdateUserInfo", "UserInfoChanged")
+//                response?.let {
+//                    _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.message, it.status))
+//                } ?: run {
+//                    Log.e("UpdateUserInfo", "ModirfyUserInfoResponse is null")
             }
         }
     }
+
     fun setUpdateOtherUserInfo(request: ModifyUserInfoRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendModifyUserInfo(request).onSuccess {
                 Log.d("UpdateOtherUserInfo", "OtherUserInfoChanged")
-                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.result))
+                _updateOtherUserInfo.emit(ModifyUserInfoResponse(it.message, it.status))
             }
         }
     }

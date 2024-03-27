@@ -9,6 +9,9 @@
         <variable
             name="view"
             type="kr.ac.tukorea.whereareu.presentation.ModifyUserInfoFragment" />
+        <variable
+            name="viewModel"
+            type="kr.ac.tukorea.whereareu.presentation.nok.setting.SettingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
