@@ -2,7 +2,7 @@ name: Depoly with Docker
 
 on:
   push:
-    branches: [develop_back]
+    branches: [github-action-test]
   
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
