@@ -34,9 +34,9 @@ jobs:
       
       - name: make Config File
         run: |
-        cd app
-        echo "class Config:" >> config.py
-        echo "        SQLALCHEMY_DATABASE_URI = '$DB_URL'" >> config.py
+          cd app
+          echo "class Config:" >> config.py
+          echo "        SQLALCHEMY_DATABASE_URI = '$DB_URL'" >> config.py
         env:
           DB_URL: ${{ secrets.DB_URL }}
 
@@ -55,5 +55,3 @@ jobs:
             DOCKER_IMAGE=${{ secrets.DOCKER_IMAGE }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-
-
