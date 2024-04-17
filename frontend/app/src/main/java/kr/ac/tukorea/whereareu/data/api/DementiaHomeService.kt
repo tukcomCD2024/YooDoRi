@@ -8,7 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface DementiaHomeService {
-    @POST("receive-location-info")
+    @POST("locations/dementias")
     suspend fun postLocationInfo(
         @Body request: LocationInfo
     ): Response<PostLocationInfoResponse>

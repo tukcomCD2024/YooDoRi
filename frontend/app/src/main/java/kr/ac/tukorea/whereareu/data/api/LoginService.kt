@@ -12,12 +12,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface LoginService {
-    @POST("receive-nok-info")
+    @POST("noks")
     suspend fun postNokIdentity(@Body request: NokIdentityRequest): Response<ResponseBody<NokIdentityResponse>>
 
-    @POST("receive-dementia-info")
+    @POST("dementias")
     suspend fun postDementiaIdentity(@Body request: DementiaIdentityRequest): Response<ResponseBody<DementiaIdentityResponse>>
 
-    @POST("is-connected")
+    @POST("connection")
     suspend fun postIsConnected(@Body request: CheckInterConnectRequest): Response<ResponseBody<CheckInterConnectResponse>>
 }
