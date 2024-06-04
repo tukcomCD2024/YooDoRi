@@ -50,8 +50,6 @@
             android:theme="@style/Theme.WhereAreU">
         </activity>
         <activity android:name="kr.ac.tukorea.whereareu.presentation.dementia.DementiaMainActivity" />
-        <activity android:name="kr.ac.tukorea.whereareu.presentation.KotlinActivity"
-            android:exported="true"/>
     </application>
 
 </manifest>

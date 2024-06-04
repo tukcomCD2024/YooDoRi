@@ -22,13 +22,10 @@ import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.CircleOverlay
-import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
-import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
@@ -61,104 +58,104 @@ class NokHomeFragment :
     override fun initObserver() {
         repeatOnStarted {
             viewModel.predictEvent.collect { predictEvent ->
-                handlePredictEvent(predictEvent)
+//                handlePredictEvent(predictEvent)
             }
         }
     }
 
-    private fun handlePredictEvent(event: NokHomeViewModel.PredictEvent) {
-        when (event) {
-            is NokHomeViewModel.PredictEvent.StartPredictEvent -> {
-                viewModel.getMeaningfulPlace()
-                //viewModel.searchWithKeyword("x", "y")
-                initBottomSheet()
-                initMeaningfulListRVA()
-                showLoadingDialog(requireContext())
-            }
-
-            is NokHomeViewModel.PredictEvent.DementiaLastInfoEvent -> {
-                dismissLoadingDialog()
-                val coord = LatLng(
-                    event.dementiaLastInfo.lastLatitude,
-                    event.dementiaLastInfo.lastLongitude
-                )
-                startCountDown(event.dementiaLastInfo.averageSpeed.div(3.6), coord)
-                binding.averageMovementSpeedTv.text =
-                    String.format("%.2fkm", event.dementiaLastInfo.averageSpeed)
-                naverMap?.locationOverlay?.isVisible = false
-
-            }
-
-            is NokHomeViewModel.PredictEvent.MeaningFulPlaceEvent -> {
-                meaningfulListRVA.submitList(event.meaningfulPlaceForList)
-
-                event.meaningfulPlaceForList.forEach { meaningfulPlace ->
-                    val latitude = meaningfulPlace.latitude
-                    val longitude = meaningfulPlace.longitude
-                    val marker = Marker()
-                    with(marker) {
-                        position = LatLng(latitude, longitude)
-                        icon = MarkerIcons.YELLOW
-                        captionText = meaningfulPlace.address
-                        captionRequestedWidth = 400
-                        map = naverMap
-                    }
-
-                    val infoWindow = InfoWindow()
-                    infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
-                        override fun getText(infoWindow: InfoWindow): CharSequence {
-                            return "예상 위치"
-                        }
-                    }
-                    infoWindow.open(marker)
-                }
-            }
-
-            is NokHomeViewModel.PredictEvent.SearchPoliceStationNearbyEvent -> {
-                event.policeStationList.forEach { policeStation ->
-                    val marker = Marker()
-                    with(marker) {
-                        position = LatLng(policeStation.y.toDouble(), policeStation.x.toDouble())
-                        icon = MarkerIcons.BLUE
-                        captionText = policeStation.placeName
-                        captionRequestedWidth = 400
-                        map = naverMap
-                    }
-                }
-            }
-
-            is NokHomeViewModel.PredictEvent.LastLocationEvent -> {
-                binding.lastLocationTv.text = event.lastAddress.address
-                val latitude = event.lastAddress.latitude
-                val longitude = event.lastAddress.longitude
-                naverMap?.moveCamera(CameraUpdate.scrollTo(LatLng(latitude, longitude)))
-                with(lastLocationMarker) {
-                    position = LatLng(latitude, longitude)
-                    icon = MarkerIcons.RED
-                    captionText = event.lastAddress.address
-                    captionRequestedWidth = 400
-                    map = naverMap
-                }
-
-                val infoWindow = InfoWindow()
-                infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
-                    override fun getText(infoWindow: InfoWindow): CharSequence {
-                        return "실종 직전 위치"
-                    }
-                }
-                infoWindow.open(lastLocationMarker)
-            }
-
-            is NokHomeViewModel.PredictEvent.StopPredictEvent -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    countDownJob?.cancelAndJoin()
-                    circleOverlay.isVisible = false
-                    binding.countDownT.text = "00:00"
-                    lastLocationMarker.map = null
-                }
-            }
-        }
-    }
+//    private fun handlePredictEvent(event: NokHomeViewModel.PredictEvent) {
+//        when (event) {
+//            is NokHomeViewModel.PredictEvent.StartPredictEvent -> {
+//                viewModel.getMeaningfulPlace()
+//                //viewModel.searchWithKeyword("x", "y")
+//                initBottomSheet()
+//                initMeaningfulListRVA()
+//                showLoadingDialog(requireContext())
+//            }
+//
+//            is NokHomeViewModel.PredictEvent.DementiaLastInfoEvent -> {
+//                dismissLoadingDialog()
+//                val coord = LatLng(
+//                    event.dementiaLastInfo.lastLatitude,
+//                    event.dementiaLastInfo.lastLongitude
+//                )
+//                startCountDown(event.dementiaLastInfo.averageSpeed.div(3.6), coord)
+//                binding.averageMovementSpeedTv.text =
+//                    String.format("%.2fkm", event.dementiaLastInfo.averageSpeed)
+//                naverMap?.locationOverlay?.isVisible = false
+//
+//            }
+//
+//            is NokHomeViewModel.PredictEvent.MeaningFulPlaceEvent -> {
+//                meaningfulListRVA.submitList(event.meaningfulPlaceForList)
+//
+//                event.meaningfulPlaceForList.forEach { meaningfulPlace ->
+//                    val latitude = meaningfulPlace.latitude
+//                    val longitude = meaningfulPlace.longitude
+//                    val marker = Marker()
+//                    with(marker) {
+//                        position = LatLng(latitude, longitude)
+//                        icon = MarkerIcons.YELLOW
+//                        captionText = meaningfulPlace.address
+//                        captionRequestedWidth = 400
+//                        map = naverMap
+//                    }
+//
+//                    val infoWindow = InfoWindow()
+//                    infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
+//                        override fun getText(infoWindow: InfoWindow): CharSequence {
+//                            return "예상 위치"
+//                        }
+//                    }
+//                    infoWindow.open(marker)
+//                }
+//            }
+//
+//            is NokHomeViewModel.PredictEvent.SearchPoliceStationNearbyEvent -> {
+//                event.policeStationList.forEach { policeStation ->
+//                    val marker = Marker()
+//                    with(marker) {
+//                        position = LatLng(policeStation.y.toDouble(), policeStation.x.toDouble())
+//                        icon = MarkerIcons.BLUE
+//                        captionText = policeStation.placeName
+//                        captionRequestedWidth = 400
+//                        map = naverMap
+//                    }
+//                }
+//            }
+//
+//            is NokHomeViewModel.PredictEvent.LastLocationEvent -> {
+//                binding.lastLocationTv.text = event.lastAddress.address
+//                val latitude = event.lastAddress.latitude
+//                val longitude = event.lastAddress.longitude
+//                naverMap?.moveCamera(CameraUpdate.scrollTo(LatLng(latitude, longitude)))
+//                with(lastLocationMarker) {
+//                    position = LatLng(latitude, longitude)
+//                    icon = MarkerIcons.RED
+//                    captionText = event.lastAddress.address
+//                    captionRequestedWidth = 400
+//                    map = naverMap
+//                }
+//
+//                val infoWindow = InfoWindow()
+//                infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
+//                    override fun getText(infoWindow: InfoWindow): CharSequence {
+//                        return "실종 직전 위치"
+//                    }
+//                }
+//                infoWindow.open(lastLocationMarker)
+//            }
+//
+//            is NokHomeViewModel.PredictEvent.StopPredictEvent -> {
+//                viewLifecycleOwner.lifecycleScope.launch {
+//                    countDownJob?.cancelAndJoin()
+//                    circleOverlay.isVisible = false
+//                    binding.countDownT.text = "00:00"
+//                    lastLocationMarker.map = null
+//                }
+//            }
+//        }
+//    }
 
     private fun updateDementiaMovementStatus(status: Int): String {
         return when (status) {
