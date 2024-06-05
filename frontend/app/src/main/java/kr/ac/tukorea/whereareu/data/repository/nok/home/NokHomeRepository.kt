@@ -16,8 +16,4 @@ interface NokHomeRepository {
     suspend fun getUserInfo(nokKey: String): NetworkResult<GetUserInfoResponse>
 
     suspend fun getDementiaLastInfo(request: DementiaKeyRequest): NetworkResult<DementiaLastInfoResponse>
-
-    suspend fun fetchPredictInfo(dementiaKey: String): NetworkResult<PredictResponse>
-
-    suspend fun fetchPredictInfoGura(dementiaKey: String): NetworkResult<PredictResponse>
 }
