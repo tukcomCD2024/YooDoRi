@@ -206,37 +206,6 @@ class NokHomeViewModel @Inject constructor(
         }
     }
 
-    fun predict() {
-        viewModelScope.launch {
-            val time = measureTimeMillis {
-                async { getDementiaLastInfo() }
-                async { getMeaningfulPlaces() }
-                async { fetchPredictInfoGura() }.await()
-                eventPredict(PredictEvent.PredictDone)
-            }
-            Log.d("after refactor time", time.toString())
-        }
-    }
-
-    private suspend fun getDementiaLastInfo() {
-        nokHomeRepository.getDementiaLastInfo(DementiaKeyRequest(_dementiaKey.value))
-            .onSuccess { response ->
-                Log.d("$tag getDementiaLastInfo", response.toString())
-                val averageSpeed = response.averageSpeed.div(3.6)
-                val latLng = LatLng(response.lastLatitude, response.lastLongitude)
-
-                eventPredict(PredictEvent.DisplayDementiaLastInfo(averageSpeed, latLng))
-
-                eventPredict(
-                    PredictEvent.DisplayDementiaLastLocation(
-                        LastLocation(latLng, response.addressName)
-                    )
-                )
-            }.onException {
-                Log.d("$tag error", it.toString())
-            }
-    }
-
     private suspend fun getMeaningfulPlaces() {
         nokHomeRepository.getMeaningfulPlace(_dementiaKey.value).onSuccess { response ->
             Log.d("$tag getMeaningfulPlaces", response.toString())
@@ -253,54 +222,6 @@ class NokHomeViewModel @Inject constructor(
             _meaningfulPlace.emit(meaningfulPlaceInfo)
         }.onException {
             Log.d("$tag error", it.toString())
-        }
-    }
-
-    private suspend fun fetchPredictInfo() {
-        nokHomeRepository.fetchPredictInfo(_dementiaKey.value).onSuccess { response ->
-            Log.d("$tag fetchPredictInfo", response.toString())
-            with(response) {
-                val policeStationInfo = policeInfo.map { it.toModel() }
-                val meaningfulPlace = MeaningfulPlaceInfo(
-                    predictLocation.address,
-                    emptyList(),
-                    LatLng(
-                        predictLocation.latitude.toDouble(),
-                        predictLocation.longitude.toDouble()
-                    ),
-                    false,
-                    policeStationInfo
-                )
-                val predictLocation = PredictLocation(meaningfulPlace, policeStationInfo)
-                eventPredict(PredictEvent.PredictLocation(predictLocation))
-                tempPredictLocation.value = predictLocation
-            }
-        }.onException {
-            Log.d("predict exception", it.toString())
-        }
-    }
-
-    private suspend fun fetchPredictInfoGura() {
-        nokHomeRepository.fetchPredictInfoGura(_dementiaKey.value).onSuccess { response ->
-            Log.d("$tag fetchPredictInfoGura", response.toString())
-            with(response) {
-                val policeStationInfo = policeInfo.map { it.toModel() }
-                val meaningfulPlace = MeaningfulPlaceInfo(
-                    predictLocation.address,
-                    emptyList(),
-                    LatLng(
-                        predictLocation.latitude.toDouble(),
-                        predictLocation.longitude.toDouble()
-                    ),
-                    false,
-                    policeStationInfo
-                )
-                val predictLocation = PredictLocation(meaningfulPlace, policeStationInfo)
-                eventPredict(PredictEvent.PredictLocation(predictLocation))
-                tempPredictLocation.value = predictLocation
-            }
-        }.onException {
-            Log.d("predict exception", it.toString())
         }
     }
 }

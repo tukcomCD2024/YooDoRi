@@ -7,5 +7,6 @@ data class PoliceStationInfo(
     val distance: String,
     val policeAddress: String,
     val policePhoneNumber: String,
-    val latLng: LatLng
+    val latLng: LatLng,
+    val phone: String,
 )
