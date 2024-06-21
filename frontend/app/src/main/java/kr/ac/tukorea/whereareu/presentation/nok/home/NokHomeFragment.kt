@@ -42,7 +42,7 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
     override fun initObserver() {
         repeatOnStarted {
             viewModel.predictEvent.collect { predictEvent ->
-//                handlePredictEvent(predictEvent)
+                handlePredictEvent(predictEvent)
             }
         }
 
@@ -59,15 +59,6 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
                 initMeaningfulListRVA()
             }
 
-            /*is NokHomeViewModel.PredictEvent.MeaningFulPlace -> {
-                if(meaningfulPlaceRVA.currentList.isEmpty()) {
-                    Log.d("ds", "isEmpty")
-                    meaningfulPlaceRVA.submitList(event.meaningfulPlaceForList)
-                }
-                else{
-                    Log.d("ds", "isNotEmpty")
-                }
-            }*/
             is NokHomeViewModel.PredictEvent.PredictLocation -> {
                 with(event.predictLocation){
                     val address = meaningfulPlaceInfo.address
@@ -76,6 +67,7 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
                     val meaningfulPlaceInfo = MeaningfulPlaceInfo(address, emptyList(), meaningfulPlaceInfo.latLng, false, policeStationInfo)
 
                     binding.mapViewBtn.setOnClickListener {
+                        Log.d("mapViewBtn", "clicked")
                         viewModel.eventPredict(NokHomeViewModel.PredictEvent.MapView(BottomSheetBehavior.STATE_COLLAPSED, meaningfulPlaceInfo.latLng))
                     }
 

@@ -12,4 +12,17 @@ class NokMainViewModel: ViewModel() {
     fun setCurrentNavigationDestination(destination: Int){
         _currentNavigationDestination.value = destination
     }
+
+    sealed interface NavigateEvent {
+        data object Home : NavigateEvent
+        data object Setting : NavigateEvent
+        data object MeaningfulPlace : NavigateEvent
+        data object LocationHistory : NavigateEvent
+        data object SafeArea : NavigateEvent
+
+        data object SafeAreaDetail: NavigateEvent
+
+        data object SafeAreaSetting: NavigateEvent
+        data class HomeState(val isPredicted: Boolean, val isPredictDone: Boolean) : NavigateEvent
+    }
 }

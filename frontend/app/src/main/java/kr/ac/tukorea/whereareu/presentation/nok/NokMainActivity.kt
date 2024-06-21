@@ -112,7 +112,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
         repeatOnStarted {
             homeViewModel.navigateEvent.collect { event ->
-                Log.d("$tag navigateEvent collect", event.toString())
+                Log.d("navigateEvent collect", event.toString())
                 handleNavigationEvent(event)
             }
         }
@@ -126,14 +126,14 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         // 앱 처음 실행, 예측 중지 시 보호대상자 위치를 갖고 오는 job이 없으면 새로운 job을 생성해서 실행
         repeatOnStarted {
             homeViewModel.updateRate.collect { updateRate ->
-                Log.d("$tag updateRate collect", updateRate.toString())
+                Log.d("updateRate collect", updateRate.toString())
                 if (updateRate == 0L) {
                     return@collect
                 }
 
                 // 위치 업데이트 주기 변경 시 기존 job을 취소하고 updateRate에 맞게 재시작
                 if (updateLocationJob != null) {
-                    Log.d("$tag updateRate restart", updateRate.toString())
+                    Log.d("updateRate restart", updateRate.toString())
                     updateLocationJob?.cancelAndJoin()
                 }
                 updateLocationJob = getUpdateLocationJob(updateRate.times(60 * 1000))
@@ -144,7 +144,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         repeatOnStarted {
             delay(100)
             homeViewModel.dementiaLocationInfo.collect { response ->
-                Log.d("$tag dementiaLocationInfo collect", response.toString())
+                Log.d("dementiaLocationInfo collect", response.toString())
 
                 //예측 기능 사용시 보호대상자 위치 UI 업데이트 X
                 if (navController.currentDestination?.id != R.id.nokHomeFragment) {
@@ -158,14 +158,14 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         // 예측 기능 실행
         repeatOnStarted {
             homeViewModel.predictEvent.collect { event ->
-                Log.d("$tag predictEvent collect", event.toString())
+                Log.d("predictEvent collect", event.toString())
                 handlePredictEvent(event)
             }
         }
 
         repeatOnStarted {
             locationHistoryViewModel.locationHistoryEvent.collect { event ->
-                Log.d("$tag locationHistoryEvent collect", event.toString())
+                Log.d("locationHistoryEvent collect", event.toString())
                 handleLocationHistoryEvent(event)
             }
         }
@@ -184,7 +184,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
         repeatOnStarted {
             meaningfulViewModel.meaningEvent.collect { event ->
-                Log.d("$tag meaningfulEvent collect", event.toString())
+                Log.d("meaningfulEvent collect", event.toString())
                 handleMeaningfulEvent(event)
             }
         }
@@ -364,20 +364,27 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     private fun handleNavigationEvent(event: NokHomeViewModel.NavigateEvent) {
         when (event) {
             NokHomeViewModel.NavigateEvent.Home -> {
-                //removeMeaningfulPlaceMarker()
+                behavior.isDraggable = true
+                setBottomSheetBehaviorForFirstNavigationEvent(HOME)
+                if (navController.currentDestination?.id == R.id.nokHomeFragment) {
+                    homeViewModel.fetchUserInfo()
+                    binding.layout.translationY = 0f
+                    //setBottomSheetBehaviorForFirstNavigationEvent(HOME)
+                }
             }
 
-            is NokHomeViewModel.NavigateEvent.HomeState -> {
+            /*is NokHomeViewModel.NavigateEvent.HomeState -> {
                 behavior.isDraggable = true
+                setBottomSheetBehaviorForFirstNavigationEvent(HOME)
                 if (event.isPredicted) {
-                    setBottomSheetBehaviorForFirstNavigationEvent(HOME)
+                    //setBottomSheetBehaviorForFirstNavigationEvent(HOME)
                 } else {
                     if (navController.currentDestination?.id == R.id.nokHomeFragment) {
                         homeViewModel.fetchUserInfo()
                         binding.layout.translationY = 0f
                     }
                 }
-            }
+            }*/
 
             NokHomeViewModel.NavigateEvent.LocationHistory -> {
                 behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
@@ -598,7 +605,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                 Log.d("distance", distance.toString())
             }
         } catch (e: IndexOutOfBoundsException) {
-            Log.d("$tag moveCameraAlongLocationHistory IndexOutOfBoundsException", e.toString())
+            Log.d("moveCameraAlongLocationHistory IndexOutOfBoundsException", e.toString())
         }
     }
 
@@ -618,7 +625,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
                 binding.averageMovementSpeedTv.text = String.format("%.2fkm", event.averageSpeed)
 
-                // bottom sheet expanded offset 지정 및 높이 지정
+                // bottom sheet 높이 상단 예측 view 밑으로 맞춤
                 behavior.expandedOffset = binding.predictLayout.bottom + 20
             }
 
@@ -857,7 +864,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
     private fun stopGetDementiaLocation() {
         lifecycleScope.launch {
-            Log.d("$tag stopGetDementiaLocation", "stopGetDementiaLocation")
+            Log.d("stopGetDementiaLocation", "stopGetDementiaLocation")
             updateLocationJob?.cancelAndJoin()
         }
         naverMap?.locationOverlay?.isVisible = false
@@ -865,13 +872,11 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     }
 
     fun predict() {
-        //homeViewModel.setIsPredicted(true)
-        isFirstNavigationEvent[HOME] = true
-        homeViewModel.eventHomeState(isPredicted = true, isPredictDone = false)
+        homeViewModel.setIsPredicted(true)
     }
 
     fun stopPredict() {
-        homeViewModel.eventHomeState(isPredicted = false)
+        homeViewModel.setIsPredicted(false)
     }
 
     private fun setSafeArea(){
@@ -890,8 +895,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         binding.viewModel = homeViewModel
         binding.safeAreaVm = safeAreaViewModel
         homeViewModel.fetchUserInfo()
-        //locationSource =
-            //FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         initBottomSheet()
         initMap()
@@ -915,11 +918,11 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                 fm.beginTransaction().add(R.id.map_fragment, it).commit()
             }
         mapFragment.getMapAsync { map ->
+            // bottom sheet 동작에 따라 map의 y축이 변화되는데, 이때 zoomControlView가 가려짐
+            // 기존 zoomControlView 비활성화 후 원하는 위치에 zoomControlView 사용
             map.uiSettings.isZoomControlEnabled = false
-            //val locationButton: LocationButtonView = findViewById(R.id.navermap_location_button)
             val zoomControlView: ZoomControlView = findViewById(R.id.zoom)
             zoomControlView.map = map
-            //locationButton.map = map
             naverMap = map
         }
     }
@@ -930,8 +933,11 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         behavior.isFitToContents = false
         behavior.halfExpandedRatio = 0.3f
         behavior.setPeekHeight(300, true)
+
         behavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // 안심구역 생성 전, bottom sheet가 collapsed 상태이면
+                // 안심구역 생성화면에서 bottom sheet의 높이가 일치되지 않기 때문에, collapsed 상태 방지
                 if (navController.currentDestination?.id == R.id.safeAreaDetailFragment){
                     if(newState == BottomSheetBehavior.STATE_COLLAPSED){
                         behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
@@ -940,34 +946,18 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                //Log.d("slide offset", slideOffset.toString())
-                /*if(navController.currentDestination?.id == R.id.safeAreaDetailFragment) {
-                    if (slideOffset < 0.3f) {
-                        behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                    }
-                }*/
-
-                if (navController.currentDestination?.id == R.id.settingSafeAreaFragment){
-                    if (slideOffset >= 0.5f) {
-                        binding.navermapLogo.isVisible = false
-                    } else {
-                        binding.navermapLogo.isVisible = true
-                    }
+                // bottom sheet가 expanded 상태일 때,
+                // 화면을 bottom sheet로 꽉 채우기 위해 Naver Map로고 visibility 제어
+                if (slideOffset >= 0.5f) {
+                    binding.navermapLogo.isVisible = false
                 } else {
-                    if (slideOffset >= 0.5f) {
-                        binding.navermapLogo.isVisible = false
-                        binding.setSafeAreaTv.isVisible = false
-                    } else {
-                        binding.navermapLogo.isVisible = true
-                        binding.setSafeAreaTv.isVisible = true
-                    }
+                    binding.navermapLogo.isVisible = true
                 }
 
-                //} else {
-                    if (slideOffset <= 0.3f) {
-                        binding.layout.translationY = -slideOffset * bottomSheet.height * 0.5f
-                    }
-               // }
+                // bottom sheet 동작에 따른 지도 y축 위치 변화
+                if (slideOffset <= 0.3f) {
+                    binding.layout.translationY = -slideOffset * bottomSheet.height * 0.5f
+                }
             }
         })
     }
@@ -979,6 +969,8 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         navController = navHostFragment.navController
 
         binding.bottomNav.setupWithNavController(navController)
+        setBottomSheetBehaviorForFirstNavigationEvent(HOME)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             //Log.d("backEntry", navController.currentBackStackEntry.)
 
@@ -987,6 +979,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                     R.id.meaningfulPlaceDetailFragment
                 )
             ) {
+                isFirstNavigationEvent[HOME] = true
                 if(isRequireStopHomeFragmentJob) {
                     isRequireStopHomeFragmentJob = false
                     stopHomeFragmentJob()
@@ -1052,7 +1045,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                 R.id.nokHomeFragment, R.id.meaningfulPlaceDetailFragment -> {
                     isRequireStopHomeFragmentJob = true
                     homeViewModel.eventNavigate(NokHomeViewModel.NavigateEvent.Home)
-                    homeViewModel.eventHomeState()
                 }
 
                 R.id.nokSettingFragment, R.id.modifyUserInfoFragment, R.id.settingUpdateTimeFragment -> {
@@ -1111,7 +1103,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
     private fun stopHomeFragmentJob() {
         stopGetDementiaLocation()
-        homeViewModel.eventHomeState(isPredicted = false)
+        homeViewModel.setIsPredicted(false)
     }
 
     private fun clearLocationFragmentUI() {

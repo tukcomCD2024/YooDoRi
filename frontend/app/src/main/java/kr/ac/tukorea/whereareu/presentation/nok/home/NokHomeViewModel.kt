@@ -43,8 +43,6 @@ import kotlin.system.measureTimeMillis
 class NokHomeViewModel @Inject constructor(
     private val nokHomeRepository: NokHomeRepositoryImpl,
     private val safeAreaRepository: SafeAreaRepositoryImpl,
-    private val naverRepository: NaverRepositoryImpl,
-    private val kakaoRepository: KakaoRepositoryImpl,
 ) : ViewModel() {
     private var tag = "HomeViewModel:"
 
@@ -119,17 +117,12 @@ class NokHomeViewModel @Inject constructor(
         data object SafeAreaDetail: NavigateEvent
 
         data object SafeAreaSetting: NavigateEvent
-        data class HomeState(val isPredicted: Boolean, val isPredictDone: Boolean) : NavigateEvent
     }
 
     fun eventNavigate(event: NavigateEvent) {
         viewModelScope.launch {
-            if (event !is NavigateEvent.HomeState) {
-                navigateEventToString.value = event.toString()
-            }
-            if(event !is NavigateEvent.Home) {
-                _navigateEvent.emit(event)
-            }
+            navigateEventToString.value = event.toString()
+            _navigateEvent.emit(event)
         }
     }
 
@@ -139,19 +132,12 @@ class NokHomeViewModel @Inject constructor(
         }
     }
 
-    fun eventHomeState(isPredicted: Boolean = this.isPredicted.value, isPredictDone: Boolean = _isPredictDone.value) {
+    fun setIsPredicted(isPredicted: Boolean){
         this.isPredicted.value = isPredicted
-        _isPredictDone.value = isPredictDone
-
-        viewModelScope.launch {
-            eventNavigate(NavigateEvent.HomeState(isPredicted, isPredictDone))
-            if(isPredicted){
-                if(!isPredictDone) {
-                    eventPredict(PredictEvent.StartPredict(true))
-                }
-            } else {
-                eventPredict(PredictEvent.StopPredict(false))
-            }
+        if(isPredicted){
+            eventPredict(PredictEvent.StartPredict(true))
+        } else {
+            eventPredict(PredictEvent.StopPredict(false))
         }
     }
 
@@ -227,7 +213,6 @@ class NokHomeViewModel @Inject constructor(
                 async { getMeaningfulPlaces() }
                 async { fetchPredictInfoGura() }.await()
                 eventPredict(PredictEvent.PredictDone)
-                eventHomeState(isPredicted = true, isPredictDone = true)
             }
             Log.d("after refactor time", time.toString())
         }
@@ -326,49 +311,6 @@ class NokHomeViewModel @Inject constructor(
                     return@launch
                 }
                 eventPredict(PredictEvent.FetchSafeArea(response.safeAreas))
-
-                //val safeAreaList = mutableListOf<SafeArea>()
-                //val groupNameList = response.safeAreaList.map { it.groupName}.filterNot { it == "notGrouped" }
-
-                /*response.safeAreaList.forEach { _safeAreaList ->
-                    val temp = if (_safeAreaList.groupName == "notGrouped") {
-                        _safeAreaList.safeAreas.map { safeArea ->
-                            SafeArea(
-                                "",
-                                _safeAreaList.groupKey,
-                                safeArea.areaKey,
-                                safeArea.areaName,
-                                safeArea.latitude,
-                                safeArea.longitude,
-                                safeArea.radius,
-                                SafeAreaRVA.SAFE_AREA
-                            )
-                        }
-                    } else {
-                        _safeAreaList.safeAreas.map {
-                            SafeArea(
-                                _safeAreaList.groupName,
-                                _safeAreaList.groupKey,
-                                "",
-                                "",
-                                0.0,
-                                0.0,
-                                0,
-                                SafeAreaRVA.SAFE_AREA_GROUP
-                            )
-                        }
-                    }
-                    safeAreaList.addAll(temp)
-                }
-                safeAreaList.sortWith(
-                    compareBy(
-                        {it.viewType},
-                        {it.groupName},
-                        {it.areaName}
-                    )
-                )*/
-                //savedStateHandle["safeAreaGroupList"] = groupList
-                //Log.d("safeArea List", safeAreaList.toString())
                 Log.d("fetchSafeArea", response.toString())
             }
         }
