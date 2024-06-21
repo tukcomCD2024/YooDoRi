@@ -56,8 +56,6 @@ class NokHomeViewModel @Inject constructor(
 
     val isPredicted = MutableStateFlow(false)
 
-    private val _isPredictDone = MutableStateFlow(false)
-
     private val _dementiaKey = MutableStateFlow("")
     private val _nokKey = MutableStateFlow("")
 
@@ -66,11 +64,6 @@ class NokHomeViewModel @Inject constructor(
 
     private val _dementiaName = MutableStateFlow("")
     val dementiaName = _dementiaName.asStateFlow()
-
-    private val _navigateEvent = MutableSharedFlow<NavigateEvent>()
-    val navigateEvent = _navigateEvent.asSharedFlow()
-
-    val navigateEventToString = MutableStateFlow(NavigateEvent.Home.toString())
 
     private val _tempMeaningfulPlace = MutableStateFlow<List<MeaningfulPlaceInfo>>(emptyList())
 
@@ -105,27 +98,6 @@ class NokHomeViewModel @Inject constructor(
 
         data class FetchSafeArea(val groupList: List<SafeArea>): PredictEvent()
     }
-    private val userMeaningfulPlace = mutableListOf<MeaningfulPlaceInfo>()
-
-    sealed interface NavigateEvent {
-        data object Home : NavigateEvent
-        data object Setting : NavigateEvent
-        data object MeaningfulPlace : NavigateEvent
-        data object LocationHistory : NavigateEvent
-        data object SafeArea : NavigateEvent
-
-        data object SafeAreaDetail: NavigateEvent
-
-        data object SafeAreaSetting: NavigateEvent
-    }
-
-    fun eventNavigate(event: NavigateEvent) {
-        viewModelScope.launch {
-            navigateEventToString.value = event.toString()
-            _navigateEvent.emit(event)
-        }
-    }
-
     fun eventPredict(event: PredictEvent) {
         viewModelScope.launch {
             _predictEvent.emit(event)

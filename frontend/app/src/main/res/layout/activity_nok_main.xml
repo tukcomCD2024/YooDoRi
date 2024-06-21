@@ -12,7 +12,11 @@
             type="kr.ac.tukorea.whereareu.presentation.nok.NokMainActivity" />
 
         <variable
-            name="viewModel"
+            name="mainViewModel"
+            type="kr.ac.tukorea.whereareu.presentation.nok.NokMainViewModel" />
+
+        <variable
+            name="homeViewModel"
             type="kr.ac.tukorea.whereareu.presentation.nok.home.NokHomeViewModel" />
 
         <variable
@@ -100,7 +104,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:text="@{viewModel.dementiaName}"
+                            android:text="@{homeViewModel.dementiaName}"
                             android:textAppearance="@style/TextAppearance.App.18sp.ExtraBold"
                             app:layout_constraintStart_toEndOf="@+id/oval_v"
                             app:layout_constraintTop_toTopOf="parent"
@@ -122,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="14dp"
-                            android:text="@{viewModel.dementiaStatusInfo.userStatus}"
+                            android:text="@{homeViewModel.dementiaStatusInfo.userStatus}"
                             android:textAppearance="@style/TextAppearance.App.18sp.Regular"
                             app:layout_constraintBaseline_toBaselineOf="@id/dementia_name_tv"
                             app:layout_constraintStart_toEndOf="@+id/state"
@@ -145,7 +149,7 @@
                             android:layout_height="25dp"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="5dp"
-                            android:src="@{viewModel.dementiaStatusInfo.isInternetOn ? @drawable/ic_wifi_on : @drawable/ic_wifi_off}"
+                            android:src="@{homeViewModel.dementiaStatusInfo.isInternetOn ? @drawable/ic_wifi_on : @drawable/ic_wifi_off}"
                             app:layout_constraintStart_toEndOf="@+id/oval_v"
                             app:layout_constraintTop_toBottomOf="@+id/line_v" />
 
@@ -154,7 +158,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text='@{viewModel.dementiaStatusInfo.isInternetOn ? "on" : "off"}'
+                            android:text='@{homeViewModel.dementiaStatusInfo.isInternetOn ? "on" : "off"}'
                             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                             app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
                             app:layout_constraintStart_toEndOf="@+id/wifi_iv"
@@ -165,7 +169,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_marginStart="15dp"
-                            android:src="@{viewModel.dementiaStatusInfo.isGpsOn ? @drawable/ic_gps_on : @drawable/ic_gps_off}"
+                            android:src="@{homeViewModel.dementiaStatusInfo.isGpsOn ? @drawable/ic_gps_on : @drawable/ic_gps_off}"
                             app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
                             app:layout_constraintStart_toEndOf="@+id/internet_status_tv" />
 
@@ -174,7 +178,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text='@{viewModel.dementiaStatusInfo.isGpsOn ? "on" : "off"}'
+                            android:text='@{homeViewModel.dementiaStatusInfo.isGpsOn ? "on" : "off"}'
                             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                             app:layout_constraintBottom_toBottomOf="@+id/wifi_iv"
                             app:layout_constraintStart_toEndOf="@+id/gps_iv"
@@ -187,7 +191,7 @@
                             android:layout_marginStart="15dp"
                             app:layout_constraintBottom_toBottomOf="@id/wifi_iv"
                             app:layout_constraintStart_toEndOf="@id/gps_status_tv"
-                            bind:ringtoneImage="@{viewModel.dementiaStatusInfo.isRingstoneOn}" />
+                            bind:ringtoneImage="@{homeViewModel.dementiaStatusInfo.isRingstoneOn}" />
 
                         <TextView
                             android:id="@+id/ring_mode_tv"
@@ -197,7 +201,7 @@
                             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                             app:layout_constraintBottom_toBottomOf="@id/ring_mode_iv"
                             app:layout_constraintStart_toEndOf="@id/ring_mode_iv"
-                            bind:ringtoneText="@{viewModel.dementiaStatusInfo.isRingstoneOn}"
+                            bind:ringtoneText="@{homeViewModel.dementiaStatusInfo.isRingstoneOn}"
                             tools:text="벨소리" />
 
                         <ImageView
@@ -215,7 +219,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text='@{String.valueOf(viewModel.dementiaStatusInfo.battery) + "%"}'
+                            android:text='@{String.valueOf(homeViewModel.dementiaStatusInfo.battery) + "%"}'
                             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                             app:layout_constraintBaseline_toBaselineOf="@id/dementia_name_tv"
                             app:layout_constraintStart_toEndOf="@id/battery_iv"
@@ -385,8 +389,8 @@
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@id/emergency_tv"
                     app:layout_constraintEnd_toEndOf="parent"
-                    bind:isPredicted="@{viewModel.isPredicted}"
-                    bind:navigateEvent="@{viewModel.navigateEventToString}" />
+                    bind:isPredicted="@{homeViewModel.isPredicted}"
+                    bind:navigateEvent="@{mainViewModel.navigateEventToString}" />
 
                 <TextView
                     android:id="@+id/emergency_tv"
@@ -403,13 +407,13 @@
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    bind:isPredicted="@{viewModel.isPredicted}"
-                    bind:navigateEvent="@{viewModel.navigateEventToString}" />
+                    bind:isPredicted="@{homeViewModel.isPredicted}"
+                    bind:navigateEvent="@{mainViewModel.navigateEventToString}" />
 
                 <androidx.constraintlayout.widget.Group
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility='@{viewModel.navigateEventToString.equals("Home") ? View.VISIBLE : View.GONE}'
+                    android:visibility='@{mainViewModel.navigateEventToString.equals("Home") ? View.VISIBLE : View.GONE}'
                     app:constraint_referenced_ids="predict_tv, emergency_tv, user_info_layout"
                     tools:visibility="gone" />
 
@@ -422,7 +426,7 @@
                     android:orientation="horizontal"
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="12dp"
-                    android:visibility="@{viewModel.isPredicted ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{homeViewModel.isPredicted ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -489,7 +493,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="@{viewModel.dementiaName}"
+                        android:text="@{homeViewModel.dementiaName}"
                         android:textAppearance="@style/TextAppearance.App.16sp.Medium"
                         app:layout_constraintStart_toEndOf="@id/dementia_name_title_tv"
                         app:layout_constraintTop_toTopOf="@id/count_down_tv" />
@@ -602,8 +606,8 @@
                 android:orientation="vertical"
                 app:behavior_hideable="false"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-                bind:isPredicted="@{viewModel.isPredicted}"
-                bind:navigateEvent="@{viewModel.navigateEventToString}">
+                bind:isPredicted="@{homeViewModel.isPredicted}"
+                bind:navigateEvent="@{mainViewModel.navigateEventToString}">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/bottom_sheet_top_layout"
@@ -632,7 +636,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="8dp"
-                        android:visibility='@{viewModel.navigateEventToString == "SafeArea" ? View.GONE : View.VISIBLE}'
+                        android:visibility='@{mainViewModel.navigateEventToString == "SafeArea" ? View.GONE : View.VISIBLE}'
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -649,7 +653,7 @@
                         android:text="구역\n생성"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        android:visibility='@{viewModel.navigateEventToString == "SafeAreaDetail" ? View.VISIBLE : View.GONE}'
+                        android:visibility='@{mainViewModel.navigateEventToString == "SafeAreaDetail" ? View.VISIBLE : View.GONE}'
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -674,7 +678,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        bind:navigateEvent="@{viewModel.navigateEventToString}" />
+                        bind:navigateEvent="@{mainViewModel.navigateEventToString}" />
 
 
                     <androidx.fragment.app.FragmentContainerView

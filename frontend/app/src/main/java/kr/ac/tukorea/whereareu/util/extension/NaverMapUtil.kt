@@ -1,9 +1,12 @@
 package kr.ac.tukorea.whereareu.util.extension
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PointF
 import androidx.core.content.ContextCompat
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
@@ -11,6 +14,8 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.MarkerIcons
 import kr.ac.tukorea.whereareu.R
+import kr.ac.tukorea.whereareu.databinding.IconLocationOverlayLayoutBinding
+import kotlin.math.roundToInt
 
 fun Marker.setMarker(
     latLng: LatLng,
@@ -89,5 +94,26 @@ fun Marker.setInfoWindowText(context: Context, text: String){
     InfoWindow().apply {
         setAdapter(context, text)
         open(this@setInfoWindowText)
+    }
+}
+
+fun NaverMap?.initLocationOverlay(activity: Activity, dementiaName: String, coord: LatLng, speed: Float){
+    val binding = IconLocationOverlayLayoutBinding.inflate(activity.layoutInflater)
+    val view = binding.layout
+    this?.let {
+        val locationOverlay = it.locationOverlay
+        with(locationOverlay) {
+            isVisible = true
+
+            // m/s to km/h
+            binding.speedTv.text = (speed * 3.6).roundToInt().toString()
+            binding.nameTv.text = dementiaName
+            circleRadius = 0
+            position = coord
+            anchor = PointF(0.5f, 1f)
+            icon = com.naver.maps.map.overlay.OverlayImage.fromView(view)
+        }
+
+        it.moveCamera(CameraUpdate.scrollTo(coord))
     }
 }
