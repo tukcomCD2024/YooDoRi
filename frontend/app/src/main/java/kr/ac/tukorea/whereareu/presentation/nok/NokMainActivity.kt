@@ -113,13 +113,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
             }
         }
 
-        repeatOnStarted {
-            mainViewModel.currentNavigationDestination.collect { destination ->
-                handleViewWithDestinationEvent(destination)
-                Log.d("currentNavigationDestination", destination.toString())
-            }
-        }
-
         // 앱 처음 실행, 예측 중지 시 보호대상자 위치를 갖고 오는 job이 없으면 새로운 job을 생성해서 실행
         repeatOnStarted {
             homeViewModel.updateRate.collect { updateRate ->
@@ -226,7 +219,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                     naverMap?.moveCamera(CameraUpdate.zoomTo(14.0))
 
                     with(safeAreMetaData) {
-
                         binding.bottomSheetTopIv.isVisible = false
                         isSettingSafeArea = true
                         settingMarker.isVisible = true
@@ -334,17 +326,17 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     }
 
     private fun handleNavigationMenuEvent(event: NokMainViewModel.NavigateMenuEvent) {
+        // 각 메뉴를 벗어났을 때 동작
         if (event !is NokMainViewModel.NavigateMenuEvent.LocationHistory) {
-            Log.d("되니ㅏ", "되나")
-            clearLocationFragmentUI()
+            clearLocationHistoryOverlay()
         }
 
         if (event !is NokMainViewModel.NavigateMenuEvent.MeaningfulPlace) {
-            clearMeaningfulPlaceMarker()
+            clearMeaningfulPlaceOverlay()
         }
 
         if (event !is NokMainViewModel.NavigateMenuEvent.Home) {
-            clearHomeFragmentOverlay()
+            clearHomeOverlay()
             if (isRequireStopHomeFragmentJob) {
                 isRequireStopHomeFragmentJob = false
                 stopHomeFragmentJob()
@@ -353,56 +345,60 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
         if (event !is NokMainViewModel.NavigateMenuEvent.SafeArea) {
             safeAreaViewModel.setIsSafeAreaGroupChanged(true)
+            clearSafeAreaOverlay()
         }
 
+        // 각 메뉴에 진입했을 때 동작
         when (event) {
             is NokMainViewModel.NavigateMenuEvent.SafeArea -> {
-                if (event.destination == R.id.settingSafeAreaFragment) {
-
-                    behavior.halfExpandedRatio = 0.25f
-                    //behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                    with(safeAreMetaData) {
-                        settingMarker.apply {
-                            setMarker(
-                                naverMap?.cameraPosition?.target!!,
-                                MarkerIcons.PINK,
-                                "",
-                                naverMap
-                            )
-                            isVisible = true
-                        }
-
-                        settingCircleOverlay.apply {
-                            center = settingMarker.position
-                            radius = 500.0
-                            color =
-                                ContextCompat.getColor(
-                                    this@NokMainActivity,
-                                    R.color.purple
+                if (event.destination != R.id.safeAreaDetailFragment){
+                    clearSafeAreaOverlay()
+                }
+                when (event.destination) {
+                    R.id.settingSafeAreaFragment -> {
+                        behavior.halfExpandedRatio = 0.25f
+                        with(safeAreMetaData) {
+                            settingMarker.apply {
+                                setMarker(
+                                    naverMap?.cameraPosition?.target!!,
+                                    MarkerIcons.PINK,
+                                    "",
+                                    naverMap
                                 )
-                            outlineWidth = 5
-                            outlineColor =
-                                ContextCompat.getColor(
-                                    this@NokMainActivity,
-                                    R.color.deep_purple
-                                )
-                            map = naverMap
-                            isVisible = true
-
-                        }
-                        safeAreaViewModel.setSettingSafeAreaLatLng(naverMap?.cameraPosition?.target!!)
-                        naverMap?.addOnCameraChangeListener { _, _ ->
-                            if (!isSettingSafeArea) {
-                                return@addOnCameraChangeListener
+                                isVisible = true
                             }
-                            Log.d("change", "change")
 
-                            val currentPosition = naverMap?.cameraPosition?.target!!
-                            safeAreaViewModel.setSettingSafeAreaLatLng(currentPosition)
-                            Log.d("position", currentPosition.toString())
-                            settingMarker.position = currentPosition
-                            settingCircleOverlay.center = currentPosition
+                            settingCircleOverlay.apply {
+                                center = settingMarker.position
+                                radius = 500.0
+                                color =
+                                    ContextCompat.getColor(
+                                        this@NokMainActivity,
+                                        R.color.purple
+                                    )
+                                outlineWidth = 5
+                                outlineColor =
+                                    ContextCompat.getColor(
+                                        this@NokMainActivity,
+                                        R.color.deep_purple
+                                    )
+                                map = naverMap
+                                isVisible = true
 
+                            }
+                            safeAreaViewModel.setSettingSafeAreaLatLng(naverMap?.cameraPosition?.target!!)
+                            naverMap?.addOnCameraChangeListener { _, _ ->
+                                if (!isSettingSafeArea) {
+                                    return@addOnCameraChangeListener
+                                }
+                                Log.d("change", "change")
+
+                                val currentPosition = naverMap?.cameraPosition?.target!!
+                                safeAreaViewModel.setSettingSafeAreaLatLng(currentPosition)
+                                Log.d("position", currentPosition.toString())
+                                settingMarker.position = currentPosition
+                                settingCircleOverlay.center = currentPosition
+                            }
                         }
                     }
                 }
@@ -417,33 +413,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
             else -> {}
         }
-    }
-
-    private fun handleViewWithDestinationEvent(destination: Int) {
-
-        if (destination != R.id.safeAreaDetailFragment) {
-            with(safeAreMetaData) {
-                markers.forEach {
-                    it.map = null
-                }
-                circleOverlays.forEach {
-                    it.map = null
-                }
-                markers.clear()
-                circleOverlays.clear()
-            }
-        }
-
-
-        /*if (destination !in listOf(
-                R.id.nokSettingFragment,
-                R.id.settingUpdateTimeFragment,
-                R.id.modifyUserInfoFragment,
-                R.id.settingSafeAreaFragment
-            )
-        ) {
-            behavior.isDraggable = true
-        }*/
     }
 
     private fun handleLocationHistoryEvent(event: LocationHistoryViewModel.LocationHistoryEvent) {
@@ -562,7 +531,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         when (event) {
             // 예측 시작 -> 보호대상자 마지막 정보, 의미 장소 api 호출, 보호대상자 위치 업데이트 api 정지, 로딩화면 표시
             is NokHomeViewModel.PredictEvent.StartPredict -> {
-                clearHomeFragmentOverlay()
+                clearHomeOverlay()
                 homeViewModel.predict()
                 stopGetDementiaLocation()
                 showLoadingDialog(this, "예측 장소를 추출중입니다...")
@@ -964,26 +933,8 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         homeViewModel.setIsPredicted(false)
     }
 
-    private fun clearLocationFragmentUI() {
-        locationHistoryViewModel.setIsMultipleSelected(false)
-        locationHistoryViewModel.setMaxProgress(0)
-
-        with(locationHistoryMetaData) {
-            paths.forEach {
-                it.map = null
-            }
-            //path = null
-            markers.forEach {
-                it.map = null
-            }
-        }
-    }
-
     companion object {
         const val LAST_LOCATION = 0
-        const val MEANINGFUL_PLACE = 0
-        const val HOME = 1
-        const val SAFE_AREA = 2
 
         val LOCATION_HISTORY_TAB = R.id.locationHistoryFragment
         val MEANINGFUL_PLACE_TAB =
@@ -998,13 +949,13 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         )
     }
 
-    private fun clearMeaningfulPlaceMarker() {
+    private fun clearMeaningfulPlaceOverlay() {
         meaningulPlaceMarkers.forEach { marker ->
             marker.map = null
         }
     }
 
-    private fun clearHomeFragmentOverlay() {
+    private fun clearHomeOverlay() {
         predictMetaData.safeMarkers.forEach {
             it.map = null
         }
@@ -1013,6 +964,33 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         }
         predictMetaData.safeMarkers.clear()
         predictMetaData.safeCircleOverlays.clear()
+    }
+
+    private fun clearLocationHistoryOverlay() {
+        locationHistoryViewModel.setIsMultipleSelected(false)
+        locationHistoryViewModel.setMaxProgress(0)
+
+        with(locationHistoryMetaData) {
+            paths.forEach {
+                it.map = null
+            }
+            //path = null
+            markers.forEach {
+                it.map = null
+            }
+        }
+    }
+    private fun clearSafeAreaOverlay() {
+        with(safeAreMetaData) {
+            markers.forEach {
+                it.map = null
+            }
+            circleOverlays.forEach {
+                it.map = null
+            }
+            markers.clear()
+            circleOverlays.clear()
+        }
     }
 
     private val locationUpdateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
