@@ -33,12 +33,6 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
     private val navigator: NavController by lazy {
         findNavController()
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initObserver()
-        initView()
-    }
     override fun initObserver() {
         repeatOnStarted {
             viewModel.predictEvent.collect { predictEvent ->

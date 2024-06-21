@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
@@ -45,7 +44,8 @@
                 android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                >
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/map_fragment"
@@ -191,7 +191,7 @@
                             android:layout_marginStart="15dp"
                             app:layout_constraintBottom_toBottomOf="@id/wifi_iv"
                             app:layout_constraintStart_toEndOf="@id/gps_status_tv"
-                            bind:ringtoneImage="@{homeViewModel.dementiaStatusInfo.isRingstoneOn}" />
+                            app:ringtoneImage="@{homeViewModel.dementiaStatusInfo.isRingstoneOn}" />
 
                         <TextView
                             android:id="@+id/ring_mode_tv"
@@ -201,7 +201,7 @@
                             android:textAppearance="@style/TextAppearance.App.16sp.SemiBold"
                             app:layout_constraintBottom_toBottomOf="@id/ring_mode_iv"
                             app:layout_constraintStart_toEndOf="@id/ring_mode_iv"
-                            bind:ringtoneText="@{homeViewModel.dementiaStatusInfo.isRingstoneOn}"
+                            app:ringtoneText="@{homeViewModel.dementiaStatusInfo.isRingstoneOn}"
                             tools:text="벨소리" />
 
                         <ImageView
@@ -336,7 +336,7 @@
                             android:paddingVertical="8dp"
                             android:textAppearance="@style/TextAppearance.App.14sp.Bold"
                             app:layout_constraintTop_toTopOf="parent"
-                            bind:searchAddress="@{safeAreaVm}" />
+                            app:searchAddress="@{safeAreaVm}" />
                     </LinearLayout>
 
                     <TextView
@@ -389,8 +389,7 @@
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@id/emergency_tv"
                     app:layout_constraintEnd_toEndOf="parent"
-                    bind:isPredicted="@{homeViewModel.isPredicted}"
-                    bind:navigateEvent="@{mainViewModel.navigateEventToString}" />
+                   />
 
                 <TextView
                     android:id="@+id/emergency_tv"
@@ -407,13 +406,13 @@
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    bind:isPredicted="@{homeViewModel.isPredicted}"
-                    bind:navigateEvent="@{mainViewModel.navigateEventToString}" />
+                    />
 
                 <androidx.constraintlayout.widget.Group
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility='@{mainViewModel.navigateEventToString.equals("Home") ? View.VISIBLE : View.GONE}'
+                    app:navigateEvent="@{mainViewModel.currentNavigationDestination}"
+                    app:isPredicted="@{homeViewModel.isPredicted}"
                     app:constraint_referenced_ids="predict_tv, emergency_tv, user_info_layout"
                     tools:visibility="gone" />
 
@@ -606,8 +605,11 @@
                 android:orientation="vertical"
                 app:behavior_hideable="false"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-                bind:isPredicted="@{homeViewModel.isPredicted}"
-                bind:navigateEvent="@{mainViewModel.navigateEventToString}">
+                app:navigateEvent="@{mainViewModel.currentNavigationDestination}"
+                app:isPredicted="@{homeViewModel.isPredicted}"
+                app:currentNavigateMenuEvent="@{mainViewModel.currentNavigateMenuEvent}"
+                app:isNavigationEventDuplicate="@{mainViewModel.isNavigationEventDuplicate}"
+                >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/bottom_sheet_top_layout"
@@ -625,6 +627,7 @@
                         android:background="@drawable/oval"
                         android:elevation="8dp"
                         android:padding="12dp"
+                        android:onClick="@{() -> view.getLastKnownLocation()}"
                         android:visibility="@{safeAreaVm.isSettingSafeArea ? View.VISIBLE : View.GONE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -636,7 +639,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="8dp"
-                        android:visibility='@{mainViewModel.navigateEventToString == "SafeArea" ? View.GONE : View.VISIBLE}'
+                        app:setLogoVisible="@{mainViewModel.currentNavigationDestination}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -653,7 +656,8 @@
                         android:text="구역\n생성"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        android:visibility='@{mainViewModel.navigateEventToString == "SafeAreaDetail" ? View.VISIBLE : View.GONE}'
+                        android:onClick="@{()->safeAreaVm.setIsSettingSafeAreaStatus(true)}"
+                        android:visibility='@{mainViewModel.currentNavigationDestination == @id/safeAreaDetailFragment ? View.VISIBLE : View.GONE}'
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -678,7 +682,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        bind:navigateEvent="@{mainViewModel.navigateEventToString}" />
+                        app:navigateEvent="@{mainViewModel.currentNavigationDestination}" />
 
 
                     <androidx.fragment.app.FragmentContainerView

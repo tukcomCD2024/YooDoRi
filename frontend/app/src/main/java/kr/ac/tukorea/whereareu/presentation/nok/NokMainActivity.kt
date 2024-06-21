@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -34,9 +33,7 @@ import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
-import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
-import com.naver.maps.map.widget.LocationButtonView
 import com.naver.maps.map.widget.ZoomControlView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -44,9 +41,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kr.ac.tukorea.whereareu.R
-import kr.ac.tukorea.whereareu.data.model.nok.home.LocationInfoResponse
 import kr.ac.tukorea.whereareu.databinding.ActivityNokMainBinding
-import kr.ac.tukorea.whereareu.databinding.IconLocationOverlayLayoutBinding
 import kr.ac.tukorea.whereareu.domain.history.LocationHistory
 import kr.ac.tukorea.whereareu.domain.history.LocationHistoryMetaData
 import kr.ac.tukorea.whereareu.domain.home.PredictMetaData
@@ -66,9 +61,7 @@ import kr.ac.tukorea.whereareu.util.extension.setInfoWindowText
 import kr.ac.tukorea.whereareu.util.extension.setMarker
 import kr.ac.tukorea.whereareu.util.extension.setMarkerWithInfoWindow
 import kr.ac.tukorea.whereareu.util.extension.setPath
-import kr.ac.tukorea.whereareu.util.location.DefaultLocationClient
 import kr.ac.tukorea.whereareu.util.location.LocationClient
-import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -116,13 +109,14 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         repeatOnStarted {
             mainViewModel.navigateEvent.collect { event ->
                 Log.d("navigateEvent collect", event.toString())
-                handleNavigationEvent(event)
+                handleNavigationMenuEvent(event)
             }
         }
 
         repeatOnStarted {
-            mainViewModel.navigateEventToString.collect {
-                Log.d("naviate to string", it)
+            mainViewModel.currentNavigationDestination.collect { destination ->
+                handleViewWithDestinationEvent(destination)
+                Log.d("currentNavigationDestination", destination.toString())
             }
         }
 
@@ -208,38 +202,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     private fun handleSafeAreaEvent(event: SafeAreaViewModel.SafeAreaEvent) {
         when (event) {
             is SafeAreaViewModel.SafeAreaEvent.FetchSafeArea -> {
-                /*event.safeAreas.forEach { safeArea ->
-                    with(safeArea) {
-                        val latLng = LatLng(latitude, longitude)
-                        safeAreMetaData.markers.add(
-                            Marker().apply {
-                                setMarker(
-                                    latLng = latLng,
-                                    markerIconColor = MarkerIcons.YELLOW,
-                                    text = areaName,
-                                    naverMap = naverMap,
-                                )
-                            }
-                        )
-                        safeAreMetaData.circleOverlays.add(
-                            CircleOverlay().apply {
-                                radius = safeArea.radius.toDouble()
-                                center = latLng
-                                outlineWidth = 5
-                                outlineColor = ContextCompat.getColor(
-                                    this@NokMainActivity,
-                                    R.color.deep_yellow
-                                )
-                                color = ContextCompat.getColor(
-                                    this@NokMainActivity,
-                                    R.color.transparent_yellow
-                                )
-                                map = naverMap
-                            }
-                        )
-                    }
-                }*/
-
             }
 
             is SafeAreaViewModel.SafeAreaEvent.MapView -> {
@@ -264,10 +226,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                     naverMap?.moveCamera(CameraUpdate.zoomTo(14.0))
 
                     with(safeAreMetaData) {
-                        //getLastKnownLocation()
-                        binding.currentLocationIv.setOnClickListener {
-                            getLastKnownLocation()
-                        }
+
                         binding.bottomSheetTopIv.isVisible = false
                         isSettingSafeArea = true
                         settingMarker.isVisible = true
@@ -281,7 +240,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                         settingMarker.isVisible = false
                         settingCircleOverlay.isVisible = false
                     }
-                    //navController.popBackStack()
                 }
             }
 
@@ -354,7 +312,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         }
     }
 
-    private fun getLastKnownLocation() {
+    fun getLastKnownLocation() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -367,9 +325,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                 if (location != null) {
                     val latLng = LatLng(location.latitude, location.longitude)
                     naverMap?.moveCamera(CameraUpdate.scrollTo(latLng))
-                    //locationTextView.text = "Latitude: $latitude, Longitude: $longitude"
                 } else {
-                    //locationTextView.text = "Location not available"
                 }
             }
             .addOnFailureListener { exception ->
@@ -377,102 +333,117 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
             }
     }
 
-    private fun handleNavigationEvent(event: NokMainViewModel.NavigateEvent) {
-        when (event) {
-            NokMainViewModel.NavigateEvent.Home -> {
-                behavior.isDraggable = true
-                setBottomSheetBehaviorForFirstNavigationEvent(HOME)
-                if (navController.currentDestination?.id == R.id.nokHomeFragment) {
-                    homeViewModel.fetchUserInfo()
-                    binding.layout.translationY = 0f
-                    //setBottomSheetBehaviorForFirstNavigationEvent(HOME)
-                }
-            }
+    private fun handleNavigationMenuEvent(event: NokMainViewModel.NavigateMenuEvent) {
+        if (event !is NokMainViewModel.NavigateMenuEvent.LocationHistory) {
+            Log.d("되니ㅏ", "되나")
+            clearLocationFragmentUI()
+        }
 
-            /*is NokHomeViewModel.NavigateEvent.HomeState -> {
-                behavior.isDraggable = true
-                setBottomSheetBehaviorForFirstNavigationEvent(HOME)
-                if (event.isPredicted) {
-                    //setBottomSheetBehaviorForFirstNavigationEvent(HOME)
-                } else {
-                    if (navController.currentDestination?.id == R.id.nokHomeFragment) {
-                        homeViewModel.fetchUserInfo()
-                        binding.layout.translationY = 0f
-                    }
-                }
-            }*/
+        if (event !is NokMainViewModel.NavigateMenuEvent.MeaningfulPlace) {
+            clearMeaningfulPlaceMarker()
+        }
 
-            NokMainViewModel.NavigateEvent.LocationHistory -> {
-                behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-            }
-
-            NokMainViewModel.NavigateEvent.MeaningfulPlace -> {
-                setBottomSheetBehaviorForFirstNavigationEvent(MEANINGFUL_PLACE)
-            }
-
-            NokMainViewModel.NavigateEvent.SafeArea -> {
-                if (navController.currentDestination?.id == R.id.safeAreaFragment) {
-                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                } else {
-                    behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                }
-                behavior.isDraggable = false
-            }
-
-            NokMainViewModel.NavigateEvent.Setting -> {
-                binding.navermapLogo.isVisible = false
-                behavior.isDraggable = false
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-
-            NokMainViewModel.NavigateEvent.SafeAreaDetail -> {
-                behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-            }
-
-            NokMainViewModel.NavigateEvent.SafeAreaSetting -> {
-                behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                with(safeAreMetaData) {
-                    settingMarker.apply {
-                        setMarker(
-                            naverMap?.cameraPosition?.target!!,
-                            MarkerIcons.PINK,
-                            "",
-                            naverMap
-                        )
-                        isVisible = true
-                    }
-
-                    settingCircleOverlay.apply {
-                        center = settingMarker.position
-                        radius = 500.0
-                        color =
-                            ContextCompat.getColor(
-                                this@NokMainActivity,
-                                R.color.purple
-                            )
-                        outlineWidth = 5
-                        outlineColor =
-                            ContextCompat.getColor(this@NokMainActivity, R.color.deep_purple)
-                        map = naverMap
-                        isVisible = true
-
-                    }
-                    safeAreaViewModel.setSettingSafeAreaLatLng(naverMap?.cameraPosition?.target!!)
-                    naverMap?.addOnCameraChangeListener { _, _ ->
-                        if (!isSettingSafeArea) {
-                            return@addOnCameraChangeListener
-                        }
-                        Log.d("change", "change")
-
-                        val currentPosition = naverMap?.cameraPosition?.target!!
-                        safeAreaViewModel.setSettingSafeAreaLatLng(currentPosition)
-                        Log.d("position", currentPosition.toString())
-                        settingMarker.position = currentPosition
-                        settingCircleOverlay.center = currentPosition
-                    }
-                }
+        if (event !is NokMainViewModel.NavigateMenuEvent.Home) {
+            clearHomeFragmentOverlay()
+            if (isRequireStopHomeFragmentJob) {
+                isRequireStopHomeFragmentJob = false
+                stopHomeFragmentJob()
             }
         }
+
+        if (event !is NokMainViewModel.NavigateMenuEvent.SafeArea) {
+            safeAreaViewModel.setIsSafeAreaGroupChanged(true)
+        }
+
+        when (event) {
+            is NokMainViewModel.NavigateMenuEvent.SafeArea -> {
+                if (event.destination == R.id.settingSafeAreaFragment) {
+
+                    behavior.halfExpandedRatio = 0.25f
+                    //behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                    with(safeAreMetaData) {
+                        settingMarker.apply {
+                            setMarker(
+                                naverMap?.cameraPosition?.target!!,
+                                MarkerIcons.PINK,
+                                "",
+                                naverMap
+                            )
+                            isVisible = true
+                        }
+
+                        settingCircleOverlay.apply {
+                            center = settingMarker.position
+                            radius = 500.0
+                            color =
+                                ContextCompat.getColor(
+                                    this@NokMainActivity,
+                                    R.color.purple
+                                )
+                            outlineWidth = 5
+                            outlineColor =
+                                ContextCompat.getColor(
+                                    this@NokMainActivity,
+                                    R.color.deep_purple
+                                )
+                            map = naverMap
+                            isVisible = true
+
+                        }
+                        safeAreaViewModel.setSettingSafeAreaLatLng(naverMap?.cameraPosition?.target!!)
+                        naverMap?.addOnCameraChangeListener { _, _ ->
+                            if (!isSettingSafeArea) {
+                                return@addOnCameraChangeListener
+                            }
+                            Log.d("change", "change")
+
+                            val currentPosition = naverMap?.cameraPosition?.target!!
+                            safeAreaViewModel.setSettingSafeAreaLatLng(currentPosition)
+                            Log.d("position", currentPosition.toString())
+                            settingMarker.position = currentPosition
+                            settingCircleOverlay.center = currentPosition
+
+                        }
+                    }
+                }
+            }
+
+            is NokMainViewModel.NavigateMenuEvent.Home -> {
+                if (event.destination == R.id.nokHomeFragment) {
+                    homeViewModel.fetchUserInfo()
+                    binding.layout.translationY = 0f
+                }
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun handleViewWithDestinationEvent(destination: Int) {
+
+        if (destination != R.id.safeAreaDetailFragment) {
+            with(safeAreMetaData) {
+                markers.forEach {
+                    it.map = null
+                }
+                circleOverlays.forEach {
+                    it.map = null
+                }
+                markers.clear()
+                circleOverlays.clear()
+            }
+        }
+
+
+        /*if (destination !in listOf(
+                R.id.nokSettingFragment,
+                R.id.settingUpdateTimeFragment,
+                R.id.modifyUserInfoFragment,
+                R.id.settingSafeAreaFragment
+            )
+        ) {
+            behavior.isDraggable = true
+        }*/
     }
 
     private fun handleLocationHistoryEvent(event: LocationHistoryViewModel.LocationHistoryEvent) {
@@ -591,6 +562,7 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         when (event) {
             // 예측 시작 -> 보호대상자 마지막 정보, 의미 장소 api 호출, 보호대상자 위치 업데이트 api 정지, 로딩화면 표시
             is NokHomeViewModel.PredictEvent.StartPredict -> {
+                clearHomeFragmentOverlay()
                 homeViewModel.predict()
                 stopGetDementiaLocation()
                 showLoadingDialog(this, "예측 장소를 추출중입니다...")
@@ -671,6 +643,11 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                     }
                     markers.clear()
                     binding.layout.translationY = 0f
+                    //homeViewModel.fetchUserInfo()
+                    //homeViewModel.fetchSafeAreaAll()
+                    if (navController.currentDestination?.id == R.id.meaningfulPlaceDetailFragment) {
+                        navController.popBackStack()
+                    }
                 }
             }
 
@@ -829,21 +806,12 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
     fun predict() {
         homeViewModel.setIsPredicted(true)
+        mainViewModel.setIsNavigationEventDuplicate(true)
     }
 
     fun stopPredict() {
         homeViewModel.setIsPredicted(false)
-    }
-
-    private fun setSafeArea() {
-        /*if(navController.currentDestination?.id == R.id.safeAreaFragment){
-            navController.navigate(R.id.action_safeAreaFragment_to_settingSafeAreaFragment)
-        } else {
-            navController.navigate(R.id.action_safeAreaDetailFragment_to_settingSafeAreaFragment)
-        }*/
-        //binding.layout.translationY = 0f
-        //behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-        safeAreaViewModel.setIsSettingSafeAreaStatus(true)
+        mainViewModel.setIsNavigationEventDuplicate(false)
     }
 
     override fun initView() {
@@ -856,10 +824,6 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         initBottomSheet()
         initMap()
         initNavigator()
-
-        binding.setSafeAreaTv.setOnClickListener {
-            setSafeArea()
-        }
 
         binding.changeGroupBtn.setOnClickListener {
             val dialog = SelectGroupDialogFragment()
@@ -913,6 +877,9 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
 
                 // bottom sheet 동작에 따른 지도 y축 위치 변화
                 if (slideOffset <= 0.3f) {
+                    if (!homeViewModel.isPredicted.value) {
+                        return
+                    }
                     binding.layout.translationY = -slideOffset * bottomSheet.height * 0.5f
                 }
             }
@@ -926,110 +893,42 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         navController = navHostFragment.navController
 
         binding.bottomNav.setupWithNavController(navController)
-        setBottomSheetBehaviorForFirstNavigationEvent(HOME)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            //Log.d("backEntry", navController.currentBackStackEntry.)
-
-            if (navController.currentDestination?.id !in listOf(
-                    R.id.nokHomeFragment,
-                    R.id.meaningfulPlaceDetailFragment
-                )
-            ) {
-                isFirstNavigationEvent[HOME] = true
-                if (isRequireStopHomeFragmentJob) {
-                    isRequireStopHomeFragmentJob = false
-                    stopHomeFragmentJob()
-                }
-            }
-
-            if (destination.id != R.id.nokHomeFragment) {
-                predictMetaData.safeMarkers.forEach {
-                    it.map = null
-                }
-                predictMetaData.safeCircleOverlays.forEach {
-                    it.map = null
-                }
-                predictMetaData.safeMarkers.clear()
-                predictMetaData.safeCircleOverlays.clear()
-            }
-
-            if (destination.id !in listOf(
-                    R.id.safeAreaFragment,
-                    R.id.safeAreaDetailFragment,
-                    R.id.settingSafeAreaFragment
-                )
-            ) {
-                isFirstNavigationEvent[SAFE_AREA] = true
-                safeAreaViewModel.setIsSafeAreaGroupChanged(true)
-            }
-
-            if (destination.id != R.id.safeAreaDetailFragment) {
-                with(safeAreMetaData) {
-                    markers.forEach {
-                        it.map = null
-                    }
-                    circleOverlays.forEach {
-                        it.map = null
-                    }
-                    markers.clear()
-                    circleOverlays.clear()
-                }
-            }
-
-            if (destination.id != R.id.locationHistoryFragment) {
-                clearLocationFragmentUI()
-            }
-
-            if (destination.id !in listOf(
-                    R.id.meaningfulPlaceFragment, R.id.meaningfulPlaceDetailForPageFragment
-                )
-            ) {
-                isFirstNavigationEvent[MEANINGFUL_PLACE] = true
-                removeMeaningfulPlaceMarker()
-            }
-
-            if (destination.id !in listOf(
-                    R.id.nokSettingFragment,
-                    R.id.settingUpdateTimeFragment,
-                    R.id.modifyUserInfoFragment,
-                    R.id.settingSafeAreaFragment
-                )
-            ) {
-                behavior.isDraggable = true
-            }
+            mainViewModel.setCurrentNavigationDestination(destination.id)
 
             when (destination.id) {
-                R.id.nokHomeFragment, R.id.meaningfulPlaceDetailFragment -> {
+                LOCATION_HISTORY_TAB -> {
+                    mainViewModel.eventNavigate(
+                        NokMainViewModel.NavigateMenuEvent.LocationHistory(
+                            destination.id
+                        )
+                    )
+                }
+
+                in MEANINGFUL_PLACE_TAB -> {
+                    mainViewModel.eventNavigate(
+                        NokMainViewModel.NavigateMenuEvent.MeaningfulPlace(
+                            destination.id
+                        )
+                    )
+                }
+
+                in HOME_TAB -> {
                     isRequireStopHomeFragmentJob = true
-                    mainViewModel.eventNavigate(NokMainViewModel.NavigateEvent.Home)
+                    mainViewModel.eventNavigate(NokMainViewModel.NavigateMenuEvent.Home(destination.id))
                 }
 
-                R.id.nokSettingFragment, R.id.modifyUserInfoFragment, R.id.settingUpdateTimeFragment -> {
-                    mainViewModel.eventNavigate(NokMainViewModel.NavigateEvent.Setting)
+                in SAFE_AREA_TAB -> {
+                    mainViewModel.eventNavigate(
+                        NokMainViewModel.NavigateMenuEvent.SafeArea(
+                            destination.id
+                        )
+                    )
                 }
 
-                R.id.safeAreaFragment -> {
-                    mainViewModel.eventNavigate(NokMainViewModel.NavigateEvent.SafeArea)
-                }
-
-                R.id.safeAreaDetailFragment -> {
-                    mainViewModel.eventNavigate(NokMainViewModel.NavigateEvent.SafeAreaDetail)
-                    //behavior.halfExpandedRatio = 0.4f
-                }
-
-                R.id.settingSafeAreaFragment -> {
-                    mainViewModel.eventNavigate(NokMainViewModel.NavigateEvent.SafeAreaSetting)
-                    behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                    behavior.halfExpandedRatio = 0.25f
-                }
-
-                R.id.meaningfulPlaceFragment, R.id.meaningfulPlaceDetailForPageFragment -> {
-                    mainViewModel.eventNavigate(NokMainViewModel.NavigateEvent.MeaningfulPlace)
-                }
-
-                R.id.locationHistoryFragment -> {
-                    mainViewModel.eventNavigate(NokMainViewModel.NavigateEvent.LocationHistory)
+                in SETTING_TAB -> {
+                    mainViewModel.eventNavigate(NokMainViewModel.NavigateMenuEvent.Setting)
                 }
             }
         }
@@ -1080,29 +979,40 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
         }
     }
 
-    private fun setBottomSheetBehaviorForFirstNavigationEvent(index: Int) {
-        if (isFirstNavigationEvent[index]) {
-            isFirstNavigationEvent[index] = false
-
-            behavior.state = if (index == HOME) {
-                BottomSheetBehavior.STATE_COLLAPSED
-            } else {
-                BottomSheetBehavior.STATE_HALF_EXPANDED
-            }
-        }
-    }
-
     companion object {
         const val LAST_LOCATION = 0
         const val MEANINGFUL_PLACE = 0
         const val HOME = 1
         const val SAFE_AREA = 2
+
+        val LOCATION_HISTORY_TAB = R.id.locationHistoryFragment
+        val MEANINGFUL_PLACE_TAB =
+            listOf(R.id.meaningfulPlaceFragment, R.id.meaningfulPlaceDetailForPageFragment)
+        val HOME_TAB = listOf(R.id.nokHomeFragment, R.id.meaningfulPlaceDetailFragment)
+        val SAFE_AREA_TAB =
+            listOf(R.id.safeAreaFragment, R.id.safeAreaDetailFragment, R.id.settingSafeAreaFragment)
+        val SETTING_TAB = listOf(
+            R.id.nokSettingFragment,
+            R.id.modifyUserInfoFragment,
+            R.id.settingUpdateTimeFragment
+        )
     }
 
-    private fun removeMeaningfulPlaceMarker() {
+    private fun clearMeaningfulPlaceMarker() {
         meaningulPlaceMarkers.forEach { marker ->
             marker.map = null
         }
+    }
+
+    private fun clearHomeFragmentOverlay() {
+        predictMetaData.safeMarkers.forEach {
+            it.map = null
+        }
+        predictMetaData.safeCircleOverlays.forEach {
+            it.map = null
+        }
+        predictMetaData.safeMarkers.clear()
+        predictMetaData.safeCircleOverlays.clear()
     }
 
     private val locationUpdateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
