@@ -28,7 +28,10 @@ import requests
 import urllib.parse
 import pandas as pd
 import time
+
 from openai import OpenAI
+
+
 
 
 router = APIRouter()
@@ -1313,18 +1316,19 @@ async def address_conversion(request: AddressConversionRequest):
 #gpt test
 @router.post("/gpt")
 async def gpt_test(request: GPTRequest):
+    
     _key = request.dementiaKey
     _date = request.date
 
-    loc_list = session.query(models.location_info).filter_by(dementia_key = _key, date = _date).all()
+    try:
+        loc_list = session.query(models.location_info).filter_by(dementia_key=_key, date=_date).all()
 
-    if not loc_list:
-        raise HTTPException(status_code=404, detail="Location data not found")
-    
-    route_descriptions = [f"({loc.latitude}, {loc.longitude})" for loc in loc_list]
-    route_prompt = "User's travel route: " + " -> ".join(route_descriptions)
+        if not loc_list:
+            raise HTTPException(status_code=404, detail="Location data not found")
 
-    try: 
+        route_descriptions = [f"({loc.latitude}, {loc.longitude})" for loc in loc_list]
+        route_prompt = "User's travel route: " + " -> ".join(route_descriptions)
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -1333,11 +1337,13 @@ async def gpt_test(request: GPTRequest):
             ]
         )
 
-        return {"summary": response.choices[0].message['content'].strip()}
+        summary = response.choices[0].message['content'].strip()
+        return {"summary": summary}
+    
+    
     except Exception as e:
-        print(f"[ERROR] GPT-3 failed: {e}")
-
-        raise HTTPException(status_code=404, detail=f"{e}")
+        print(f"[ERROR] An error occurred: {e}")
+        raise HTTPException(status_code=500, detail="An internal error occurred")
     
     finally:
         session.close()
