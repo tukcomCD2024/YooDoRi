@@ -81,78 +81,21 @@ async def receive_dementia_info(request: ReceiveDementiaInfoRequest, user_servic
     
 
 @router.post("/connection", responses = {200 : {"model" : ConnectionResponse, "description" : "연결 확인 성공" }, 400: {"model": ErrorResponse, "description": "연결 실패"}}, description="보호자와 보호 대상자의 연결 확인")
-async def is_connected(request: ConnectionRequest):
-
-    _dementia_key = request.dementiaKey
-
-    session = next(db.get_session())
+async def is_connected(request: ConnectionRequest, user_service: UserService = Depends()):
     try:
-        existing_nok = session.query(models.nok_info).filter_by(dementia_info_key = _dementia_key).first()
-        if existing_nok:
-            result = {
-                'nokInfoRecord':{
-                    'nokKey': existing_nok.nok_key,
-                    'nokName': existing_nok.nok_name,
-                    'nokPhoneNumber': existing_nok.nok_phonenumber
-                }
-            }
-            response = {
-                'status': 'success',
-                'message': 'Connection check',
-                'result': result
-            }
-
-            print(f"[INFO] Connection check from {existing_nok.nok_name}(from {existing_nok.dementia_info_key})")
-
-            return response
-        
-        else:
-            print (f"[ERROR] Connection denied from Dementia key({_dementia_key})")
-
-            raise HTTPException(status_code=400, detail="Connection denied")
-
-    finally:
-        session.close()
+        return await user_service.check_connection(request)
+    
+    except HTTPException as e:
+        raise e
 
 @router.post("/login", responses = {200 : {"model" : CommonResponse, "description" : "로그인 성공" }, 400: {"model": ErrorResponse, "description": "로그인 실패"}}, description="보호자와 보호 대상자의 로그인 | isDementia : 0(보호자), 1(보호 대상자)")
-async def receive_user_login(request: loginRequest):
-    _key = request.key
-    _isdementia = request.isDementia
+async def receive_user_login(request: loginRequest, user_service: UserService = Depends()):
     try:
-        if _isdementia == 0: # 보호자인 경우
-            existing_nok = session.query(models.nok_info).filter_by(nok_key = _key).first()
+        return await user_service.auto_login(request)
+    
+    except HTTPException as e:
+        raise e
 
-            if existing_nok:
-                response = {
-                    'status': 'success',
-                    'message': 'User login success',
-                }
-                print(f"[INFO] User login from {existing_nok.nok_name}({existing_nok.nok_key})")
-
-            else:
-                print(f"[ERROR] User login failed from NOK key({_key})")
-
-                raise HTTPException(status_code=400, detail="User login failed")
-        
-        elif _isdementia == 1: # 보호 대상자인 경우
-            existing_dementia = session.query(models.dementia_info).filter_by(dementia_key = _key).first()
-
-            if existing_dementia:
-                response = {
-                    'status': 'success',
-                    'message': 'User login success',
-                }
-                print(f"[INFO] User login from {existing_dementia.dementia_name}({existing_dementia.dementia_key})")
-
-            else:
-                print(f"[ERROR] User login failed from Dementia key({_key})")
-
-                raise HTTPException(status_code=400, detail="User login failed")
-
-        return response
-        
-    finally:
-        session.close()
 
 
 #위치 정보 전송

@@ -48,6 +48,44 @@ class UserService:
                 "dementiaKey": _key
             }
         )
+    
+    async def check_connection(self, request: ConnectionRequest) -> ConnectionResponse:
+        nok_info = self.db.query(models.nok_info).filter(models.nok_info.dementia_info_key == request.dementiaKey).first()
+
+        if not nok_info:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="NOK 정보 조회 실패")
+        
+        return ConnectionResponse(
+            status="success",
+            message="Connection check success",
+            result={
+                "nokInfoRecord": {
+                    "nokKey": nok_info.nok_key,
+                    "nokName": nok_info.nok_name,
+                    "nokPhoneNumber": nok_info.nok_phonenumber,
+                    "updateRate": nok_info.update_rate
+                }
+            }
+        )
+    async def auto_login(self, request: loginRequest) -> CommonResponse:
+        _isDementia = request.isDementia
+
+        if _isDementia == 0:
+            nok_info = self.db.query(models.nok_info).filter(models.nok_info.nok_key == request.key).first()
+
+            if not nok_info:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="NOK 정보 조회 실패")
+            
+        elif _isDementia == 1:
+            dementia_info = self.db.query(models.dementia_info).filter(models.dementia_info.dementia_key == request.key).first()
+
+            if not dementia_info:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="보호 대상자 정보 조회 실패")
+            
+        return CommonResponse(
+            status="success",
+            message="User login success"
+        )
 
     def get_dementia_info(self, key_from_dementia: str):
         dementia_info = self.db.query(models.dementia_info).filter(models.dementia_info.dementia_key == key_from_dementia).first()
