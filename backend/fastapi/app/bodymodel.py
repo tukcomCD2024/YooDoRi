@@ -99,7 +99,7 @@ class LastLoc(BaseModel):
     longitude : float = Field(examples=["127.123456"])
     bearing : float = Field(examples=["0.0"])
     currentSpeed : float = Field(examples=["0.0"])
-    userStatus : int = Field(examples=["1"], description = " 1 : 정지, 2 : 도보, 3 : 차량, 4 : 지하철")
+    userStatus : str = Field(examples=["도보"])
     battery : int = Field(examples=["100"])
     isInternetOn : bool = Field(examples=["true"])
     isGpsOn : bool = Field(examples=["true"])
@@ -325,7 +325,7 @@ class safeArea(BaseModel):
     latitude : float = Field(examples=["37.123456"])
     longitude : float = Field(examples=["127.123456"])
     radius : float = Field(examples=["0.5"], description="킬로미터 단위")
-
+    
 class GetSafeAreaAllResponse(BaseModel):
     status: str = Field("success")
     message: str = Field("메~시~지~")
