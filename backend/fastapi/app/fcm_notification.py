@@ -12,13 +12,6 @@ firebase_admin.initialize_app(cred)
 
 async def send_push_notification(token, title, body, data):
 
-    '''result = push_service.notify_single_device(
-        registration_id=token,
-        message_title=title,
-        message_body=body,
-        data_message=data
-    )'''
-
     message = messaging.Message(
         notification=messaging.Notification(
             title=title,

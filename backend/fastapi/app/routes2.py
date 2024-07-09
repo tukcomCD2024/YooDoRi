@@ -22,6 +22,7 @@ from .user_status_convertor import convertor
 from .LocationPredict import ForecastLSTMClassification, Preprocessing
 from .validater import validateInSafeArea
 from .fcm_notification import send_push_notification
+from .service.user_service import UserService
 
 import asyncio
 import requests
@@ -61,83 +62,21 @@ async def send_fcm(request: FCMRequest):
 
 #유저 등록
 @router.post("/noks",status_code=status.HTTP_201_CREATED, responses = {201 : {"model" : ReceiveNokInfoResponse, "description" : "유저 등록 성공" },404: {"model": ErrorResponse, "description": "보호 대상자 키 조회 실패"}}, description="보호자가 보호 대상자의 정보를 등록 | fcmToken 없으면 그냥 빈칸으로 보낼 것")
-async def receive_nok_info(request: ReceiveNokInfoRequest):
-
-    _key_from_dementia = request.keyFromDementia
-
-    rng = RandomNumberGenerator()
-
+async def receice_nok_info(request: ReceiveNokInfoRequest, user_service: UserService = Depends()):
     try:
-        existing_dementia = session.query(models.dementia_info).filter(models.dementia_info.dementia_key == _key_from_dementia).first()
-        if existing_dementia:
-            _nok_name = request.nokName
-            _nok_phonenumber = request.nokPhoneNumber
-            
-            
-            duplication_check = session.query(models.nok_info).filter(models.nok_info.nok_name == _nok_name, models.nok_info.nok_phonenumber == _nok_phonenumber, models.nok_info.dementia_info_key == _key_from_dementia).first()
-
-            if duplication_check:
-                _key = duplication_check.nok_key
-                if not duplication_check.fcm_token == request.fcmToken:
-                    duplication_check.fcm_token = request.fcmToken
-                    session.commit()
-                else:
-                    pass
-                
-            else:
-                unique_key = None
-                for _ in range(10):
-                    unique_key = rng.generate_unique_random_number(100000, 999999)
-                
-                _key = str(unique_key)
-
-                new_nok = models.nok_info(nok_key=_key, nok_name=_nok_name, nok_phonenumber=_nok_phonenumber, dementia_info_key=_key_from_dementia, update_rate=1, fcm_token = request.fcmToken) # update_rate는 기본값 1분으로 설정
-                session.add(new_nok)
-                session.commit()
-
-            '''if not request.fcmToken == '':
-                existing_token = session.query(models.refresh_token_info).filter_by(key = _key).first()
-                if existing_token:
-                    existing_token.fcm_token = request.fcmToken
-                else:
-
-                    new_token = models.refresh_token_info(key = _key, fcm_token = request.fcmToken)
-                    session.add(new_token)
-
-                session.commit()
-            else:
-                pass'''
-
-            result = {
-                'dementiaInfoRecord' : {
-                        'dementiaKey' : existing_dementia.dementia_key,
-                        'dementiaName': existing_dementia.dementia_name,
-                        'dementiaPhoneNumber': existing_dementia.dementia_phonenumber
-                },
-                'nokKey': _key
-            }
-
-            print(f"[INFO] NOK information received from {existing_dementia.dementia_name}({existing_dementia.dementia_key})")
-
-            response = {
-                'status': 'success',
-                'message': 'NOK information received',
-                'result': result
-            }
-
-            return response
-            
-        else: # 보호 대상자 인증번호가 등록되어 있지 않은 경우
-
-            print(f"[ERROR] Dementia key({_key_from_dementia}) not found")
-
-            raise HTTPException(status_code=404, detail="Dementia key not found")
-
-    finally:
-        session.close()
+        return await user_service.register_nok_info(request)
+    
+    except HTTPException as e:
+        raise e
 
 @router.post("/dementias", status_code=status.HTTP_201_CREATED, responses = {201 : {"model" : ReceiveDementiaInfoResponse, "description" : "유저 등록 성공" }}, description="보호 대상자의 정보를 등록 | fcmToken 없으면 그냥 빈칸으로 보낼 것")
-async def receive_dementia_info(request: ReceiveDementiaInfoRequest):
+async def receive_dementia_info(request: ReceiveDementiaInfoRequest, user_service: UserService = Depends()):
+
+    try:
+        return await user_service.register_dementia_info(request)
+    
+    except HTTPException as e:
+        raise e
 
     rng = RandomNumberGenerator()
 
@@ -1361,3 +1300,4 @@ def analyzing_location_data():
 @sched.scheduled_job('cron', hour=1, minute=0, id = 'geocoding')
 def geocoding():
     asyncio.run(schedFunc.load_kakao_api(session))'''
+
