@@ -78,57 +78,7 @@ async def receive_dementia_info(request: ReceiveDementiaInfoRequest, user_servic
     except HTTPException as e:
         raise e
 
-    rng = RandomNumberGenerator()
-
-    try:
-        _dementia_name = request.name
-        _dementia_phonenumber = request.phoneNumber
-        
-
-        duplication_check = session.query(models.dementia_info).filter(models.dementia_info.dementia_name == _dementia_name, models.dementia_info.dementia_phonenumber == _dementia_phonenumber).first()
-
-        if duplication_check: # 기존의 인증번호를 가져옴
-            _key = duplication_check.dementia_key
-        else: # 새로운 인증번호 생성
-            unique_key = None
-            for _ in range(10):
-                unique_key = rng.generate_unique_random_number(100000, 999999)
-            
-            _key = str(unique_key)
-
-            #_key = pwd_context.hash(unique_key)
-
-            new_dementia = models.dementia_info(dementia_key=_key, dementia_name=_dementia_name, dementia_phonenumber=_dementia_phonenumber, update_rate=1) # update_rate는 기본값 1분으로 설정
-            session.add(new_dementia)
-            session.commit()
-
-        '''if not request.fcmToken == '':
-            existing_token = session.query(models.refresh_token_info).filter_by(key = _key).first()
-            if existing_token:
-                existing_token.fcm_token = request.fcmToken
-            else:
-                new_token = models.refresh_token_info(key = _key, fcm_token = request.fcmToken)
-                session.add(new_token)
-            session.commit()
-        else:
-            pass'''
-
-        result = {
-            'dementiaKey': _key
-        }
-
-        response = {
-            'status': 'success',
-            'message' : 'Dementia information received',
-            'result': result
-        }
-
-        print(f"[INFO] Dementia information received from {_dementia_name}({_key})")
-
-        return response
     
-    finally:
-        session.close()
 
 @router.post("/connection", responses = {200 : {"model" : ConnectionResponse, "description" : "연결 확인 성공" }, 400: {"model": ErrorResponse, "description": "연결 실패"}}, description="보호자와 보호 대상자의 연결 확인")
 async def is_connected(request: ConnectionRequest):
