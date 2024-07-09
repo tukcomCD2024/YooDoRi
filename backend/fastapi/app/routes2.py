@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm, APIKeyHeader, OAuth2PasswordBearer
-from fastapi.responses import JSONResponse
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from passlib.context import CryptContext
@@ -12,7 +11,6 @@ from sqlalchemy import and_, func
 
 from . import models
 from .random_generator import RandomNumberGenerator
-from .update_user_status import UpdateUserStatus
 from .database import Database
 from .bodymodel import *
 from .util import JWTService
@@ -23,12 +21,10 @@ from .LocationPredict import ForecastLSTMClassification, Preprocessing
 from .validater import validateInSafeArea
 from .fcm_notification import send_push_notification
 from .service.user_service import UserService
+from .service.location_service import LocService
 
-import asyncio
-import requests
-import urllib.parse
 import pandas as pd
-import time
+
 
 from openai import OpenAI
 
@@ -100,137 +96,20 @@ async def receive_user_login(request: loginRequest, user_service: UserService = 
 
 #위치 정보 전송
 @router.post("/locations/dementias", responses = {200 : {"model" : TempResponse, "description" : "위치 정보 전송 성공" }, 404: {"model": ErrorResponse, "description": "보호 대상자 키 조회 실패"}}, description="보호 대상자의 위치 정보를 전송 | isRingstoneOn : 0(무음), 1(진동), 2(벨소리)")
-def receive_location_info(request: ReceiveLocationRequest):
-
+async def receive_location_info(request: ReceiveLocationRequest, loc_service: LocService = Depends()):
     try:
-        _dementia_key = request.dementiaKey
-
-        existing_dementia = session.query(models.dementia_info).filter_by(dementia_key = _dementia_key).first()
-        safe_area_list = session.query(models.safe_area_info).filter_by(dementia_key = _dementia_key).all()
-        latest_loc = session.query(models.location_info).filter_by(dementia_key = _dementia_key).order_by(models.location_info.num.desc()).first()
-
-        current_location = (request.latitude, request.longitude)
-        
-
-        if existing_dementia:
-
-            user_status_updater = UpdateUserStatus()
-
-            accel = request.accelerationSensor
-            gyro = request.gyroSensor
-            direction = request.directionSensor
-
-            prediction = user_status_updater.predict(accel, gyro, direction)
-
-            _near_safe_area, _isInSafeArea = val.isinsafearea(current_location, safe_area_list)
-                
-            if prediction[0]==1:
-                status = "정지"
-            elif prediction[0]==2:
-                status = "도보"
-            elif prediction[0]==3:
-                status = "차량"
-            elif prediction[0]==4:
-                status = "지하철"
-            else:
-                pass
-            
-            new_location = models.location_info(
-                dementia_key = _dementia_key,
-                date = request.date,
-                time = request.time,
-                latitude = request.latitude,
-                longitude = request.longitude,
-                bearing = request.bearing,
-                user_status = status,
-                accelerationsensor_x = accel[0],
-                accelerationsensor_y = accel[1],
-                accelerationsensor_z = accel[2],
-                directionsensor_x = direction[0],
-                directionsensor_y = direction[1],
-                directionsensor_z = direction[2],
-                gyrosensor_x = gyro[0],
-                gyrosensor_y = gyro[1],
-                gyrosensor_z = gyro[2],
-                lightsensor = request.lightSensor[0],
-                battery = request.battery,
-                isInternetOn = request.isInternetOn,
-                isRingstoneOn = request.isRingstoneOn,
-                isGpsOn = request.isGpsOn,
-                current_speed = request.currentSpeed,
-                isInSafeArea = _isInSafeArea,
-                nearSafeArea = _near_safe_area.area_key
-            )
-
-            session.add(new_location)
-            session.commit()
-
-            nok_info = session.query(models.nok_info).filter_by(dementia_info_key = _dementia_key).all()
-
-            if nok_info:
-                for nok in nok_info:
-                    if nok.fcm_token == None:
-                        pass
-                    else:
-                        asyncio.run(val.pushNotification(nok.fcm_token, new_location, latest_loc, _near_safe_area))
-            else:
-                pass
-
-            print(f"[INFO] Location data received from {existing_dementia.dementia_name}({existing_dementia.dementia_key})")
-
-            response = {
-                'status': 'success',
-                'message': 'Location data received',
-                'result' : int(prediction[0])
-            }
-
-        else:
-            print(f"[ERROR] Dementia key({_dementia_key}) not found(receive location info)")
-
-            raise HTTPException(status_code=404, detail="Dementia key not found")
-
-        return response
-        
-    finally:
-        session.close()
+        return await loc_service.register_location(request)
+    
+    except HTTPException as e:
+        raise e
 
 @router.get("/locations/noks", responses = {200 : {"model" : GetLocationResponse, "description" : "위치 정보 전송 성공" }, 404: {"model": ErrorResponse, "description": "위치 정보 없음"}}, description="보호자에게 보호 대상자의 위치 정보를 전송(쿼리 스트링) | userStatus : 1(정지), 2(도보), 3(차량), 4(지하철) | isRingstoneOn : 0(무음), 1(진동), 2(벨소리)")
-def send_live_location_info(dementiaKey : str):
-
+async def send_live_location_info(dementiaKey : str, loc_service : LocService = Depends()):
     try:
-        
-        latest_location = session.query(models.location_info).filter_by(dementia_key = dementiaKey).order_by(models.location_info.num.desc()).first()
-
-        if latest_location:
-                
-            result = {
-                'latitude': latest_location.latitude,
-                'longitude': latest_location.longitude,
-                'bearing': latest_location.bearing,
-                'currentSpeed': latest_location.current_speed,
-                'userStatus': latest_location.user_status, # 1: 정지, 2: 도보, 3: 차량, 4: 지하철
-                'battery': latest_location.battery,
-                'isInternetOn': latest_location.isInternetOn,
-                'isGpsOn': latest_location.isGpsOn,
-                'isRingstoneOn': latest_location.isRingstoneOn # 0 : 무음, 1 : 진동, 2 : 벨소리
-            }
-            response = {
-                'status': 'success',
-                'message': 'Live location data sent',
-                'result': result
-            }
-            print(f"[INFO] Live location data sent to {latest_location.dementia_key}")
-            
-        else:
-            print(f"[ERROR] Location data not found for Dementia key({dementiaKey})")
-
-            raise HTTPException(status_code=404, detail="Location data not found")
-
-        return response
+        return await loc_service.send_live_location_info(dementiaKey)
     
-    finally:
-        session.close()
-
+    except HTTPException as e:
+        raise e
 
 # 유저 정보 수정
 @router.post("/users/modification/userInfo", responses = {200 : {"model" : CommonResponse, "description" : "유저 정보 수정 성공" }, 404: {"model": ErrorResponse, "description": "유저 키 조회 실패"}}, description="보호자와 보호대상자의 정보를 수정 | isDementia : 0(보호자), 1(보호대상자) | 변경하지 않는 값은 기존의 값을 그대로 수신할 것")
