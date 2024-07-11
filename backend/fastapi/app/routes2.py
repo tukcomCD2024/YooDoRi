@@ -22,6 +22,7 @@ from .validater import validateInSafeArea
 from .fcm_notification import send_push_notification
 from .service.user_service import UserService
 from .service.location_service import LocService
+from .service.modify import ModifyService
 
 import pandas as pd
 
@@ -113,123 +114,20 @@ async def send_live_location_info(dementiaKey : str, loc_service : LocService = 
 
 # 유저 정보 수정
 @router.post("/users/modification/userInfo", responses = {200 : {"model" : CommonResponse, "description" : "유저 정보 수정 성공" }, 404: {"model": ErrorResponse, "description": "유저 키 조회 실패"}}, description="보호자와 보호대상자의 정보를 수정 | isDementia : 0(보호자), 1(보호대상자) | 변경하지 않는 값은 기존의 값을 그대로 수신할 것")
-async def modify_user_info(request: ModifyUserInfoRequest):
-
-    _is_dementia = request.isDementia
-    _key = request.key
-    _before_name = request.name
-    _before_phonenumber = request.phoneNumber
-
+async def modify_user_info(request: ModifyUserInfoRequest, modify : ModifyService = Depends()):
     try:
-        if _is_dementia == 0: #보호자
-            existing_nok = session.query(models.nok_info).filter_by(nok_key = _key).first()
-
-            if existing_nok:
-                # 수정된 정보를 제외한 나머지 정보들은 기존의 값을 그대로 수신받음
-
-                if not existing_nok.nok_name == _before_name:
-                    existing_nok.nok_name = _before_name
-                
-                if not existing_nok.nok_phonenumber == _before_phonenumber:
-                    existing_nok.nok_phonenumber = _before_phonenumber
-                
-                session.commit()
-
-                print(f"[INFO] User information modified by {existing_nok.nok_name}({existing_nok.nok_key})")
-
-                response = {
-                    'status': 'success',
-                    'message': 'User information modified'
-                }
-            else:
-                print(f"[ERROR] NOK key not found")
-                
-                raise HTTPException(status_code=404, detail="NOK key not found")
-
-        elif _is_dementia == 1: #보호대상자
-            existing_dementia = session.query(models.dementia_info).filter_by(dementia_key = _key).first()
-
-            if existing_dementia:
-                # 수정된 정보를 제외한 나머지 정보들은 기존의 값을 그대로 수신받음
-
-                if not existing_dementia.dementia_name == _before_name:
-                    existing_dementia.dementia_name = _before_name
-                
-                if not existing_dementia.dementia_phonenumber == _before_phonenumber:
-                    existing_dementia.dementia_phonenumber = _before_phonenumber
-                
-                session.commit()
-
-                print(f"[INFO] User information modified by {existing_dementia.dementia_name}({existing_dementia.dementia_key})")
-
-                response = {
-                    'status': 'success',
-                    'message': 'User information modified'
-                }
-
-            else:
-                print(f"[ERROR] Dementia key not found")
-
-                raise HTTPException(status_code=404, detail="Dementia key not found")
-
-        return response
+        return await modify.modify_userInfo(request)
     
-    finally:
-        session.close()
+    except HTTPException as e:
+        raise e
 
 @router.post("/users/modification/updateRate", responses = {200 : {"model" : CommonResponse, "description" : "업데이트 주기 수정 성공" }, 404: {"model": ErrorResponse, "description": "유저 키 조회 실패"}}, description="보호자와 보호대상자의 업데이트 주기를 수정 | isDementia : 0(보호자), 1(보호대상자)")
-async def modify_updatint_rate(request: ModifyUserUpdateRateRequest):
-    _is_dementia = request.isDementia
-    _key = request.key
-    _update_rate = request.updateRate
-
-    #보호자와 보호대상자 모두 업데이트
+async def modify_updatint_rate(request: ModifyUserUpdateRateRequest, modify : ModifyService = Depends()):
     try:
-        if _is_dementia == 0: #보호자
-            existing_nok = session.query(models.nok_info).filter_by(nok_key = _key).first()
-
-            if existing_nok:
-                connected_dementia = session.query(models.dementia_info).filter_by(dementia_key = existing_nok.dementia_info_key).first()
-                existing_nok.update_rate = _update_rate
-                connected_dementia.update_rate = _update_rate
-
-                print(f"[INFO] Update rate modified by {existing_nok.nok_name}, {connected_dementia.dementia_name}")
-
-                response = {
-                    'status': 'success',
-                    'message': 'User update rate modified'
-                }
-            else:
-                print(f"[ERROR] NOK key not found(update rate)")
-
-                raise HTTPException(status_code=404, detail="NOK key not found")
-
-        elif _is_dementia == 1:
-            existing_dementia = session.query(models.dementia_info).filter_by(dementia_key = _key).first()
-
-            if existing_dementia:
-                connected_nok = session.query(models.nok_info).filter_by(dementia_info_key = existing_dementia.dementia_key).first()
-                existing_dementia.update_rate = _update_rate
-                connected_nok.update_rate = _update_rate
-
-                print(f"[INFO] Update rate modified by {existing_dementia.dementia_name}, {connected_nok.nok_name}")
-
-                response = {
-                    'status': 'success',
-                    'message': 'User update rate modified'
-                }
-            else:
-                print(f"[ERROR] Dementia key not found(update rate)")
-
-                raise HTTPException(status_code=404, detail="Dementia key not found")
-        
-        session.commit()
+        return await modify.modify_update_rate(request)
     
-        return response
-    
-    finally:
-        session.close()
-
+    except HTTPException as e:
+        raise e
 
 #유저 정보 전달
 @router.post("/dementias/averageWalkingSpeed", responses = {200 : {"model" : AverageWalkingSpeedResponse, "description" : "평균 걷기 속도 계산 성공" }, 404: {"model": ErrorResponse, "description": "보호 대상자 키 조회 실패 or 위치 정보 부족"}}, description="보호 대상자의 평균 걷기 속도를 계산 및 마지막 정보 전송")
