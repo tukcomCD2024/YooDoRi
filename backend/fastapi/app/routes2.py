@@ -23,6 +23,8 @@ from .fcm_notification import send_push_notification
 from .service.user_service import UserService
 from .service.location_service import LocService
 from .service.modify import ModifyService
+from .service.calculate_avg import CalculateAvg
+from .service.get_userinfo import GetUserInfo
 
 import pandas as pd
 
@@ -131,62 +133,21 @@ async def modify_updatint_rate(request: ModifyUserUpdateRateRequest, modify : Mo
 
 #유저 정보 전달
 @router.post("/dementias/averageWalkingSpeed", responses = {200 : {"model" : AverageWalkingSpeedResponse, "description" : "평균 걷기 속도 계산 성공" }, 404: {"model": ErrorResponse, "description": "보호 대상자 키 조회 실패 or 위치 정보 부족"}}, description="보호 대상자의 평균 걷기 속도를 계산 및 마지막 정보 전송")
-async def caculate_dementia_average_walking_speed(requset: AverageWalkingSpeedRequest): # current_user : int = Depends(APIKeyHeader(name = "Authorization"))
-
-    #_dementia_key = get_current_user(current_user)["key"]
-
-    _dementia_key = requset.dementiaKey
-
-    if _dementia_key is None:
-        print(f"[ERROR] Dementia key not found(calculate dementia average walking speed)")
-        
-        raise HTTPException(status_code=404, detail="Dementia key not found")
-    
+async def caculate_dementia_average_walking_speed(requset: AverageWalkingSpeedRequest, cal_service : CalculateAvg = Depends()): # current_user : int = Depends(APIKeyHeader(name = "Authorization"))
     try:
-        #최근 10개의 정보를 가져와 평균 속도 계산(임시)
-        location_info_list = session.query(models.location_info).filter_by(dementia_key = _dementia_key, user_status = "도보").order_by(models.location_info.num.desc()).limit(10).all()
-        
-        if location_info_list:
-            sum_speed = 0
-            for location_info in location_info_list:
-                print(location_info.current_speed)
-                sum_speed += float(location_info.current_speed)
-                print(sum_speed)
-            
-            average_speed = round(sum_speed / len(location_info_list), 2)
-            
-            geo = kakao.geo_coord2address(location_info_list[0].longitude, location_info_list[0].latitude)
-
-            if not geo['documents'][0]['road_address'] == None:
-                xy2addr = geo['documents'][0]['road_address']['address_name'] + " " + geo['documents'][0]['road_address']['building_name']
-                    
-            else:
-                xy2addr = geo['documents'][0]['address']['address_name']
-
-            response = {
-                'status': 'success',
-                'message': 'Dementia average walking speed calculated',
-                'result': {
-                    'averageSpeed': average_speed,
-                    'lastLatitude': location_info_list[0].latitude,
-                    'lastLongitude': location_info_list[0].longitude,
-                    'addressName' : xy2addr
-                }
-            }
-            print(f"[INFO] Dementia average walking speed calculated for {location_info_list[0].dementia_key}")
-
-        else:
-            print(f"[ERROR] Not enough location data for Dementia key({_dementia_key})")
-
-            raise HTTPException(status_code=404, detail="Not enough location data")
-
-        return response
+        return await cal_service.calculate_avg(requset)
     
-    finally:
-        session.close()
+    except HTTPException as e:
+        raise e
 
 @router.get("/users/info", responses = {200 : {"model" : GetUserInfoResponse, "description" : "유저 정보 전송 성공" }, 404: {"model": ErrorResponse, "description": "유저 정보 없음"}}, description="보호자와 보호 대상자 정보 전달(쿼리 스트링)")
-async def get_user_info(nokKey : str):
+async def get_user_info(nokKey : str, get_info : GetUserInfo = Depends()):
+    try:
+        return await get_info.get_user_info(nokKey)
+    
+    except HTTPException as e:
+        raise e
+    
     _nok_key = nokKey
 
     try:
