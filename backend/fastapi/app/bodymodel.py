@@ -170,8 +170,8 @@ class LocHis(BaseModel):
     latitude : float = Field(examples=["37.123456"])
     longitude : float = Field(examples=["127.123456"])
     time : str = Field(examples=["12:00:00 or 12:00:00,12:01:00"], description='정지 일땐 시작, 끝 시간임')
-    userStatus : int = Field(examples=["1"], description = " 1 : 정지, 2 : 도보, 3 : 차량, 4 : 지하철")
-    distance : int = Field(examples=["2005"], description="미터 단위(소수점 2자리까지)")
+    userStatus : str = Field(examples=["도보"])
+    distance : float = Field(examples=["1.72"], description="미터 단위(소수점 2자리까지)")
 
 class LocHisRecord(BaseModel):
     locationHistory : List[LocHis]
