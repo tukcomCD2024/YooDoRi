@@ -9,3 +9,12 @@ def convertor(data):
 
     return status
     
+def convertor2(data):
+    status = {
+        1 : "정지",
+        2 : "도보",
+        3 : "차량",
+        4 : "지하철"
+    }.get(data, None)
+
+    return status
