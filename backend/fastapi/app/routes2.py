@@ -3,11 +3,9 @@ from fastapi.security import OAuth2PasswordRequestForm, APIKeyHeader, OAuth2Pass
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from passlib.context import CryptContext
-from haversine import haversine
 from PyKakao import Local
-from datetime import datetime, timedelta
+from datetime import datetime
 from pytz import timezone
-from sqlalchemy import and_, func
 
 from . import models
 from .random_generator import RandomNumberGenerator
@@ -16,8 +14,6 @@ from .bodymodel import *
 from .util import JWTService
 from .config import Config
 from .schedularFunc import SchedulerFunc
-from .user_status_convertor import convertor
-from .LocationPredict import ForecastLSTMClassification, Preprocessing
 from .validater import validateInSafeArea
 from .fcm_notification import send_push_notification
 from .service.user_service import UserService
@@ -25,8 +21,8 @@ from .service.location_service import LocService
 from .service.modify import ModifyService
 from .service.calculate_avg import CalculateAvg
 from .service.get_userinfo import GetUserInfo
-
-import pandas as pd
+from .predict.meaningful import MeaningfulLoc
+from .predict.prediction import LocPredict
 
 
 from openai import OpenAI
@@ -147,299 +143,32 @@ async def get_user_info(nokKey : str, get_info : GetUserInfo = Depends()):
     
     except HTTPException as e:
         raise e
-    
-    _nok_key = nokKey
-
-    try:
-        nok_info_record = session.query(models.nok_info).filter_by(nok_key = _nok_key).first()
-        
-
-        if nok_info_record:
-            dementia_info_record = session.query(models.dementia_info).filter_by(dementia_key = nok_info_record.dementia_info_key).first()
-            if not dementia_info_record:
-                print(f"[ERROR] Dementia information not found for nok key({_nok_key})")
-
-                raise HTTPException(status_code=404, detail="Dementia information not found")
-            
-            result = {
-                'dementiaInfoRecord': {
-                    'dementiaKey': dementia_info_record.dementia_key,
-                    'dementiaName': dementia_info_record.dementia_name,
-                    'dementiaPhoneNumber': dementia_info_record.dementia_phonenumber,
-                    'updateRate': dementia_info_record.update_rate
-                },
-                'nokInfoRecord': {
-                    'nokKey': nok_info_record.nok_key,
-                    'nokName': nok_info_record.nok_name,
-                    'nokPhoneNumber': nok_info_record.nok_phonenumber,
-                    'updateRate': nok_info_record.update_rate
-                }
-            }
-
-            response = {
-                'status': 'success',
-                'message': 'User information sent',
-                'result': result
-            }
-
-            print(f"[INFO] User information sent to {dementia_info_record.dementia_name}({dementia_info_record.dementia_key})")
-
-        else:
-            print(f"[ERROR] User information not found for nok key({_nok_key})")
-
-            raise HTTPException(status_code=404, detail="User information not found")
-
-        return response
-    
-    finally:
-        session.close()
 
 #의미장소, 위치 이력, 위치 예측
 @router.get("/locations/meaningful", responses = {200 : {"model" : MeaningfulLocResponse, "description" : "의미장소 전송 성공" }, 404: {"model": ErrorResponse, "description": "의미 장소 없음"}}, description="보호 대상자의 의미 장소 정보 및 주변 경찰서 정보 전달(쿼리 스트링)")
-async def send_meaningful_location_info(dementiaKey: str):
-    _key = dementiaKey
-
+async def send_meaningful_location_info(dementiaKey: str, mean_service : MeaningfulLoc = Depends()):
     try:
-        meaningful_location_list = session.query(models.meaningful_location_info).filter_by(dementia_key=_key).all()
-
-        if meaningful_location_list:
-            meaningful_places_dict = {}
-
-
-            for location in meaningful_location_list:
-                address = location.address
-                day_of_week = location.day_of_the_week
-                time = location.time
-
-                # 주소가 이미 존재하는지 확인하고, 없으면 새로운 딕셔너리 엔트리 생성
-                if address not in meaningful_places_dict:
-                    # 해당 주소의 경찰서 정보 가져오기(distance 순으로 정렬)
-                    police_list = session.query(models.police_info).filter_by(key = location.key).order_by(models.police_info.distance).limit(3).all()
-
-                    #police_list의 num 속성 제거
-                    for police in police_list:
-                        del police.num
-                        del police.key
-
-                    meaningful_places_dict[address] = {
-                        'address': address,
-                        'timeInfo': [],
-                        'latitude': location.latitude,
-                        'longitude': location.longitude,
-                        'policeStationInfo' : police_list
-                    }
-
-                # 해당 주소의 시간 정보 리스트에 현재 시간 정보가 없으면 추가
-                time_info_list = meaningful_places_dict[address]['timeInfo']
-                if {'dayOfTheWeek': day_of_week, 'time': time} not in time_info_list:
-                    time_info_list.append({'dayOfTheWeek': day_of_week, 'time': time})
-
-            # 결과를 리스트 형태로 변환
-            meaningful_places = list(meaningful_places_dict.values())
-
-            result = {
-                'meaningfulPlaces': meaningful_places
-            }
-
-            response = {
-                'status': 'success',
-                'message': 'Meaningful location data sent',
-                'result': result
-            }
-
-            print(f"[INFO] Meaningful location data sent to {_key}")
-
-        else:
-            print(f"[ERROR] Meaningful location data not found for {_key}")
-            raise HTTPException(status_code=404, detail="Meaningful location data not found")
-
-        return response
-
-    finally:
-        session.close()
+        return await mean_service.get_meaningful_loc(dementiaKey)
+    
+    except HTTPException as e:
+        raise e
 
 @router.get("/locations/history", responses = {200 : {"model" : LocHistoryResponse, "description" : "위치 이력 전송 성공" }, 404: {"model": ErrorResponse, "description": "위치 이력 없음"}}, description="보호 대상자의 위치 이력 정보 전달(쿼리 스트링) | distance는 현재 값과 다음 값과의 거리 | date : YYYY-MM-DD")
-async def send_location_history(date: str, dementiaKey: str):
-    _key = dementiaKey
-
+async def send_location_history(date: str, dementiaKey: str, loc_service : LocService = Depends()):
     try:
-        location_list = session.query(models.location_info).filter_by(dementia_key=_key, date=date).all()
-
-        if not location_list:
-            print(f"[ERROR] Location history data not found for {_key}")
-            raise HTTPException(status_code=404, detail="Location history data not found")
-
-        locHistory = []
-        prev_location = None
-
-        for index, location in enumerate(location_list):
-            current_location = (location.latitude, location.longitude)
-            distance = 0
-
-            if prev_location:
-                distance = round(haversine(current_location, prev_location, unit='m'), 2)
-
-            if not locHistory or location.user_status != "정지" or locHistory[-1]['userStatus'] != "정지":
-                locHistory.append({
-                    'latitude': location.latitude,
-                    'longitude': location.longitude,
-                    'time': location.time,
-                    'userStatus': location.user_status,
-                    'distance': distance
-                })
-            else:
-                locHistory[-1]['time'] = locHistory[-1]['time'][:8] + '~' + location.time
-
-            prev_location = current_location
-
-            # If it's the last location, set distance to 0
-            if index == len(location_list) - 1:
-                locHistory[-1]['distance'] = 0
-
-        result = {
-            'locationHistory': locHistory,
-        }
-
-        response = {
-            'status': 'success',
-            'message': 'Location history data sent',
-            'result': result
-        }
-
-        print(f"[INFO] Location history data sent to {_key}")
-
-    finally:
-        session.close()
-
-    return response
+        return await loc_service.send_location_history(date, dementiaKey)
+    
+    except HTTPException as e:
+        raise e
 
 @router.get("/locations/predict", responses = {200 : {"model" : PredictLocationResponse, "description" : "위치 예측 성공" }, 404: {"model": ErrorResponse, "description": "위치 정보 부족"}}, description="보호 대상자의 다음 위치 예측(쿼리 스트링) | 2주치 위치 데이터 사용(임시)")
-async def predict_location(dementiaKey: str):
-    _key = dementiaKey
-
+async def predict_location(dementiaKey: str, pred_service : LocPredict = Depends()):
     try:
-        loc_list = []
-        today = datetime.today()
-
-        # 2주 전 날짜
-        two_weeks_ago = today - timedelta(weeks=2)
-
-        # 쿼리문 수정
-        # 쿼리문 수정 (MySQL에서 문자열을 날짜로 변환할 때)
-        location_list = session.query(models.location_info).filter(
-            and_(
-                models.location_info.dementia_key == _key,
-                func.STR_TO_DATE(models.location_info.date, '%Y-%m-%d') >= two_weeks_ago,
-                func.STR_TO_DATE(models.location_info.date, '%Y-%m-%d') <= today
-            )
-        ).all()
-
-        if not location_list:
-            raise HTTPException(status_code=404, detail="Location data not found")
-
-        for location in location_list:
-            status = convertor(location.user_status)
-            loc_list.append({
-                'date' : location.date,
-                'time': location.time,
-                'latitude': location.latitude,
-                'longitude': location.longitude,
-                'user_status' : status
-            })
-        # dataframe으로 변환
-        
-        loc_list_df = pd.DataFrame(loc_list, columns=['date', 'time', 'latitude', 'longitude', 'user_status'])
-        
-        pr = Preprocessing(loc_list_df)
-        df, meaningful_df= pr.run_analysis()
-
-        test_idx = int(len(df) * 0.8)
-        df_train = df.iloc[:test_idx]
-        df_test = df.iloc[test_idx:]
-
-        seq_len = 5  # 150개의 데이터를 feature로 사용
-        steps = 5  # 향후 150개 뒤의 y를 예측
-        single_output = False
-        metrics = ["accuracy"]  # 모델 성능 지표
-        lstm_params = {
-            "seq_len": seq_len,
-            "epochs": 100,  # epochs 반복 횟수
-            "patience": 30,  # early stopping 조건
-            "steps_per_epoch": 5,  # 1 epochs 시 dataset을 5개로 분할하여 학습
-            "learning_rate": 0.03,
-            "lstm_units": [64, 32],  # Dense Layer: 2, Unit: (64, 32)
-            "activation": "softmax",
-            "dropout": 0,
-            "validation_split": 0.3,  # 검증 데이터셋 30%
-        }
-        fl = ForecastLSTMClassification(class_num=len(df['y'].unique()))
-        model = fl.fit_lstm(
-            df=df_train,
-            steps=steps,
-            single_output=single_output,
-            verbose=True,
-            metrics=metrics,
-            **lstm_params,
-        )
-        y_pred = fl.pred(df=df_test, 
-                    steps=steps, 
-                    num_classes=len(df['y'].unique()),
-                    seq_len=seq_len, 
-                    single_output=single_output)
-
-        print(y_pred)
-        print(meaningful_df.iloc[y_pred].iloc[-1])
-
-        pred_loc = meaningful_df.iloc[y_pred].iloc[-1]
-
-        geo = kakao.geo_coord2address(pred_loc.longitude, pred_loc.latitude)
-
-        if not geo['documents'][0]['road_address'] == None:
-            xy2addr = geo['documents'][0]['road_address']['address_name'] + " " + geo['documents'][0]['road_address']['building_name']
-                    
-        else:
-            xy2addr = geo['documents'][0]['address']['address_name']
-
-        police = kakao.search_keyword("경찰서", x = pred_loc.longitude, y = pred_loc.latitude, sort = 'distance')\
-        
-        police_list = []
-        if police['meta']['total_count'] == 0:
-            print(f"[INFO] No police station found near {xy2addr}")
-        else:
-            for pol in police['documents']:
-                if not pol['phone'] == '':
-                    new_police = {
-                        "policeName" :  pol['place_name'],
-                        "policeAddress" : pol['road_address_name'],
-                        "policePhoneNumber" : pol['phone'],
-                        "distance" : pol['distance'],
-                        "latitude" : pol['y'],
-                        "longitude" : pol['x']
-                        }
-                    
-                    police_list.append(new_police)
-                else:
-                    pass
-        
-        pred_loc = {
-            "latitude" : pred_loc.latitude,
-            "longitude" : pred_loc.longitude,
-            "address" : xy2addr
-        }
-        result = {
-            "predictLocation" : pred_loc,
-            "policeInfo" : police_list[:3]
-
-        }
-        response = {
-            "status" : "susccess",
-            "message" : "predict complete",
-            "result" : result
-        }
-
-        return response
-    finally:
-        session.close()
+        return await pred_service.predict_location(dementiaKey)
+    
+    except HTTPException as e:
+        raise e
+    
 
 @router.get("/locations/predict/gura")
 async def predict_location(dementiaKey : str):
