@@ -21,6 +21,7 @@ from .service.location_service import LocService
 from .service.modify import ModifyService
 from .service.calculate_avg import CalculateAvg
 from .service.get_userinfo import GetUserInfo
+from .service.safe_area_service import SafeArea
 from .predict.meaningful import MeaningfulLoc
 from .predict.prediction import LocPredict
 
@@ -209,105 +210,20 @@ async def predict_location(dementiaKey : str):
 
 #안심구역
 @router.post("/safeArea/register", status_code=status.HTTP_201_CREATED, responses = {201 : {"model" : CommonResponse, "description" : "안전 지역 등록 성공" }, 404: {"model": ErrorResponse, "description": "보호 대상자 키 조회 실패"}}, description="보호 대상자의 안전 지역을 등록 | 단위는 km | groupName이 없으면 notGrouped로 저장됨")
-async def register_safe_area(request: RegisterSafeAreaRequest):
+async def register_safe_area(request: RegisterSafeAreaRequest, safe_area_service : SafeArea = Depends()):
     try:
-        _dementia_key = request.dementiaKey
-        _area_name = request.areaName
-        _latitude = request.latitude
-        _longitude = request.longitude
-        _radius = request.radius
-        _group_key = request.groupKey
+        return await safe_area_service.register_safe_area(request)
 
-        if not session.query(models.safe_area_info).filter_by(dementia_key = _dementia_key, group_key = _group_key, area_name = _area_name).first() == None:
-            print(f"[ERROR] Safe area already exists for {_dementia_key}")
-
-            raise HTTPException(status_code=400, detail="Safe area already exists in group")
-        else:
-            pass
-
-        if _group_key == '':
-            _default_group = session.query(models.safe_area_group_info).filter_by(dementia_key = _dementia_key, group_name = '기본 그룹').first()
-            if _default_group:
-                _group_key = _default_group.group_key
-            else:
-                rng = RandomNumberGenerator()
-                for _ in range(10):
-                    _group_key = rng.generate_unique_random_number(100000, 999999)
-                
-                new_group = models.safe_area_group_info(group_key = _group_key, group_name = '기본 그룹', dementia_key = _dementia_key)
-                session.add(new_group)
-        else:
-            pass
-
-        _area_key = int(_dementia_key) + datetime.timestamp(datetime.now(timezone('Asia/Seoul'))) + ord(_area_name[0])
-
-        new_area = models.safe_area_info(
-            dementia_key = _dementia_key,
-            area_key = _area_key,
-            area_name = _area_name,
-            latitude = _latitude,
-            longitude = _longitude,
-            radius = _radius,
-            group_key = _group_key
-        )
-
-        session.add(new_area)
-        
-        session.commit()
-
-        print(f"[INFO] Safe area registered for {_dementia_key}")
-
-        response = {
-            'status': 'success',
-            'message': 'Safe area registered'
-        }
-
-        return response
-    
-    finally:
-        session.close()
+    except HTTPException as e:
+        raise e
 
 @router.post("/safeArea/register/group", status_code=status.HTTP_201_CREATED, responses = {201 : {"model" : RegisterSafeAreaGroupResponse, "description" : "안전 지역 그룹 등록 성공" }, 404: {"model": ErrorResponse, "description": "보호 대상자 키 조회 실패"}}, description="보호 대상자의 안전 지역 그룹을 등록")
-async def register_safe_area_group(request: RegisterSafeAreaGroupRequest):
+async def register_safe_area_group(request: RegisterSafeAreaGroupRequest, safe_area_service : SafeArea = Depends()):
     try:
-        _dementia_key = request.dementiaKey
-        _group_name = request.groupName
-
-        existing_group = session.query(models.safe_area_group_info).filter_by(dementia_key = _dementia_key, group_name = _group_name).first()
-
-        if existing_group:
-            print(f"[ERROR] Safe area group already exists for {_dementia_key}")
-
-            raise HTTPException(status_code=400, detail="Safe area group already exists")
-        else:
-            rng = RandomNumberGenerator()
-            for _ in range(10):
-                _group_key = rng.generate_unique_random_number(100000, 999999)
-
-            new_group = models.safe_area_group_info(
-                dementia_key = _dementia_key,
-                group_key = _group_key,
-                group_name = _group_name
-            )
-            session.add(new_group)
-            session.commit()
-        
-        print(f"[INFO] Safe area group registered for {_dementia_key}")
-
-        result = {
-            'groupKey': _group_key
-        }
-
-        response = {
-            'status': 'success',
-            'message': 'Safe area group registered',
-            'result' : result
-        }
-
-        return response
+        return await safe_area_service.register_safe_area_group(request)
     
-    finally:
-        session.close()
+    except HTTPException as e:
+        raise e
 
 @router.get("/safeArea/info", responses = {200 : {"model" : GetSafeAreaResponse, "description" : "안전 지역 정보 전송 성공" }, 404: {"model": ErrorResponse, "description": "안전 지역 정보 없음"}}, description="보호 대상자의 안전 지역 정보 전달(쿼리 스트링)")
 async def get_safe_area_info(dementiaKey: str):
