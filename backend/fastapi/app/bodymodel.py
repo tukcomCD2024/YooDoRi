@@ -325,8 +325,11 @@ class safeArea(BaseModel):
     latitude : float = Field(examples=["37.123456"])
     longitude : float = Field(examples=["127.123456"])
     radius : float = Field(examples=["0.5"], description="킬로미터 단위")
+
+class safeAreaList(BaseModel):
+    safeAreas : List[safeArea]
     
 class GetSafeAreaAllResponse(BaseModel):
     status: str = Field("success")
     message: str = Field("메~시~지~")
-    result: List[safeArea]
+    result: safeAreaList
