@@ -27,7 +27,8 @@ class UserService:
                 "dementiaInfoRecord": {
                     "dementiaKey": dementia_info.dementia_key,
                     "dementiaName": dementia_info.dementia_name,
-                    "dementiaPhoneNumber": dementia_info.dementia_phonenumber
+                    "dementiaPhoneNumber": dementia_info.dementia_phonenumber,
+                    "updateRate" : dementia_info.update_rate
                 },
                 "nokKey": nok_key
             }

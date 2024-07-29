@@ -30,7 +30,7 @@ class CalculateAvg:
         if not geo['documents'][0]['road_address'] == None:
             xy2address = geo['documents'][0]['road_address']['address_name'] + " " + geo['documents'][0]['road_address']['building_name']
         else:
-            xy2address = geo['documents'][0]['address']['address_name'] + " " + geo['documents'][0]['address']['building_name']
+            xy2address = geo['documents'][0]['address']['address_name']
 
         return AverageWalkingSpeedResponse(
             status = 'success',

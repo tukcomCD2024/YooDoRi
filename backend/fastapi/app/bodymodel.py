@@ -18,7 +18,7 @@ class dementiaInfoRecord(BaseModel):
     dementiaKey : str = Field(examples=["123456"])
     dementiaName : str = Field(examples=["성춘향"])
     dementiaPhoneNumber : str = Field(examples=["010-1234-5678"])
-    updateRate : int = Field(examples=["15"], description="초 단위")
+    updateRate : Optional[int] = Field(examples=["15"], description="초 단위")
 
 class nokInfoRecord(BaseModel):
     nokKey : str = Field(examples=["123456"])
@@ -145,7 +145,6 @@ class PoliceStationInfoList(BaseModel):
     policeName : str = Field(examples=["서울동작경찰서"])
     policePhoneNumber : str = Field(examples=["02-1234-5678"])
     policeAddress : str = Field(examples=["서울 동작구 노량진동 72-35"])
-    roadAddress : str = Field(examples=["서울 동작구 노량진로 148"])
     distance : int = Field(examples=["2005"], description="미터 단위")
     latitude : float = Field(examples=["37.123456"])
     longitude : float = Field(examples=["127.123456"])
@@ -153,13 +152,13 @@ class PoliceStationInfoList(BaseModel):
 
 class MeaningfulLoc(BaseModel):
     address : str = Field(examples=["서울특별시 강남구 니가 사는 그 집"])
-    timeInfo : timeInfoList
+    timeInfo : List[timeInfoList]
     latitude : float = Field(examples=["37.123456"])
     longitude : float = Field(examples=["127.123456"])
     policeStationInfo : List[PoliceStationInfoList]
 
 class MeaningfulLocRecord(BaseModel):
-    meaningfulLocations : List[MeaningfulLoc]
+    meaningfulPlaces : List[MeaningfulLoc]
 
 class MeaningfulLocResponse(BaseModel):
     status: str = Field("success")
