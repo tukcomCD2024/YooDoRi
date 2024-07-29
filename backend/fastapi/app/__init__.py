@@ -7,7 +7,11 @@ from fastapi.responses import JSONResponse
 
 
 # FastAPI 인스턴스 생성
-app = FastAPI()
+app = FastAPI(
+    title = "어디U",
+    description = "어디U API",
+    version = "0.0.7",
+)
 handler = Mangum(app)
 engine = Database()
 session = engine.get_session()
