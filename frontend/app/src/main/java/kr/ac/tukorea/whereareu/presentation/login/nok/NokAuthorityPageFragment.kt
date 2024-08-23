@@ -1,5 +1,6 @@
 package kr.ac.tukorea.whereareu.presentation.login.nok
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,12 +15,124 @@ import kr.ac.tukorea.whereareu.databinding.FragmentNokAuthorityPageBinding
 import kr.ac.tukorea.whereareu.presentation.base.BaseFragment
 import kr.ac.tukorea.whereareu.presentation.nok.NokMainActivity
 
+//class NokAuthorityPageFragment :
+//    BaseFragment<FragmentNokAuthorityPageBinding>(R.layout.fragment_nok_authority_page) {
+//    private val LOCATION_PERMISSION_REQUEST_CODE = 123
+//    private val
+//    override fun initObserver() {
+//
+//    }
+//
+//    override fun initView() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            checkNotificationPermission()
+//        } else {
+//            checkAndRequestLocationPermissions()
+//        }
+//        goMainActivity()
+//    }
+//
+//    fun onClickBackBtn() {
+//        findNavController().popBackStack()
+//    }
+//
+//    private fun goMainActivity() {
+//        binding.finishBtn.setOnClickListener {
+//            val intent = Intent(requireContext(), NokMainActivity::class.java)
+//            intent.flags =
+//                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            startActivity(intent)
+//        }
+//    }
+//
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//
+//        when (requestCode) {
+//            LOCATION_PERMISSION_REQUEST_CODE -> {
+//                if (grantResults.isNotEmpty() &&
+//                    grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+//                    grantResults[1] == PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    checkAndRequestLocationPermissions()
+//                } else {
+//                    // Handle the case where the user denies the location permission
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun checkAndRequestLocationPermissions() {
+//        if (checkLocationPermission()) {
+//            Log.d("checkLocationPermission", "true")
+//        } else {
+//            requestLocationPermission()
+//        }
+//    }
+//
+//    private fun checkLocationPermission(): Boolean {
+//        return (ContextCompat.checkSelfPermission(
+//            requireContext(),
+//            android.Manifest.permission.ACCESS_FINE_LOCATION
+//        ) == PackageManager.PERMISSION_GRANTED &&
+//                ContextCompat.checkSelfPermission(
+//                    requireContext(),
+//                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+//                ) == PackageManager.PERMISSION_GRANTED)
+//    }
+//
+//    private fun requestLocationPermission() {
+//        ActivityCompat.requestPermissions(
+//            requireActivity(),
+//            arrayOf(
+//                android.Manifest.permission.ACCESS_FINE_LOCATION,
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//            ),
+//            LOCATION_PERMISSION_REQUEST_CODE
+//        )
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+//    fun checkNotificationPermission() {
+//        val permission = android.Manifest.permission.POST_NOTIFICATIONS
+//        when {
+//            ContextCompat.checkSelfPermission(
+//                requireContext(),
+//                permission
+//            ) == PackageManager.PERMISSION_GRANTED -> {
+//                // make your action here
+//                checkAndRequestLocationPermissions()
+//            }
+//
+//            shouldShowRequestPermissionRationale(permission) -> {
+//                // permission denied permanently
+//            }
+//
+//            else -> {
+//                requestNotificationPermission.launch(permission)
+//            }
+//        }
+//    }
+//
+//    private val requestNotificationPermission =
+//        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+//            if (isGranted) // make your action here
+//                checkAndRequestLocationPermissions()
+//        }
+//
+//    private val requestRecordPermission =
+//        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+//}
 class NokAuthorityPageFragment :
     BaseFragment<FragmentNokAuthorityPageBinding>(R.layout.fragment_nok_authority_page) {
     private val LOCATION_PERMISSION_REQUEST_CODE = 123
-    override fun initObserver() {
+    private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 456
 
-    }
+    override fun initObserver() {}
 
     override fun initView() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -27,6 +140,7 @@ class NokAuthorityPageFragment :
         } else {
             checkAndRequestLocationPermissions()
         }
+        checkAndRequestRecordAudioPermission() // STT 권한 체크 추가
         goMainActivity()
     }
 
@@ -61,9 +175,19 @@ class NokAuthorityPageFragment :
                     // Handle the case where the user denies the location permission
                 }
             }
+            RECORD_AUDIO_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 음성 녹음 권한이 허용됨
+                    Log.d("Permission", "Record Audio Permission Granted")
+                } else {
+                    // Handle the case where the user denies the record audio permission
+                    Log.d("Permission", "Record Audio Permission Denied")
+                }
+            }
         }
     }
 
+    // 위치 권한 체크 및 요청 함수
     private fun checkAndRequestLocationPermissions() {
         if (checkLocationPermission()) {
             Log.d("checkLocationPermission", "true")
@@ -94,6 +218,25 @@ class NokAuthorityPageFragment :
         )
     }
 
+    // STT 권한 체크 및 요청 함수
+    private fun checkAndRequestRecordAudioPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestRecordAudioPermission()
+        }
+    }
+
+    private fun requestRecordAudioPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(android.Manifest.permission.RECORD_AUDIO),
+            RECORD_AUDIO_PERMISSION_REQUEST_CODE
+        )
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun checkNotificationPermission() {
         val permission = android.Manifest.permission.POST_NOTIFICATIONS
@@ -121,4 +264,7 @@ class NokAuthorityPageFragment :
             if (isGranted) // make your action here
                 checkAndRequestLocationPermissions()
         }
+
+    private val requestRecordPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 }

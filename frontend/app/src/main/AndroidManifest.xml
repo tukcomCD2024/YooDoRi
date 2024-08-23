@@ -14,7 +14,8 @@
     <!--    FCM -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+<!--    stt-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
         android:name=".WhereAreUApplication"
         android:allowBackup="true"
