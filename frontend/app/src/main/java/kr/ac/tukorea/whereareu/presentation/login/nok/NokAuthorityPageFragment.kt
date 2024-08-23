@@ -264,7 +264,4 @@ class NokAuthorityPageFragment :
             if (isGranted) // make your action here
                 checkAndRequestLocationPermissions()
         }
-
-    private val requestRecordPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 }
