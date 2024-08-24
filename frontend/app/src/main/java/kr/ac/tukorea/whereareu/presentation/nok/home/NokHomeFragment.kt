@@ -1,10 +1,12 @@
 package kr.ac.tukorea.whereareu.presentation.nok.home
 
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -20,13 +22,14 @@ import kr.ac.tukorea.whereareu.presentation.login.nok.NokIdentityFragmentDirecti
 import kr.ac.tukorea.whereareu.presentation.nok.home.adapter.MeaningfulPlaceRVA
 import kr.ac.tukorea.whereareu.util.extension.repeatOnStarted
 
-
 @AndroidEntryPoint
 class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home),
     MeaningfulPlaceRVA.MeaningfulPlaceRVAClickListener {
+
     private val viewModel: NokHomeViewModel by activityViewModels()
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
+    private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1002 // 추가된 부분
     private val meaningfulPlaceRVA by lazy {
         MeaningfulPlaceRVA()
     }
@@ -39,6 +42,7 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         initObserver()
         initView()
     }
+
     override fun initObserver() {
         repeatOnStarted {
             viewModel.predictEvent.collect { predictEvent ->
@@ -59,15 +63,6 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
                 initMeaningfulListRVA()
             }
 
-            /*is NokHomeViewModel.PredictEvent.MeaningFulPlace -> {
-                if(meaningfulPlaceRVA.currentList.isEmpty()) {
-                    Log.d("ds", "isEmpty")
-                    meaningfulPlaceRVA.submitList(event.meaningfulPlaceForList)
-                }
-                else{
-                    Log.d("ds", "isNotEmpty")
-                }
-            }*/
             is NokHomeViewModel.PredictEvent.PredictLocation -> {
                 with(event.predictLocation){
                     val address = meaningfulPlaceInfo.address
@@ -95,7 +90,7 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         binding.view = this
         binding.viewModel = viewModel
         viewModel.fetchSafeAreaAll()
-        checkLocationPermission()
+        checkPermissions() // 위치 및 녹음 권한을 함께 체크
     }
 
     private fun initMeaningfulListRVA(){
@@ -110,6 +105,11 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         initMeaningfulListRVA()
     }
 
+    private fun checkPermissions() {
+        checkLocationPermission() // 위치 권한 요청
+        checkRecordAudioPermission() // 녹음 권한 요청
+    }
+
     private fun checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -122,7 +122,23 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         } else {
-            // 권한이 이미 허용된 경우 위치 업데이트 요청
+            // 위치 권한이 이미 허용된 경우 처리
+        }
+    }
+
+    private fun checkRecordAudioPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                android.Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                RECORD_AUDIO_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // 녹음 권한이 이미 허용된 경우 처리
         }
     }
 
@@ -131,17 +147,25 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 위치 권한이 허용된 경우 위치 업데이트 요청
+                    // 위치 권한이 허용된 경우 처리
                 } else {
-                    // 권한이 거부된 경우 처리 (예: 사용자에게 권한이 필요하다고 알리기)
+                    // 위치 권한이 거부된 경우 처리
+                }
+            }
+            RECORD_AUDIO_PERMISSION_REQUEST_CODE -> { // 추가된 부분
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 녹음 권한이 허용된 경우 처리
+                } else {
+                    // 녹음 권한이 거부된 경우 처리
                 }
             }
         }
     }
-
 
     // inner RVA 클릭 이벤트
     override fun onClickMapView(latLng: LatLng) {
@@ -155,3 +179,4 @@ class NokHomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home
         navigator.navigate(action)
     }
 }
+
