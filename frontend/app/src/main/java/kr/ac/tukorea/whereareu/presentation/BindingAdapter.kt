@@ -107,6 +107,21 @@ object BindingAdapter {
         }
     }
 
+    @BindingAdapter("bind:navigateEvent", "bind:isSos")
+    @JvmStatic
+    fun setHomeComponentBtnVisibleSos(view: TextView, navigateEvent: String, isSos: Boolean) {
+        Log.d("binding adapter djs", isSos.toString())
+        if(navigateEvent == "Home"){
+            view.isVisible = if (isSos) {
+                false
+            } else {
+                true
+            }
+        } else {
+            view.isVisible = false
+        }
+    }
+
     @BindingAdapter("bind:dayOfWeek")
     @JvmStatic
     fun setDayOfWeekColor(view: TextView, dayOfWeek: String){
