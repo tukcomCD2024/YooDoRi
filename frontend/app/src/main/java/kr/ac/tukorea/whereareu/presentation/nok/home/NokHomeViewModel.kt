@@ -60,6 +60,12 @@ class NokHomeViewModel @Inject constructor(
 
     private val _isPredictDone = MutableStateFlow(false)
 
+    val isSos = MutableStateFlow(false)
+    private val _isSosDone = MutableStateFlow(false)
+    private val _sosEvent = MutableSharedFlow<SosEvent>()
+    val sosEvent = _sosEvent.asSharedFlow()
+
+
     private val _dementiaKey = MutableStateFlow("")
     private val _nokKey = MutableStateFlow("")
 
@@ -81,6 +87,13 @@ class NokHomeViewModel @Inject constructor(
     private val _meaningfulPlace = MutableSharedFlow<List<MeaningfulPlaceInfo>>()
     val meaningfulPlace = _meaningfulPlace.asSharedFlow()
 
+    sealed class SosEvent {
+        data class StartSos(val isSos: Boolean) : SosEvent()
+
+        data object SosDone : SosEvent()
+
+        data class StopSos(val isSos: Boolean) : SosEvent()
+    }
     sealed class PredictEvent {
         data class StartPredict(val isPredicted: Boolean) : PredictEvent()
         data class MeaningFulPlace(
@@ -139,9 +152,17 @@ class NokHomeViewModel @Inject constructor(
         }
     }
 
-    fun eventHomeState(isPredicted: Boolean = this.isPredicted.value, isPredictDone: Boolean = _isPredictDone.value) {
+    fun eventSos(event: SosEvent) {
+        viewModelScope.launch {
+            _sosEvent.emit(event)
+        }
+    }
+
+    fun eventHomeState(isPredicted: Boolean = this.isPredicted.value, isPredictDone: Boolean = _isPredictDone.value, isSos: Boolean = this.isSos.value, isSosDone: Boolean = _isSosDone.value) {
         this.isPredicted.value = isPredicted
         _isPredictDone.value = isPredictDone
+        this.isSos.value = isSos
+        _isSosDone.value = isSosDone
 
         viewModelScope.launch {
             eventNavigate(NavigateEvent.HomeState(isPredicted, isPredictDone))
@@ -151,6 +172,13 @@ class NokHomeViewModel @Inject constructor(
                 }
             } else {
                 eventPredict(PredictEvent.StopPredict(false))
+            }
+            if(isSos) {
+                if(!isSosDone) {
+                    eventSos(SosEvent.StartSos(true))
+                }
+            } else {
+                eventSos(SosEvent.StopSos(false))
             }
         }
     }
@@ -230,6 +258,15 @@ class NokHomeViewModel @Inject constructor(
                 eventHomeState(isPredicted = true, isPredictDone = true)
             }
             Log.d("after refactor time", time.toString())
+        }
+    }
+
+    fun sos() {
+        viewModelScope.launch {
+            val time = measureTimeMillis {
+                eventSos(SosEvent.SosDone)
+                eventHomeState(isSos = true, isSosDone = true)
+            }
         }
     }
 
