@@ -94,6 +94,8 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
     //private lateinit var locationSource: FusedLocationSource
     private lateinit var locationClient: LocationClient
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private var sosProgressJob: Job? = null
     private fun getUpdateLocationJob(duration: Long): Job {
         return lifecycleScope.launch {
             while (true) {
@@ -194,8 +196,41 @@ class NokMainActivity : BaseActivity<ActivityNokMainBinding>(R.layout.activity_n
                 Log.d("currentGroup", it.toString())
             }
         }
+        lifecycleScope.launch {
+            homeViewModel.sosEvent.collect { event ->
+                when (event) {
+                    is NokHomeViewModel.SosEvent.StartSos -> {
+                        startSosProgressBar() // SOS가 시작된 상태 처리
+                    }
+                    is NokHomeViewModel.SosEvent.StopSos -> {
+                        cancelSosProgressBar() // SOS가 중지된 상태 처리
+                    }
+                    is NokHomeViewModel.SosEvent.SosDone -> {
+                        cancelSosProgressBar() // SOS 완료 처리
+                    }
+                }
+            }
+        }
     }
 
+    private fun startSosProgressBar() {
+        cancelSosProgressBar() // 기존 타이머 취소
+        binding.sosPb.max = 30 // 30초 설정
+        sosProgressJob = lifecycleScope.launch {
+            for (i in 30 downTo 0) {
+                binding.sosPb.progress = i // 원형 ProgressBar의 진행상황 업데이트
+                delay(1000L) // 1초 간격
+            }
+            // 타이머 완료 시 SOS 완료 이벤트 호출
+            homeViewModel.eventSos(NokHomeViewModel.SosEvent.SosDone)
+        }
+    }
+
+    private fun cancelSosProgressBar() {
+        sosProgressJob?.cancel() // 기존 Job 취소
+        sosProgressJob = null
+        binding.sosPb.progress = 30 // ProgressBar 초기화 (다시 30초로)
+    }
     private fun handleSafeAreaEvent(event: SafeAreaViewModel.SafeAreaEvent) {
         when (event) {
             is SafeAreaViewModel.SafeAreaEvent.FetchSafeArea -> {

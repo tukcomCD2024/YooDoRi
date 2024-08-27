@@ -10,7 +10,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -64,6 +66,8 @@ class NokHomeViewModel @Inject constructor(
     private val _isSosDone = MutableStateFlow(false)
     private val _sosEvent = MutableSharedFlow<SosEvent>()
     val sosEvent = _sosEvent.asSharedFlow()
+    val sosTimerValue = MutableStateFlow(30)
+    private var sosJob: Job? = null
 
 
     private val _dementiaKey = MutableStateFlow("")
@@ -94,6 +98,7 @@ class NokHomeViewModel @Inject constructor(
 
         data class StopSos(val isSos: Boolean) : SosEvent()
     }
+
     sealed class PredictEvent {
         data class StartPredict(val isPredicted: Boolean) : PredictEvent()
         data class MeaningFulPlace(
@@ -118,8 +123,9 @@ class NokHomeViewModel @Inject constructor(
 
         data class StopPredict(val isPredicted: Boolean) : PredictEvent()
 
-        data class FetchSafeArea(val groupList: List<SafeArea>): PredictEvent()
+        data class FetchSafeArea(val groupList: List<SafeArea>) : PredictEvent()
     }
+
     private val userMeaningfulPlace = mutableListOf<MeaningfulPlaceInfo>()
 
     sealed interface NavigateEvent {
@@ -129,9 +135,9 @@ class NokHomeViewModel @Inject constructor(
         data object LocationHistory : NavigateEvent
         data object SafeArea : NavigateEvent
 
-        data object SafeAreaDetail: NavigateEvent
+        data object SafeAreaDetail : NavigateEvent
 
-        data object SafeAreaSetting: NavigateEvent
+        data object SafeAreaSetting : NavigateEvent
         data class HomeState(val isPredicted: Boolean, val isPredictDone: Boolean) : NavigateEvent
     }
 
@@ -140,7 +146,7 @@ class NokHomeViewModel @Inject constructor(
             if (event !is NavigateEvent.HomeState) {
                 navigateEventToString.value = event.toString()
             }
-            if(event !is NavigateEvent.Home) {
+            if (event !is NavigateEvent.Home) {
                 _navigateEvent.emit(event)
             }
         }
@@ -158,7 +164,12 @@ class NokHomeViewModel @Inject constructor(
         }
     }
 
-    fun eventHomeState(isPredicted: Boolean = this.isPredicted.value, isPredictDone: Boolean = _isPredictDone.value, isSos: Boolean = this.isSos.value, isSosDone: Boolean = _isSosDone.value) {
+    fun eventHomeState(
+        isPredicted: Boolean = this.isPredicted.value,
+        isPredictDone: Boolean = _isPredictDone.value,
+        isSos: Boolean = this.isSos.value,
+        isSosDone: Boolean = _isSosDone.value
+    ) {
         this.isPredicted.value = isPredicted
         _isPredictDone.value = isPredictDone
         this.isSos.value = isSos
@@ -166,15 +177,15 @@ class NokHomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             eventNavigate(NavigateEvent.HomeState(isPredicted, isPredictDone))
-            if(isPredicted){
-                if(!isPredictDone) {
+            if (isPredicted) {
+                if (!isPredictDone) {
                     eventPredict(PredictEvent.StartPredict(true))
                 }
             } else {
                 eventPredict(PredictEvent.StopPredict(false))
             }
-            if(isSos) {
-                if(!isSosDone) {
+            if (isSos) {
+                if (!isSosDone) {
                     eventSos(SosEvent.StartSos(true))
                 }
             } else {
@@ -193,9 +204,9 @@ class NokHomeViewModel @Inject constructor(
         }
     }
 
-    fun eventPredictLocation(){
+    fun eventPredictLocation() {
         viewModelScope.launch {
-            if(tempPredictLocation.value == PredictLocation() || ! isPredicted.value){
+            if (tempPredictLocation.value == PredictLocation() || !isPredicted.value) {
                 return@launch
             }
             eventPredict(PredictEvent.PredictLocation(tempPredictLocation.value))
@@ -263,12 +274,36 @@ class NokHomeViewModel @Inject constructor(
 
     fun sos() {
         viewModelScope.launch {
-            val time = measureTimeMillis {
-                eventSos(SosEvent.SosDone)
-                eventHomeState(isSos = true, isSosDone = true)
-            }
+            isSos.value = true
+            eventSos(SosEvent.SosDone)
+            eventHomeState(isSos = true, isSosDone = true)
+            startSosTimer()
         }
     }
+
+    fun startSosTimer() {
+        sosJob?.cancel()
+        sosJob = viewModelScope.launch {
+            for (i in 30 downTo 0) {
+                sosTimerValue.emit(i)
+                delay(1000L)
+            }
+            eventSos(SosEvent.SosDone) // SOS가 완료되면 알림
+            isSos.value = false
+        }
+    }
+
+    fun cancelSosTimer() {
+        sosJob?.cancel()
+        sosJob = null
+        viewModelScope.launch {
+            sosTimerValue.emit(30)  // 타이머 값을 초기화
+            // UI 상태를 리셋하여 초기 화면으로 돌아가도록 처리
+            isSos.value = false  // SOS 상태를 false로 변경
+            _sosEvent.emit(SosEvent.StopSos(false)) // SOS 종료 이벤트 전송
+        }
+    }
+
 
     private suspend fun getDementiaLastInfo() {
         nokHomeRepository.getDementiaLastInfo(DementiaKeyRequest(_dementiaKey.value))
@@ -358,8 +393,8 @@ class NokHomeViewModel @Inject constructor(
 
     fun fetchSafeAreaAll() {
         viewModelScope.launch {
-            safeAreaRepository.fetchSafeAreaInfoAll(_dementiaKey.value).onSuccess {response ->
-                if(response.safeAreas.isEmpty()){
+            safeAreaRepository.fetchSafeAreaInfoAll(_dementiaKey.value).onSuccess { response ->
+                if (response.safeAreas.isEmpty()) {
                     return@launch
                 }
                 eventPredict(PredictEvent.FetchSafeArea(response.safeAreas))
