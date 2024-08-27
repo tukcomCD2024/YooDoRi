@@ -1,0 +1,33 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<shape xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:shape="ring"-->
+<!--    android:innerRadiusRatio="8"-->
+<!--    android:thickness="10dp"-->
+<!--    android:useLevel="false">-->
+<!--    <solid android:color="@color/red"/>-->
+
+<!--</shape>-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 회색 배경 -->
+    <item>
+        <shape android:shape="ring"
+            android:thicknessRatio="16"
+            android:useLevel="false">
+            <solid android:color="#D3D3D3"/>
+        </shape>
+    </item>
+
+    <!-- 빨간색 진행 -->
+    <item>
+        <rotate
+            android:fromDegrees="270"
+            android:pivotX="50%"
+            android:pivotY="50%">
+            <shape android:shape="ring"
+                android:thicknessRatio="16"
+                android:useLevel="true">
+                <solid android:color="@color/red"/>
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

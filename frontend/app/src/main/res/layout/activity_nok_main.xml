@@ -399,11 +399,12 @@
                     android:elevation="8dp"
                     android:fontFamily="@font/suite_extrabold"
                     android:gravity="center"
+                    android:onClick="@{()-> view.sos()}"
                     android:text="긴급\n도움"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    bind:isPredicted="@{viewModel.isPredicted}"
+                    bind:isSos="@{viewModel.isSos}"
                     bind:navigateEvent="@{viewModel.navigateEventToString}" />
 
                 <androidx.constraintlayout.widget.Group
@@ -412,6 +413,78 @@
                     android:visibility='@{viewModel.navigateEventToString.equals("Home") ? View.VISIBLE : View.GONE}'
                     app:constraint_referenced_ids="predict_tv, emergency_tv, user_info_layout"
                     tools:visibility="gone" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/sos_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:elevation="10dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="12dp"
+                    android:visibility="@{viewModel.isSos ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/sos_title_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:fontFamily="@font/suite_extrabold"
+                        android:text="긴급 도움 요청 중.."
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/sos_pb"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="40dp"
+                        android:background="@drawable/circle_progressbar_background"
+                        android:indeterminate="false"
+                        android:max="100"
+                        android:progress="100"
+                        android:rotation="270"
+                        android:scaleY="-1"
+                        app:layout_constraintBottom_toTopOf="@+id/sos_cancel_btn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sos_title_tv" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suite_extrabold"
+                        android:text="30"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@id/sos_pb"
+                        app:layout_constraintEnd_toEndOf="@id/sos_pb"
+                        app:layout_constraintStart_toStartOf="@id/sos_pb"
+                        app:layout_constraintTop_toTopOf="@id/sos_pb" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/sos_cancel_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginBottom="32dp"
+                        android:background="@drawable/rectangle_corner_10"
+                        android:backgroundTint="@color/red"
+                        android:text="취소"
+                        android:textAppearance="@style/TextAppearance.App.20sp.Bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/predict_layout"
@@ -615,15 +688,15 @@
                         android:id="@+id/current_location_iv"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_gps_outline"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         android:background="@drawable/oval"
                         android:elevation="8dp"
                         android:padding="12dp"
+                        android:src="@drawable/ic_gps_outline"
                         android:visibility="@{safeAreaVm.isSettingSafeArea ? View.VISIBLE : View.GONE}"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent" />
 
 
                     <com.naver.maps.map.widget.LogoView
@@ -663,7 +736,8 @@
                     android:background="@drawable/rectangle_top_corner_20"
                     android:elevation="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/bottom_sheet_top_layout">
+                    app:layout_constraintTop_toBottomOf="@id/bottom_sheet_top_layout"
+                    tools:visibility="gone">
 
                     <ImageView
                         android:id="@+id/bottom_sheet_top_iv"
