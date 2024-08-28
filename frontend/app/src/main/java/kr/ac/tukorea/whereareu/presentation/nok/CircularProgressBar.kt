@@ -17,14 +17,14 @@ class CircularProgressBar @JvmOverloads constructor(
     private val backgroundPaint = Paint().apply {
         color = Color.GRAY
         style = Paint.Style.STROKE
-        strokeWidth = 20f
+        strokeWidth = 60f
         isAntiAlias = true
     }
 
     private val progressPaint = Paint().apply {
         color = Color.RED
         style = Paint.Style.STROKE
-        strokeWidth = 20f
+        strokeWidth = 60f
         isAntiAlias = true
     }
 
