@@ -440,21 +440,31 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ProgressBar
+                    <!--                    <ProgressBar-->
+                    <!--                        android:id="@+id/sos_pb"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        style="?android:attr/progressBarStyleHorizontal"-->
+                    <!--                        android:layout_height="0dp"-->
+                    <!--                        android:layout_marginBottom="40dp"-->
+                    <!--                        android:background="@drawable/circle_progressbar_background"-->
+                    <!--                        android:indeterminate="false"-->
+                    <!--                        android:max="30"-->
+                    <!--                        android:progressTint="@color/red"-->
+                    <!--                        android:progress="@{viewModel.sosTimerValue}"-->
+                    <!--                        app:layout_constraintBottom_toTopOf="@+id/sos_cancel_btn"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintTop_toBottomOf="@+id/sos_title_tv" />-->
+                    <kr.ac.tukorea.whereareu.presentation.nok.CircularProgressBar
                         android:id="@+id/sos_pb"
-                        android:layout_width="match_parent"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_height="0dp"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_marginBottom="40dp"
-                        android:background="@drawable/circle_progressbar_background"
-                        android:indeterminate="false"
-                        android:max="30"
-                        android:progressTint="@color/red"
-                        android:progress="@{viewModel.sosTimerValue}"
                         app:layout_constraintBottom_toTopOf="@+id/sos_cancel_btn"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/sos_title_tv" />
+
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -475,8 +485,8 @@
                         android:layout_marginBottom="32dp"
                         android:background="@drawable/rectangle_corner_10"
                         android:backgroundTint="@color/red"
-                        android:text="취소"
                         android:onClick="@{() -> viewModel.cancelSosTimer()}"
+                        android:text="취소"
                         android:textAppearance="@style/TextAppearance.App.20sp.Bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -275,7 +275,7 @@ class NokHomeViewModel @Inject constructor(
     fun sos() {
         viewModelScope.launch {
             isSos.value = true
-            eventSos(SosEvent.SosDone)
+            eventSos(SosEvent.StartSos(true))
             eventHomeState(isSos = true, isSosDone = true)
             startSosTimer()
         }
@@ -284,9 +284,9 @@ class NokHomeViewModel @Inject constructor(
     fun startSosTimer() {
         sosJob?.cancel()
         sosJob = viewModelScope.launch {
-            for (i in 0..30) {
-                sosTimerValue.emit(i)  // 0에서 30까지 값 증가
-                delay(1000L)  // 1초 간격
+            for (i in 30 downTo 0) {
+                sosTimerValue.emit(i)
+                delay(1000L)
             }
             eventSos(SosEvent.SosDone) // SOS가 완료되면 알림
             isSos.value = false
