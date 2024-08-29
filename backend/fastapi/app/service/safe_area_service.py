@@ -19,6 +19,8 @@ class SafeArea:
         models.safe_area_info.area_name == request.areaName).first() == None:
             raise(HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Safe area already exists in group"))
 
+        _group_key = None
+
         if request.groupKey == '':
             _default_group = self.db.query(models.safe_area_group_info).filter(models.safe_area_group_info.dementia_key == request.dementiaKey, models.safe_area_group_info.group_name == '기본 그룹').first()
             if _default_group:
@@ -32,7 +34,7 @@ class SafeArea:
                 )
                 self.db.add(new_gorup)
         else:
-            pass
+            _group_key = request.groupKey
 
         _area_key = int(request.dementiaKey) + datetime.timestamp(datetime.now(timezone('Asia/Seoul'))) + ord(request.areaName[0])
 
