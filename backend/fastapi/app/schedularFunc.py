@@ -46,6 +46,7 @@ class SchedulerFunc:
             for key in dementia_keys:
                 key_location_list = [location for location in meaningful_location_list if location.dementia_key == key]
                 for location in key_location_list:
+                    print(f"[INFO] Geocoding for {location.latitude}, {location.longitude}")
                     geo = kakao.geo_coord2address(location.longitude, location.latitude)
                     if not geo['documents'][0]['road_address'] == None:
                         xy2addr = geo['documents'][0]['road_address']['address_name'] + " " + geo['documents'][0]['road_address']['building_name']

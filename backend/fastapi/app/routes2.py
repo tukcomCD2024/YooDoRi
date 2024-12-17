@@ -25,7 +25,7 @@ from .predict.prediction import LocPredict
 import asyncio
 
 
-from openai import OpenAI
+#from openai import OpenAI
 
 
 
@@ -40,9 +40,9 @@ sched = BackgroundScheduler(timezone="Asia/Seoul", daemon=True)
 val = validateInSafeArea()
 kakao = Local(service_key=Config.kakao_service_key)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-client = OpenAI(
+'''client = OpenAI(
     api_key=Config.GPT_API_KEY,
-)
+)'''
 
 
 
@@ -54,7 +54,7 @@ async def send_fcm(request: FCMRequest):
 
     return {"status": "success", "message": "FCM sent"}
 #gpt test
-@router.post("/gpt", description="GPT-3.5 테스트", tags = ["Test"])
+"""@router.post("/gpt", description="GPT-3.5 테스트", tags = ["Test"])
 async def gpt_test(request: GPTRequest):
     
     _key = request.dementiaKey
@@ -88,7 +88,7 @@ async def gpt_test(request: GPTRequest):
     finally:
         session.close()
 
-
+"""
 
 
 
@@ -211,7 +211,8 @@ async def predict_location(dementiaKey : str):
     
     try:
         # db 에서 의미장소 정보 가져오기
-        meaningful_location_list = session.query(models.meaningful_location_info).filter_by(dementia_key = dementiaKey, address = '서울 중구 정동 5-8').limit(1).all()
+        meaningful_location_list = session.query(models.meaningful_location_info).filter_by(dementia_key = dementiaKey, num = 153).limit(1).all()
+        print(meaningful_location_list)
         police_info = session.query(models.police_info).filter_by(key = meaningful_location_list[0].key).order_by(models.police_info.distance).limit(3).all()
 
         for police in police_info:
@@ -401,6 +402,14 @@ async def delete_safe_area_group(request: DeleteSafeAreaGroupRequest, safe_area_
     except HTTPException as e:
         raise e
 
+@router.post("/users/sos", responses = {200 : {"model" : CommonResponse, "description" : "SOS 전송 성공" }, 404: {"model": ErrorResponse, "description": "보호 대상자 키 조회 실패"}}, description="보호 대상자의 SOS 전송", tags = ["SOS"])
+async def send_sos(request: SOSSendRequest):
+    try:
+        token = db.query(models.dementia_info).filter(models.dementia_info.dementia_key == request.dementiaKey).first().fcm_token
+        return await val.send_sos(token)
+    
+    except HTTPException as e:
+        raise e
 
 #유틸
 @router.post("/address/conversion", responses = {200 : {"model" : AddressConversionResponse, "description" : "주소 변환 성공" }, 404: {"model": ErrorResponse, "description": "주소 변환 실패"}}, description="주소를 위경도로 변환", tags = ["Util"])
@@ -435,14 +444,17 @@ async def address_conversion(request: AddressConversionRequest):
         session.close()
 
 
+'''@router.post("/asdasd")
+def asdasd(dementiaKey: str):
+    asyncio.run(schedFunc.load_kakao_api(session))
+    return {"status": "success", "message": "FCM sent"}'''
 
 
-
-'''@sched.scheduled_job('cron', hour=0, minute=0, id = 'analyze_location_data')
+@sched.scheduled_job('cron', hour=14, minute=54, id = 'analyze_location_data')
 def analyzing_location_data():
     asyncio.run(schedFunc.load_analyze_location_data(session))
 
 @sched.scheduled_job('cron', hour=0, minute=59, id = 'geocoding')
 def geocoding():
-    asyncio.run(schedFunc.load_kakao_api(session))'''
+    asyncio.run(schedFunc.load_kakao_api(session))
 

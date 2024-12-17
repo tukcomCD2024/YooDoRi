@@ -111,7 +111,8 @@ class UserService:
         new_dementia = models.dementia_info(
             dementia_key=unique_key,
             dementia_name=dementia_name,
-            dementia_phonenumber=dementia_phonenumber
+            dementia_phonenumber=dementia_phonenumber,
+            updateRate = 1
         )
         self.db.add(new_dementia)
         self.db.commit()

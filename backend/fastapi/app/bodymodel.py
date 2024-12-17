@@ -332,3 +332,7 @@ class GetSafeAreaAllResponse(BaseModel):
     status: str = Field("success")
     message: str = Field("메~시~지~")
     result: safeAreaList
+
+class SOSSendRequest(BaseModel):
+    dementiaKey : str = Field(examples=["123456"])
+    

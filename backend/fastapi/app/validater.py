@@ -31,10 +31,17 @@ class validateInSafeArea:
                 "safeAreaName" : safeArea.area_name,
                 "time" : latest_location.time
             }
-            await send_push_notification(fcm_token, "안심 구역 이탈", "", data)
         elif latest_location.isInSafeArea == 1 and before_location.isInSafeArea == 0:
             data = {
                 "safeAreaName" : safeArea.area_name,
                 "time" : latest_location.time
             }
             await send_push_notification(fcm_token, "안심 구역 진입", "", data)
+        else:
+            return
+    
+    async def send_sos(self, fcm_token):
+        data = {
+            "time" : "지금 이손 간~"
+        }
+        await send_push_notification(fcm_token, "SOS", "", data)
