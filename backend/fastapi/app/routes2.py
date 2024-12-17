@@ -20,7 +20,7 @@ from .service.calculate_avg import CalculateAvg
 from .service.get_userinfo import GetUserInfo
 from .service.safe_area_service import SafeArea
 from .predict.meaningful import MeaningfulLoc
-from .predict.prediction import LocPredict
+#from .predict.prediction import LocPredict
 
 import asyncio
 
@@ -197,13 +197,13 @@ async def send_location_history(date: str, dementiaKey: str, loc_service : LocSe
     except HTTPException as e:
         raise e
 
-@router.get("/locations/predict", responses = {200 : {"model" : PredictLocationResponse, "description" : "위치 예측 성공" }, 404: {"model": ErrorResponse, "description": "위치 정보 부족"}}, description="보호 대상자의 다음 위치 예측(쿼리 스트링) | 2주치 위치 데이터 사용(임시)", tags=["Location"])
+'''@router.get("/locations/predict", responses = {200 : {"model" : PredictLocationResponse, "description" : "위치 예측 성공" }, 404: {"model": ErrorResponse, "description": "위치 정보 부족"}}, description="보호 대상자의 다음 위치 예측(쿼리 스트링) | 2주치 위치 데이터 사용(임시)", tags=["Location"])
 async def predict_location(dementiaKey: str, pred_service : LocPredict = Depends()):
     try:
         return await pred_service.predict_location(dementiaKey)
     
     except HTTPException as e:
-        raise e
+        raise e'''
     
 
 @router.get("/locations/predict/gura", tags = ["Location"])
@@ -444,17 +444,45 @@ async def address_conversion(request: AddressConversionRequest):
         session.close()
 
 
-'''@router.post("/asdasd")
-def asdasd(dementiaKey: str):
-    asyncio.run(schedFunc.load_kakao_api(session))
-    return {"status": "success", "message": "FCM sent"}'''
+@router.post("/asdasdasd")
+async def asdasd(request: List[tempasd]):
+    try:
+        for i in request:
+            new_loc = models.meaningful_location_info(
+                dementia_key = "111111",
+                latitude = i.latitude,
+                longitude = i.longitude,
+                date = i.date,
+                time = i.time,
+                day_of_the_week = i.day_of_the_week
+            )
+            session.add(new_loc)
+
+        session.commit()
+
+        response = {
+            'status': 'success',
+            'message': 'Location data added'
+        }
+
+        return response
+    
+    except Exception as e:
+        print(f"[ERROR] Location data failed: {e}")
+
+        raise HTTPException(status_code=404, detail=f"{e}")
+
+    finally:
+        session.close()
 
 
-@sched.scheduled_job('cron', hour=14, minute=54, id = 'analyze_location_data')
+
+
+@sched.scheduled_job('cron', hour=15, minute=33, id = 'analyze_location_data')
 def analyzing_location_data():
     asyncio.run(schedFunc.load_analyze_location_data(session))
 
-@sched.scheduled_job('cron', hour=0, minute=59, id = 'geocoding')
+@sched.scheduled_job('cron', hour=16, minute=47, id = 'geocoding')
 def geocoding():
     asyncio.run(schedFunc.load_kakao_api(session))
 

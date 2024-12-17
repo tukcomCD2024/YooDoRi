@@ -8,7 +8,7 @@ from .LocationAnalyzer import LocationAnalyzer
 from .database import Database
 from .config import Config
 
-from PyKakao import Local
+import requests
 
 from datetime import datetime, timedelta
 from pytz import timezone
@@ -16,12 +16,12 @@ from pytz import timezone
 
 
 
-kakao = Local(service_key=Config.kakao_service_key)
+
 
 
 class SchedulerFunc:
     def __init__(self):
-        pass
+        self.geourl = "https://dapi.kakao.com/v2/local/geo/coord2address.json"
 
     async def load_analyze_location_data(self, session = Depends(Database().get_session)):
         await self.analyze_location_data(session)
@@ -47,12 +47,19 @@ class SchedulerFunc:
                 key_location_list = [location for location in meaningful_location_list if location.dementia_key == key]
                 for location in key_location_list:
                     print(f"[INFO] Geocoding for {location.latitude}, {location.longitude}")
-                    geo = kakao.geo_coord2address(location.longitude, location.latitude)
-                    if not geo['documents'][0]['road_address'] == None:
-                        xy2addr = geo['documents'][0]['road_address']['address_name'] + " " + geo['documents'][0]['road_address']['building_name']
+                    
+                    params = {"x":location.longitude,
+                              "y":location.latitude}
+    
+                    headers = {"Authorization": "KakaoAK " + Config.kakao_service_key}
+                    geo = requests.get(self.geourl, headers=headers, params=params) 
+                     
+                    print(geo)
+                    if not geo.json()['documents'][0]['road_address'] == None:
+                        xy2addr = geo.json()['documents'][0]['road_address']['address_name'] + " " + geo.json()['documents'][0]['road_address']['building_name']
                     
                     else:
-                        xy2addr = geo['documents'][0]['address']['address_name']
+                        xy2addr = geo.json()['documents'][0]['address']['address_name']
                 
                     location.address = xy2addr
 
@@ -61,13 +68,16 @@ class SchedulerFunc:
                         new_key = rng.generate_unique_random_number(100000, 999999)
                         key_dict[xy2addr] = str(new_key)
                         location.key = str(new_key)
-                        police = kakao.search_keyword("경찰서", x = location.longitude, y = location.latitude, sort = 'distance')
+                        params = {"query" : "경찰서", "x":location.longitude, "y":location.latitude , "sort" : 'distance'}
+                        
+                        headers = {"Authorization": "KakaoAK " + Config.kakao_service_key}
+                        police = requests.get("https://dapi.kakao.com/v2/local/search/keyword.json", headers=headers, params=params)
 
                         police_list = []
-                        if police['meta']['total_count'] == 0:
+                        if police.json()['meta']['total_count'] == 0:
                             print(f"[INFO] No police station found near {xy2addr}")
                         else:
-                            for pol in police['documents']:
+                            for pol in police.json()['documents']:
                                 if not pol['road_address_name'] == None:
                                     poladdr = pol['address_name'] + " " + pol['place_name']
 
@@ -107,7 +117,7 @@ class SchedulerFunc:
         now = datetime.now(seoul_timezone)
 
         # 어제의 날짜 계산하고 포맷팅
-        yesterday = now - timedelta(days=1)
+        yesterday = now - timedelta(days=9)
         yesterday_str = yesterday.strftime('%Y-%m-%d')
 
         print(f"[INFO] Start analyzing location data at {yesterday_str}")
@@ -146,6 +156,7 @@ class SchedulerFunc:
                             day_of_the_week = prediction[i][3]
                         )
                         meaningful_location_list.append(new_meaningful_location)
+                    
 
                     session.add_all(meaningful_location_list)
 
@@ -155,7 +166,7 @@ class SchedulerFunc:
                 print("[ERROR] Location data not found")
                 pass
 
-            #session.commit()
+            session.commit()
             print(f"[INFO] Location data analysis completed at {yesterday_str}")
 
         finally:

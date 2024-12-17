@@ -336,3 +336,16 @@ class GetSafeAreaAllResponse(BaseModel):
 class SOSSendRequest(BaseModel):
     dementiaKey : str = Field(examples=["123456"])
     
+class tempasd(BaseModel):
+    num : int = Field(examples=["1"])
+    dementia_key : str = Field(examples=["123456"])
+    date : str = Field(examples=["2024-03-19"], description="yyyy-mm-dd")
+    time : str = Field(examples=["0006"])
+    latitude : float = Field(examples=["37.123456"])
+    longitude : float = Field(examples=["127.123456"])
+    day_of_the_week : str = Field(examples=["monday"])
+    address : str = Field(examples=["서울특별시 강남구 니가 사는 그 집"])
+    key : str = Field(examples=["123456"])
+    
+class temp(BaseModel):
+    request : List[tempasd]

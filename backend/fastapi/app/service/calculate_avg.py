@@ -14,7 +14,7 @@ class CalculateAvg:
         self.kakao = Local(service_key=Config.kakao_service_key)
 
     async def calculate_avg(self, request: AverageWalkingSpeedRequest) -> AverageWalkingSpeedResponse:
-        loc_list = self.db.query(models.location_info).filter(models.location_info.dementia_key == request.dementiaKey, models.location_info.user_status == "도보").order_by(models.location_info.num.desc()).limit(10).all()
+        loc_list = self.db.query(models.location_info).filter(models.location_info.dementia_key == request.dementiaKey).order_by(models.location_info.num.desc()).limit(10).all()
 
         if not loc_list:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Location 정보 조회 실패")
